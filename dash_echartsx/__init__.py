@@ -1,5 +1,7 @@
 from .DashEChartsX import DashEChartsX
 
+__version__ = "0.1.0"
+
 _js_dist = [
     {
         "relative_package_path": "dash_echartsx.umd.js",
