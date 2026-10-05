@@ -18,3 +18,16 @@ def test_generated_component_and_runtime_assets_are_registered():
     assert any(
         asset["relative_package_path"] == "dash_echartsx.umd.js" for asset in _js_dist
     )
+
+
+def test_event_props_are_available_to_dash_callbacks():
+    event_props = {
+        "click_data",
+        "dblclick_data",
+        "hover_data",
+        "selected_data",
+        "legend_status",
+        "zoom_data",
+    }
+    component = DashEChartsX(id="chart")
+    assert event_props <= set(component.available_properties)

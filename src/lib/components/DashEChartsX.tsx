@@ -1,5 +1,6 @@
 import { BarChart, LineChart, PieChart } from "echarts/charts";
 import {
+  DataZoomComponent,
   GridComponent,
   LegendComponent,
   TitleComponent,
@@ -16,6 +17,7 @@ registerEChartsModules([
   BarChart,
   LineChart,
   PieChart,
+  DataZoomComponent,
   GridComponent,
   LegendComponent,
   TitleComponent,
@@ -36,6 +38,29 @@ const namedThemes = {
     textStyle: { color: "#e8eaed" },
   },
 } satisfies Record<"light" | "dark", Record<string, unknown>>;
+
+function eventPayload(
+  params: unknown,
+  fields: readonly string[],
+): Record<string, unknown> {
+  if (!params || typeof params !== "object" || Array.isArray(params)) {
+    return {};
+  }
+
+  const source = params as Record<string, unknown>;
+  const payload: Record<string, unknown> = {};
+  for (const field of fields) {
+    if (!(field in source)) continue;
+
+    try {
+      const serialized = JSON.stringify(source[field]);
+      if (serialized !== undefined) payload[field] = JSON.parse(serialized);
+    } catch {
+      // Omit non-serializable ECharts internals from Dash callback state.
+    }
+  }
+  return payload;
+}
 
 export type DashEChartsXHandle = {
   getInstance: () => EChartsType | null;
@@ -58,11 +83,25 @@ type DashEChartsXProps = {
   renderer?: "canvas" | "svg";
   /** Named light/dark theme or a custom ECharts theme object. */
   theme?: "light" | "dark" | object;
+  /** Latest click event with seriesIndex, dataIndex, name, and value when available. */
+  click_data?: Record<string, unknown>;
+  /** Latest double-click event with seriesIndex, dataIndex, name, and value when available. */
+  dblclick_data?: Record<string, unknown>;
+  /** Latest pointer-over event with seriesIndex, dataIndex, name, and value when available. */
+  hover_data?: Record<string, unknown>;
+  /** Latest selection-change event, including the selected series and data indexes. */
+  selected_data?: Record<string, unknown>;
+  /** Latest legend selection event with the legend name and selection state. */
+  legend_status?: Record<string, unknown>;
+  /** Latest data-zoom event with range and value bounds when available. */
+  zoom_data?: Record<string, unknown>;
 };
 
+type DashSetProps = (props: Partial<DashEChartsXProps>) => void;
+
 const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
-  function DashEChartsX(
-    {
+  function DashEChartsX(componentProps, forwardedRef) {
+    const {
       id,
       className,
       style,
@@ -71,11 +110,17 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       lazyUpdate = false,
       renderer = "canvas",
       theme,
-    },
-    forwardedRef,
-  ) {
+    } = componentProps;
+    const dashSetProps = (
+      componentProps as DashEChartsXProps & { setProps?: DashSetProps }
+    ).setProps;
     const containerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<EChartsType | null>(null);
+    const setPropsRef = useRef<DashSetProps | undefined>(undefined);
+
+    useEffect(() => {
+      setPropsRef.current = dashSetProps;
+    }, [dashSetProps]);
 
     useImperativeHandle(
       forwardedRef,
@@ -91,6 +136,84 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
         typeof theme === "string" ? namedThemes[theme] : theme;
       const chart = init(container, resolvedTheme, { renderer });
       chartRef.current = chart;
+
+      const listeners: Array<[string, (params: unknown) => void]> = [
+        [
+          "click",
+          (params) =>
+            setPropsRef.current?.({
+              click_data: eventPayload(params, [
+                "seriesIndex",
+                "dataIndex",
+                "name",
+                "value",
+              ]),
+            }),
+        ],
+        [
+          "dblclick",
+          (params) =>
+            setPropsRef.current?.({
+              dblclick_data: eventPayload(params, [
+                "seriesIndex",
+                "dataIndex",
+                "name",
+                "value",
+              ]),
+            }),
+        ],
+        [
+          "mouseover",
+          (params) =>
+            setPropsRef.current?.({
+              hover_data: eventPayload(params, [
+                "seriesIndex",
+                "dataIndex",
+                "name",
+                "value",
+              ]),
+            }),
+        ],
+        [
+          "selectchanged",
+          (params) =>
+            setPropsRef.current?.({
+              selected_data: eventPayload(params, [
+                "type",
+                "fromAction",
+                "isFromClick",
+                "seriesIndex",
+                "dataIndex",
+                "name",
+                "value",
+                "selected",
+              ]),
+            }),
+        ],
+        [
+          "legendselectchanged",
+          (params) =>
+            setPropsRef.current?.({
+              legend_status: eventPayload(params, ["name", "selected"]),
+            }),
+        ],
+        [
+          "datazoom",
+          (params) =>
+            setPropsRef.current?.({
+              zoom_data: eventPayload(params, [
+                "dataZoomId",
+                "dataZoomIndex",
+                "start",
+                "end",
+                "startValue",
+                "endValue",
+                "batch",
+              ]),
+            }),
+        ],
+      ];
+      listeners.forEach(([event, handler]) => chart.on(event, handler));
 
       let resizeFrame: number | null = null;
       const scheduleResize = () => {
@@ -119,6 +242,7 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
         return () => {
           resizeObserver.disconnect();
           cancelScheduledResize();
+          listeners.forEach(([event, handler]) => chart.off(event, handler));
           chart.dispose();
           chartRef.current = null;
         };
@@ -130,6 +254,7 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       return () => {
         window.removeEventListener("resize", scheduleResize);
         cancelScheduledResize();
+        listeners.forEach(([event, handler]) => chart.off(event, handler));
         chart.dispose();
         chartRef.current = null;
       };
