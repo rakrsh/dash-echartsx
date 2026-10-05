@@ -12,7 +12,7 @@ license = { file = "LICENSE" }
 dependencies = ["dash>=2.14"]
 
 [dependency-groups]
-dev = ["dash[testing]>=2.14", "pytest>=8"]
+dev = ["dash[testing]>=2.14", "pytest>=8", "pyyaml>=6"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["dash_echartsx"]

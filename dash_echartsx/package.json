@@ -3,15 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "description": "Apache ECharts components for Plotly Dash",
-  "type": "module",
   "scripts": {
     "build": "npm run build:js && npm run build:py",
     "build:js": "vite build",
-    "build:py": "dash-generate-components ./src/lib/components dash_echartsx -p package.json",
+    "build:py": "uv run dash-generate-components ./src/lib/components dash_echartsx -p package.json",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "echarts": "^5.5.1",
+    "echarts": "^6.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
