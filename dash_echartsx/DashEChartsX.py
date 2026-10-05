@@ -32,10 +32,26 @@ Keyword arguments:
 - className (string; optional):
     CSS class applied to the component container.
 
+- click_data (boolean | number | string | dict | list; optional):
+    Latest click event with seriesIndex, dataIndex, name, and value
+    when available.
+
+- dblclick_data (boolean | number | string | dict | list; optional):
+    Latest double-click event with seriesIndex, dataIndex, name, and
+    value when available.
+
+- hover_data (boolean | number | string | dict | list; optional):
+    Latest pointer-over event with seriesIndex, dataIndex, name, and
+    value when available.
+
 - key (string | number; optional)
 
 - lazyUpdate (boolean; optional):
     Defer option updates until the next animation frame.
+
+- legend_status (boolean | number | string | dict | list; optional):
+    Latest legend selection event with the legend name and selection
+    state.
 
 - notMerge (boolean; optional):
     Replace the current option instead of merging it.
@@ -53,8 +69,15 @@ Keyword arguments:
 - renderer (a value equal to: None, 'canvas', 'svg'; optional):
     Rendering engine used by ECharts.
 
+- selected_data (boolean | number | string | dict | list; optional):
+    Latest selection-change event, including the selected series and
+    data indexes.
+
 - theme (dict; optional):
-    Named light/dark theme or a custom ECharts theme object."""
+    Named light/dark theme or a custom ECharts theme object.
+
+- zoom_data (boolean | number | string | dict | list; optional):
+    Latest data-zoom event with range and value bounds when available."""
     _children_props: typing.List[str] = []
     _base_nodes = ['children']
     _namespace = 'dash_echartsx'
@@ -71,13 +94,19 @@ Keyword arguments:
         lazyUpdate: typing.Optional[typing.Union[bool]] = None,
         renderer: typing.Optional[Literal[None, "canvas", "svg"]] = None,
         theme: typing.Optional[typing.Union[dict, Literal["light"], Literal["dark"]]] = None,
+        click_data: typing.Optional[typing.Any] = None,
+        dblclick_data: typing.Optional[typing.Any] = None,
+        hover_data: typing.Optional[typing.Any] = None,
+        selected_data: typing.Optional[typing.Any] = None,
+        legend_status: typing.Optional[typing.Any] = None,
+        zoom_data: typing.Optional[typing.Any] = None,
         ref: typing.Optional[typing.Union[str, typing.Any]] = None,
         key: typing.Optional[typing.Union[str, NumberType]] = None,
         **kwargs
     ):
-        self._prop_names = ['id', 'className', 'key', 'lazyUpdate', 'notMerge', 'option', 'ref', 'renderer', 'style', 'theme']
+        self._prop_names = ['id', 'className', 'click_data', 'dblclick_data', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'className', 'key', 'lazyUpdate', 'notMerge', 'option', 'ref', 'renderer', 'style', 'theme']
+        self.available_properties = ['id', 'className', 'click_data', 'dblclick_data', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

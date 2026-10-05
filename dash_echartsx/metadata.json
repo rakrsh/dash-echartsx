@@ -75,6 +75,36 @@
           "raw": "object | \"light\" | \"dark\" | undefined"
         }
       },
+      "click_data": {
+        "description": "Latest click event with seriesIndex, dataIndex, name, and value when available.",
+        "required": false,
+        "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
+      },
+      "dblclick_data": {
+        "description": "Latest double-click event with seriesIndex, dataIndex, name, and value when available.",
+        "required": false,
+        "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
+      },
+      "hover_data": {
+        "description": "Latest pointer-over event with seriesIndex, dataIndex, name, and value when available.",
+        "required": false,
+        "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
+      },
+      "selected_data": {
+        "description": "Latest selection-change event, including the selected series and data indexes.",
+        "required": false,
+        "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
+      },
+      "legend_status": {
+        "description": "Latest legend selection event with the legend name and selection state.",
+        "required": false,
+        "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
+      },
+      "zoom_data": {
+        "description": "Latest data-zoom event with range and value bounds when available.",
+        "required": false,
+        "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
+      },
       "ref": {
         "description": "Allows getting a ref to the component instance.\nOnce the component unmounts, React will set `ref.current` to `null`\n(or call the ref with `null` if you passed a callback ref).\n@,see,,{@link ,https://react.dev/learn/referencing-values-with-refs#refs-and-the-dom React Docs,}",
         "required": false,
