@@ -51,7 +51,10 @@ Keyword arguments:
     React Docs,}.
 
 - renderer (a value equal to: None, 'canvas', 'svg'; optional):
-    Rendering engine used by ECharts."""
+    Rendering engine used by ECharts.
+
+- theme (dict; optional):
+    Named light/dark theme or a custom ECharts theme object."""
     _children_props: typing.List[str] = []
     _base_nodes = ['children']
     _namespace = 'dash_echartsx'
@@ -67,13 +70,14 @@ Keyword arguments:
         notMerge: typing.Optional[typing.Union[bool]] = None,
         lazyUpdate: typing.Optional[typing.Union[bool]] = None,
         renderer: typing.Optional[Literal[None, "canvas", "svg"]] = None,
+        theme: typing.Optional[typing.Union[dict, Literal["light"], Literal["dark"]]] = None,
         ref: typing.Optional[typing.Union[str, typing.Any]] = None,
         key: typing.Optional[typing.Union[str, NumberType]] = None,
         **kwargs
     ):
-        self._prop_names = ['id', 'className', 'key', 'lazyUpdate', 'notMerge', 'option', 'ref', 'renderer', 'style']
+        self._prop_names = ['id', 'className', 'key', 'lazyUpdate', 'notMerge', 'option', 'ref', 'renderer', 'style', 'theme']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'className', 'key', 'lazyUpdate', 'notMerge', 'option', 'ref', 'renderer', 'style']
+        self.available_properties = ['id', 'className', 'key', 'lazyUpdate', 'notMerge', 'option', 'ref', 'renderer', 'style', 'theme']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

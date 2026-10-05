@@ -24,6 +24,19 @@ registerEChartsModules([
   SVGRenderer,
 ]);
 
+const namedThemes = {
+  light: {
+    backgroundColor: "transparent",
+    color: ["#5470c6", "#91cc75", "#fac858", "#ee6666", "#73c0de"],
+    textStyle: { color: "#333333" },
+  },
+  dark: {
+    backgroundColor: "#202124",
+    color: ["#4992ff", "#7cffb2", "#fddd60", "#ff6e76", "#58d9f9"],
+    textStyle: { color: "#e8eaed" },
+  },
+} satisfies Record<"light" | "dark", Record<string, unknown>>;
+
 export type DashEChartsXHandle = {
   getInstance: () => EChartsType | null;
 };
@@ -43,6 +56,8 @@ type DashEChartsXProps = {
   lazyUpdate?: boolean;
   /** Rendering engine used by ECharts. */
   renderer?: "canvas" | "svg";
+  /** Named light/dark theme or a custom ECharts theme object. */
+  theme?: "light" | "dark" | object;
 };
 
 const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
@@ -55,6 +70,7 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       notMerge = false,
       lazyUpdate = false,
       renderer = "canvas",
+      theme,
     },
     forwardedRef,
   ) {
@@ -71,7 +87,9 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       const container = containerRef.current;
       if (!container) return;
 
-      const chart = init(container, undefined, { renderer });
+      const resolvedTheme =
+        typeof theme === "string" ? namedThemes[theme] : theme;
+      const chart = init(container, resolvedTheme, { renderer });
       chartRef.current = chart;
 
       let resizeFrame: number | null = null;
@@ -115,13 +133,13 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
         chart.dispose();
         chartRef.current = null;
       };
-    }, [renderer]);
+    }, [renderer, theme]);
 
     useEffect(() => {
       if (option) {
         chartRef.current?.setOption(option, notMerge, lazyUpdate);
       }
-    }, [lazyUpdate, notMerge, option, renderer]);
+    }, [lazyUpdate, notMerge, option, renderer, theme]);
 
     return (
       <div
