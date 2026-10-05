@@ -7,12 +7,23 @@ name = "dash-echartsx"
 version = "0.1.0"
 description = "Apache ECharts components for Plotly Dash"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { file = "LICENSE" }
 dependencies = ["dash>=2.14"]
 
 [dependency-groups]
-dev = ["dash[testing]>=2.14", "pytest>=8", "pyyaml>=6", "ruff>=0.11", "black>=25"]
+test = [
+	"chromedriver-autoinstaller>=0.6.4",
+	"pytest>=8",
+	"selenium>=4.14.0",
+]
+automation = ["pyyaml>=6"]
+lint = ["black>=25", "ruff>=0.11"]
+dev = [
+	{ include-group = "test" },
+	{ include-group = "automation" },
+	{ include-group = "lint" },
+]
 
 [tool.ruff]
 line-length = 88

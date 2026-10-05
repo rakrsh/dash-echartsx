@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:js && npm run build:py",
     "build:js": "vite build",
-    "build:py": "uv run dash-generate-components ./src/lib/components dash_echartsx -p package.json",
+    "build:py": "uv run dash-generate-components ./src/lib/components dash_echartsx -p package.json && prettier --write dash_echartsx/metadata.json",
     "lint": "eslint src mcp && prettier --check \"src/**/*.{ts,tsx}\" \"mcp/**/*.js\" vite.config.ts eslint.config.mjs",
     "prepare": "husky",
     "typecheck": "tsc --noEmit"
