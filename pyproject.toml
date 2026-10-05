@@ -12,7 +12,20 @@ license = { file = "LICENSE" }
 dependencies = ["dash>=2.14"]
 
 [dependency-groups]
-dev = ["dash[testing]>=2.14", "pytest>=8", "pyyaml>=6"]
+dev = ["dash[testing]>=2.14", "pytest>=8", "pyyaml>=6", "ruff>=0.11", "black>=25"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+extend-exclude = ["dash_echartsx/DashEChartsX.py", "dash_echartsx/_imports_.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+extend-exclude = '(?x)(/DashEChartsX\.py|/_imports_\.py)$'
 
 [tool.hatch.build.targets.wheel]
 packages = ["dash_echartsx"]

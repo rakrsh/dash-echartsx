@@ -224,3 +224,7 @@ node_modules/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Husky generated hook shims
+.husky/
+.husky/_/

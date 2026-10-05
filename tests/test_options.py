@@ -15,4 +15,6 @@ def test_generated_component_and_runtime_assets_are_registered():
     component = DashEChartsX(option={"series": []})
     assert component._namespace == "dash_echartsx"
     assert component.option == {"series": []}
-    assert any(asset["relative_package_path"] == "dash_echartsx.umd.js" for asset in _js_dist)
+    assert any(
+        asset["relative_package_path"] == "dash_echartsx.umd.js" for asset in _js_dist
+    )
