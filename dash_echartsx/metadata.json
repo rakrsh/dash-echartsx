@@ -62,6 +62,19 @@
           "raw": "\"canvas\" | \"svg\" | undefined"
         }
       },
+      "theme": {
+        "description": "Named light/dark theme or a custom ECharts theme object.",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [
+            { "name": "object", "raw": "object" },
+            { "name": "literal", "value": "light" },
+            { "name": "literal", "value": "dark" }
+          ],
+          "raw": "object | \"light\" | \"dark\" | undefined"
+        }
+      },
       "ref": {
         "description": "Allows getting a ref to the component instance.\nOnce the component unmounts, React will set `ref.current` to `null`\n(or call the ref with `null` if you passed a callback ref).\n@,see,,{@link ,https://react.dev/learn/referencing-values-with-refs#refs-and-the-dom React Docs,}",
         "required": false,

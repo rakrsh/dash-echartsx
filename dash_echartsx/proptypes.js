@@ -10,5 +10,6 @@ pk.DashEChartsX.propTypes = {id:pt.oneOfType([pt.string]),
  notMerge:pt.oneOfType([pt.bool]),
  lazyUpdate:pt.oneOfType([pt.bool]),
  renderer:pt.oneOf(['canvas','svg']),
+ theme:pt.oneOfType([pt.object,pt.oneOf(["light"]),pt.oneOf(["dark"])]),
  ref:pt.oneOfType([pt.string,pt.any]),
  key:pt.oneOfType([pt.string,pt.number])};
