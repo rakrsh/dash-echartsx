@@ -24394,15 +24394,22 @@ const ik = cb(
       if (!h) return;
       const c = SE(h, void 0, { renderer: s });
       f.current = c;
-      const v = () => c.resize();
+      let v = null;
+      const d = () => {
+        v === null && (v = requestAnimationFrame(() => {
+          v = null, h.clientWidth > 0 && h.clientHeight > 0 && c.resize();
+        }));
+      }, p = () => {
+        v !== null && (cancelAnimationFrame(v), v = null);
+      };
       if (typeof ResizeObserver < "u") {
-        const d = new ResizeObserver(v);
-        return d.observe(h), v(), () => {
-          d.disconnect(), c.dispose(), f.current = null;
+        const g = new ResizeObserver(d);
+        return g.observe(h), d(), () => {
+          g.disconnect(), p(), c.dispose(), f.current = null;
         };
       }
-      return window.addEventListener("resize", v), v(), () => {
-        window.removeEventListener("resize", v), c.dispose(), f.current = null;
+      return window.addEventListener("resize", d), d(), () => {
+        window.removeEventListener("resize", d), p(), c.dispose(), f.current = null;
       };
     }, [s]), $c(() => {
       var h;
