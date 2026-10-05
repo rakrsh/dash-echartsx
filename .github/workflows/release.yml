@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+    environment: pypi
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          uv sync --group dev
+
+      - name: Build and verify
+        run: |
+          npm run build
+          npm run lint
+          npm run typecheck
+          uv run ruff check .
+          uv run black --check dash_echartsx tests
+          uv run pytest
+
+      - name: Build Python distributions
+        run: uv build
+
+      - name: Verify wheel installation
+        run: |
+          uv venv .venv-check
+          uv pip install --python .venv-check/bin/python dist/*.whl
+          cd "$RUNNER_TEMP"
+          "$GITHUB_WORKSPACE/.venv-check/bin/python" -c "import dash_echartsx; print(dash_echartsx.__version__)"
+
+      - name: Upload distributions to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "$GITHUB_REF_NAME" dist/* --clobber
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
