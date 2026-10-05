@@ -1,4 +1,5 @@
 # dash-echartsx
+
 A high-performance, developer-friendly Python wrapper for Apache ECharts 6+ in Plotly Dash.
 
 ## Development
@@ -15,3 +16,10 @@ npm run build
 The build writes ES module and UMD bundles to `dash_echartsx/` and generates
 the Dash Python component wrapper there. Check the TypeScript sources with
 `npm run typecheck` and run the Python tests with `uv run pytest`.
+
+## Code Quality
+
+Run the JavaScript/TypeScript lint and formatting checks with `npm run lint`.
+Run Python linting and formatting checks with `uv run ruff check .` and
+`uv run black --check dash_echartsx tests`. Pre-commit hooks run lint-staged
+automatically after `npm install` configures Husky.
