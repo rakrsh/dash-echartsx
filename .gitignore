@@ -228,3 +228,6 @@ node_modules/
 # Husky generated hook shims
 .husky/
 .husky/_/
+
+# Visual Studio Code
+.vscode/

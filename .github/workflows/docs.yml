@@ -1,0 +1,47 @@
+name: Documentation and generated API checks
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'docs/**'
+      - 'src/lib/components/**'
+      - 'package.json'
+      - '.github/workflows/docs.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          uv sync --group dev
+
+      - name: Build generated component documentation
+        run: npm run build
+
+      - name: Verify generated component metadata is committed
+        run: git diff --exit-code -- dash_echartsx/metadata.json dash_echartsx/DashEChartsX.py
