@@ -6,4 +6,9 @@ var pk = window['dash_echartsx'];
 pk.DashEChartsX.propTypes = {id:pt.oneOfType([pt.string]),
  className:pt.oneOfType([pt.string]),
  style:pt.any,
- option:pt.any};
+ option:pt.any,
+ notMerge:pt.oneOfType([pt.bool]),
+ lazyUpdate:pt.oneOfType([pt.bool]),
+ renderer:pt.oneOf(['canvas','svg']),
+ ref:pt.oneOfType([pt.string,pt.any]),
+ key:pt.oneOfType([pt.string,pt.number])};

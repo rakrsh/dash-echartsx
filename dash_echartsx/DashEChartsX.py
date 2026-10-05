@@ -22,7 +22,7 @@ ComponentType = typing.Union[
 
 class DashEChartsX(Component):
     """A DashEChartsX component.
-@description A Dash component for Apache ECharts.
+
 
 Keyword arguments:
 
@@ -32,8 +32,26 @@ Keyword arguments:
 - className (string; optional):
     CSS class applied to the component container.
 
+- key (string | number; optional)
+
+- lazyUpdate (boolean; optional):
+    Defer option updates until the next animation frame.
+
+- notMerge (boolean; optional):
+    Replace the current option instead of merging it.
+
 - option (boolean | number | string | dict | list; optional):
-    ECharts option object."""
+    ECharts option object.
+
+- ref (string; optional):
+    Allows getting a ref to the component instance. Once the component
+    unmounts, React will set `ref.current` to `None` (or call the ref
+    with `None` if you passed a callback ref). @,see,,{@link
+    ,https://react.dev/learn/referencing-values-with-refs#refs-and-the-dom
+    React Docs,}.
+
+- renderer (a value equal to: None, 'canvas', 'svg'; optional):
+    Rendering engine used by ECharts."""
     _children_props: typing.List[str] = []
     _base_nodes = ['children']
     _namespace = 'dash_echartsx'
@@ -46,11 +64,16 @@ Keyword arguments:
         className: typing.Optional[typing.Union[str]] = None,
         style: typing.Optional[typing.Any] = None,
         option: typing.Optional[typing.Any] = None,
+        notMerge: typing.Optional[typing.Union[bool]] = None,
+        lazyUpdate: typing.Optional[typing.Union[bool]] = None,
+        renderer: typing.Optional[Literal[None, "canvas", "svg"]] = None,
+        ref: typing.Optional[typing.Union[str, typing.Any]] = None,
+        key: typing.Optional[typing.Union[str, NumberType]] = None,
         **kwargs
     ):
-        self._prop_names = ['id', 'className', 'option', 'style']
+        self._prop_names = ['id', 'className', 'key', 'lazyUpdate', 'notMerge', 'option', 'ref', 'renderer', 'style']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'className', 'option', 'style']
+        self.available_properties = ['id', 'className', 'key', 'lazyUpdate', 'notMerge', 'option', 'ref', 'renderer', 'style']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

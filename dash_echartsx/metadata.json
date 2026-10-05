@@ -1,1 +1,95 @@
-{"src/lib/components/DashEChartsX.tsx":{"displayName":"DashEChartsX","description":"@description A Dash component for Apache ECharts.\r","props":{"id":{"description":"Unique identifier for the component.","required":false,"type":{"name":"union","value":[{"name":"string","raw":"string"}],"raw":"string | undefined"}},"className":{"description":"CSS class applied to the component container.","required":false,"type":{"name":"union","value":[{"name":"string","raw":"string"}],"raw":"string | undefined"}},"style":{"description":"Inline styles applied to the component container.","required":false,"type":{"name":"any","raw":"CSSProperties | undefined"}},"option":{"description":"ECharts option object.","required":false,"type":{"name":"any","raw":"Record<string, unknown> | undefined"}}},"isContext":false}}
+{
+  "src/lib/components/DashEChartsX.tsx": {
+    "displayName": "DashEChartsX",
+    "description": "",
+    "props": {
+      "id": {
+        "description": "Unique identifier for the component.",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [{ "name": "string", "raw": "string" }],
+          "raw": "string | undefined"
+        }
+      },
+      "className": {
+        "description": "CSS class applied to the component container.",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [{ "name": "string", "raw": "string" }],
+          "raw": "string | undefined"
+        }
+      },
+      "style": {
+        "description": "Inline styles applied to the component container.",
+        "required": false,
+        "type": { "name": "any", "raw": "CSSProperties | undefined" }
+      },
+      "option": {
+        "description": "ECharts option object.",
+        "required": false,
+        "type": { "name": "any", "raw": "EChartsOption | undefined" }
+      },
+      "notMerge": {
+        "description": "Replace the current option instead of merging it.",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [{ "name": "bool", "raw": "false" }],
+          "raw": "boolean | undefined"
+        }
+      },
+      "lazyUpdate": {
+        "description": "Defer option updates until the next animation frame.",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [{ "name": "bool", "raw": "false" }],
+          "raw": "boolean | undefined"
+        }
+      },
+      "renderer": {
+        "description": "Rendering engine used by ECharts.",
+        "required": false,
+        "type": {
+          "name": "enum",
+          "value": [
+            { "computed": false },
+            { "value": "'canvas'", "computed": false },
+            { "value": "'svg'", "computed": false }
+          ],
+          "raw": "\"canvas\" | \"svg\" | undefined"
+        }
+      },
+      "ref": {
+        "description": "Allows getting a ref to the component instance.\nOnce the component unmounts, React will set `ref.current` to `null`\n(or call the ref with `null` if you passed a callback ref).\n@,see,,{@link ,https://react.dev/learn/referencing-values-with-refs#refs-and-the-dom React Docs,}",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [
+            { "name": "string", "raw": "string" },
+            {
+              "name": "func",
+              "raw": "(instance: DashEChartsXHandle | null) => void"
+            }
+          ],
+          "raw": "LegacyRef<DashEChartsXHandle> | undefined"
+        }
+      },
+      "key": {
+        "description": "",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [
+            { "name": "string", "raw": "string" },
+            { "name": "number", "raw": "number" }
+          ],
+          "raw": "Key | null | undefined"
+        }
+      }
+    },
+    "isContext": false
+  }
+}
