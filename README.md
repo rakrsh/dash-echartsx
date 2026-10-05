@@ -2,6 +2,24 @@
 
 A high-performance, developer-friendly Python wrapper for Apache ECharts 6+ in Plotly Dash.
 
+## Event callbacks
+
+Chart interactions are exposed as Dash properties: `click_data`, `dblclick_data`,
+`hover_data`, `selected_data`, `legend_status`, and `zoom_data`. Event payloads are
+JSON-safe dictionaries; data events include `seriesIndex`, `dataIndex`, `name`,
+and `value` when ECharts provides them.
+
+Use any event property as a callback input:
+
+```python
+from dash import Input, Output
+
+
+@app.callback(Output("interaction", "children"), Input("chart", "click_data"))
+def show_click(data):
+	return str(data)
+```
+
 ## Development
 
 Use uv to sync the Python project and npm to install JavaScript dependencies,
