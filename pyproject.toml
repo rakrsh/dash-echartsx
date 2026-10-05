@@ -13,6 +13,7 @@ dependencies = ["dash>=2.14"]
 
 [dependency-groups]
 test = [
+    "dash[testing]>=2.14",
 	"chromedriver-autoinstaller>=0.6.4",
 	"pytest>=8",
 	"selenium>=4.14.0",
