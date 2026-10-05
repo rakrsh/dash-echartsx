@@ -13,7 +13,7 @@ dependencies = ["dash>=2.14"]
 
 [dependency-groups]
 test = [
-    "dash[testing]>=2.14",
+	"dash[testing]>=4.5.0rc0",
 	"chromedriver-autoinstaller>=0.6.4",
 	"pytest>=8",
 	"selenium>=4.14.0",
@@ -28,7 +28,7 @@ dev = [
 
 [tool.ruff]
 line-length = 88
-target-version = "py39"
+target-version = "py310"
 extend-exclude = ["dash_echartsx/DashEChartsX.py", "dash_echartsx/_imports_.py"]
 
 [tool.ruff.lint]
@@ -36,7 +36,7 @@ select = ["E", "F", "I", "UP"]
 
 [tool.black]
 line-length = 88
-target-version = ["py39"]
+target-version = ["py310"]
 extend-exclude = '(?x)(/DashEChartsX\.py|/_imports_\.py)$'
 
 [tool.hatch.build.targets.wheel]
