@@ -1,6 +1,7 @@
 import json
 
 from dash import Dash, Input, Output, html
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -72,18 +73,15 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
         "value": 12,
     }
 
-    dash_duo.driver.execute_script("""
-        const canvas = document.querySelector("#chart canvas");
-        const rect = canvas.getBoundingClientRect();
-        canvas.dispatchEvent(new WheelEvent("wheel", {
-          bubbles: true,
-          cancelable: true,
-          clientX: rect.left + rect.width * 0.5,
-          clientY: rect.top + rect.height * 0.5,
-          deltaY: -120,
-          deltaMode: 0
-        }));
-        """)
+    canvas = dash_duo.find_element("#chart canvas")
+    (
+        ActionChains(dash_duo.driver)
+        .move_to_element(canvas)
+        .click_and_hold()
+        .move_by_offset(120, 0)
+        .release()
+        .perform()
+    )
 
     def read_zoom_range(driver):
         payload = read_payload(driver, "zoom-output")
