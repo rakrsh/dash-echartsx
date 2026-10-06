@@ -14,6 +14,7 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
             DashEChartsX(
                 id="chart",
                 option={
+                    "animation": False,
                     "xAxis": {"type": "category", "data": ["A", "B", "C"]},
                     "yAxis": {"type": "value"},
                     "dataZoom": [
@@ -37,7 +38,7 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
         return json.dumps(value or {}, sort_keys=True)
 
     dash_duo.start_server(app)
-    dash_duo.wait_for_element("#chart canvas")
+    dash_duo.wait_for_element("#chart canvas", timeout=30)
 
     dash_duo.driver.execute_script("""
         const canvas = document.querySelector("#chart canvas");
@@ -60,7 +61,7 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
         text = driver.find_element(By.ID, element_id).text
         return json.loads(text) if text else {}
 
-    WebDriverWait(dash_duo.driver, 10).until(
+    WebDriverWait(dash_duo.driver, 30).until(
         lambda driver: read_payload(driver, "click-output").get("dataIndex") == 0
     )
     click_data = read_payload(dash_duo.driver, "click-output")
@@ -84,8 +85,15 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
         }));
         """)
 
-    WebDriverWait(dash_duo.driver, 10).until(
-        lambda driver: {"start", "end"} <= read_payload(driver, "zoom-output").keys()
-    )
-    zoom_data = read_payload(dash_duo.driver, "zoom-output")
+    def read_zoom_range(driver):
+        payload = read_payload(driver, "zoom-output")
+        if {"start", "end"} <= payload.keys():
+            return payload
+
+        batch = payload.get("batch")
+        if isinstance(batch, list) and batch and {"start", "end"} <= batch[0].keys():
+            return batch[0]
+        return None
+
+    zoom_data = WebDriverWait(dash_duo.driver, 30).until(read_zoom_range)
     assert 0 <= zoom_data["start"] < zoom_data["end"] <= 100

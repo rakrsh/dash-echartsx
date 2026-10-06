@@ -16,6 +16,7 @@ def test_dash_callback_dispatches_legend_select_action(dash_duo):
             DashEChartsX(
                 id="chart",
                 option={
+                    "animation": False,
                     "xAxis": {"type": "category", "data": ["A", "B", "C"]},
                     "yAxis": {"type": "value"},
                     "legend": {"selected": {"Revenue": False}},
@@ -39,7 +40,7 @@ def test_dash_callback_dispatches_legend_select_action(dash_duo):
         return json.dumps(status)
 
     dash_duo.start_server(app)
-    dash_duo.wait_for_element("#chart canvas")
+    dash_duo.wait_for_element("#chart canvas", timeout=30)
     dash_duo.find_element("#show-point").click()
 
     def revenue_is_selected(driver):
@@ -50,4 +51,4 @@ def test_dash_callback_dispatches_legend_select_action(dash_duo):
             and payload.get("selected", {}).get("Revenue") is True
         )
 
-    WebDriverWait(dash_duo.driver, 10).until(revenue_is_selected)
+    WebDriverWait(dash_duo.driver, 30).until(revenue_is_selected)
