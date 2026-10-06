@@ -1,7 +1,6 @@
 import json
 
 from dash import Dash, Input, Output, html
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -15,7 +14,6 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
             DashEChartsX(
                 id="chart",
                 option={
-                    "animation": False,
                     "xAxis": {"type": "category", "data": ["A", "B", "C"]},
                     "yAxis": {"type": "value"},
                     "dataZoom": [
@@ -39,7 +37,7 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
         return json.dumps(value or {}, sort_keys=True)
 
     dash_duo.start_server(app)
-    dash_duo.wait_for_element("#chart canvas", timeout=30)
+    dash_duo.wait_for_element("#chart canvas")
 
     dash_duo.driver.execute_script("""
         const canvas = document.querySelector("#chart canvas");
@@ -62,7 +60,7 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
         text = driver.find_element(By.ID, element_id).text
         return json.loads(text) if text else {}
 
-    WebDriverWait(dash_duo.driver, 30).until(
+    WebDriverWait(dash_duo.driver, 10).until(
         lambda driver: read_payload(driver, "click-output").get("dataIndex") == 0
     )
     click_data = read_payload(dash_duo.driver, "click-output")
@@ -73,25 +71,21 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
         "value": 12,
     }
 
-    canvas = dash_duo.find_element("#chart canvas")
-    (
-        ActionChains(dash_duo.driver)
-        .move_to_element(canvas)
-        .click_and_hold()
-        .move_by_offset(120, 0)
-        .release()
-        .perform()
+    dash_duo.driver.execute_script("""
+        const canvas = document.querySelector("#chart canvas");
+        const rect = canvas.getBoundingClientRect();
+        canvas.dispatchEvent(new WheelEvent("wheel", {
+          bubbles: true,
+          cancelable: true,
+          clientX: rect.left + rect.width * 0.5,
+          clientY: rect.top + rect.height * 0.5,
+          deltaY: -120,
+          deltaMode: 0
+        }));
+        """)
+
+    WebDriverWait(dash_duo.driver, 10).until(
+        lambda driver: {"start", "end"} <= read_payload(driver, "zoom-output").keys()
     )
-
-    def read_zoom_range(driver):
-        payload = read_payload(driver, "zoom-output")
-        if {"start", "end"} <= payload.keys():
-            return payload
-
-        batch = payload.get("batch")
-        if isinstance(batch, list) and batch and {"start", "end"} <= batch[0].keys():
-            return batch[0]
-        return None
-
-    zoom_data = WebDriverWait(dash_duo.driver, 30).until(read_zoom_range)
+    zoom_data = read_payload(dash_duo.driver, "zoom-output")
     assert 0 <= zoom_data["start"] < zoom_data["end"] <= 100
