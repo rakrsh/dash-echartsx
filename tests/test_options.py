@@ -28,6 +28,7 @@ def test_event_props_are_available_to_dash_callbacks():
         "selected_data",
         "legend_status",
         "zoom_data",
+        "dispatch_action",
     }
     component = DashEChartsX(id="chart")
     assert event_props <= set(component.available_properties)

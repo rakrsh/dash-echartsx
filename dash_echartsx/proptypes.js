@@ -17,5 +17,6 @@ pk.DashEChartsX.propTypes = {id:pt.oneOfType([pt.string]),
  selected_data:pt.any,
  legend_status:pt.any,
  zoom_data:pt.any,
+ dispatch_action:pt.any,
  ref:pt.oneOfType([pt.string,pt.any]),
  key:pt.oneOfType([pt.string,pt.number])};
