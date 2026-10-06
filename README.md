@@ -20,6 +20,20 @@ def show_click(data):
 	return str(data)
 ```
 
+To trigger an ECharts action from Python, return a payload through
+`dispatch_action`. Supported action types are `highlight`, `downplay`, `showTip`,
+`hideTip`, `selectDataRange`, and `legendSelect`:
+
+```python
+@app.callback(
+	Output("chart", "dispatch_action"),
+	Input("show-point", "n_clicks"),
+	prevent_initial_call=True,
+)
+def show_point(_):
+	return {"type": "showTip", "seriesIndex": 0, "dataIndex": 2}
+```
+
 ## Development
 
 Use uv to sync the Python project and npm to install JavaScript dependencies,

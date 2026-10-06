@@ -40,6 +40,9 @@ Keyword arguments:
     Latest double-click event with seriesIndex, dataIndex, name, and
     value when available.
 
+- dispatch_action (boolean | number | string | dict | list; optional):
+    Dispatch a supported ECharts action when this payload changes.
+
 - hover_data (boolean | number | string | dict | list; optional):
     Latest pointer-over event with seriesIndex, dataIndex, name, and
     value when available.
@@ -100,13 +103,14 @@ Keyword arguments:
         selected_data: typing.Optional[typing.Any] = None,
         legend_status: typing.Optional[typing.Any] = None,
         zoom_data: typing.Optional[typing.Any] = None,
+        dispatch_action: typing.Optional[typing.Any] = None,
         ref: typing.Optional[typing.Union[str, typing.Any]] = None,
         key: typing.Optional[typing.Union[str, NumberType]] = None,
         **kwargs
     ):
-        self._prop_names = ['id', 'className', 'click_data', 'dblclick_data', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
+        self._prop_names = ['id', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'className', 'click_data', 'dblclick_data', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
+        self.available_properties = ['id', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

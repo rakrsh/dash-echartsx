@@ -5,12 +5,18 @@ import {
   LegendComponent,
   TitleComponent,
   TooltipComponent,
+  VisualMapComponent,
 } from "echarts/components";
 import { init, use as registerEChartsModules } from "echarts/core";
 import type { EChartsOption } from "echarts";
 import type { EChartsType } from "echarts/core";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import type { CSSProperties } from "react";
 
 registerEChartsModules([
@@ -22,6 +28,7 @@ registerEChartsModules([
   LegendComponent,
   TitleComponent,
   TooltipComponent,
+  VisualMapComponent,
   CanvasRenderer,
   SVGRenderer,
 ]);
@@ -38,6 +45,43 @@ const namedThemes = {
     textStyle: { color: "#e8eaed" },
   },
 } satisfies Record<"light" | "dark", Record<string, unknown>>;
+
+const supportedActions = new Set([
+  "highlight",
+  "downplay",
+  "showTip",
+  "hideTip",
+  "selectDataRange",
+  "legendSelect",
+]);
+
+function dispatchChartAction(chart: EChartsType, action: unknown): void {
+  if (!action || typeof action !== "object" || Array.isArray(action)) {
+    console.warn(
+      "[DashEChartsX] dispatch_action must be an object with a supported string 'type'.",
+    );
+    return;
+  }
+
+  const payload = action as Record<string, unknown>;
+  if (typeof payload.type !== "string" || !supportedActions.has(payload.type)) {
+    console.warn(
+      `[DashEChartsX] Ignoring unsupported dispatch_action type: ${String(payload.type)}. Supported types: ${[...supportedActions].join(", ")}.`,
+    );
+    return;
+  }
+
+  try {
+    chart.dispatchAction(
+      payload as Parameters<EChartsType["dispatchAction"]>[0],
+    );
+  } catch (error) {
+    console.warn(
+      `[DashEChartsX] Failed to dispatch ECharts action '${payload.type}'.`,
+      error,
+    );
+  }
+}
 
 function eventPayload(
   params: unknown,
@@ -95,6 +139,8 @@ type DashEChartsXProps = {
   legend_status?: Record<string, unknown>;
   /** Latest data-zoom event with range and value bounds when available. */
   zoom_data?: Record<string, unknown>;
+  /** Dispatch a supported ECharts action when this payload changes. */
+  dispatch_action?: Record<string, unknown>;
 };
 
 type DashSetProps = (props: Partial<DashEChartsXProps>) => void;
@@ -110,6 +156,7 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       lazyUpdate = false,
       renderer = "canvas",
       theme,
+      dispatch_action,
     } = componentProps;
     const dashSetProps = (
       componentProps as DashEChartsXProps & { setProps?: DashSetProps }
@@ -198,6 +245,13 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
             }),
         ],
         [
+          "legendselected",
+          (params) =>
+            setPropsRef.current?.({
+              legend_status: eventPayload(params, ["name", "selected"]),
+            }),
+        ],
+        [
           "datazoom",
           (params) =>
             setPropsRef.current?.({
@@ -265,6 +319,12 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
         chartRef.current?.setOption(option, notMerge, lazyUpdate);
       }
     }, [lazyUpdate, notMerge, option, renderer, theme]);
+
+    useEffect(() => {
+      if (dispatch_action !== undefined && chartRef.current) {
+        dispatchChartAction(chartRef.current, dispatch_action);
+      }
+    }, [dispatch_action]);
 
     return (
       <div
