@@ -1,13 +1,20 @@
-import { BarChart, CustomChart, LineChart, PieChart } from "echarts/charts";
+import {
+  BarChart,
+  CustomChart,
+  LineChart,
+  MapChart,
+  PieChart,
+} from "echarts/charts";
 import {
   DataZoomComponent,
+  GeoComponent,
   GridComponent,
   LegendComponent,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,
 } from "echarts/components";
-import { init, use as registerEChartsModules } from "echarts/core";
+import { init, registerMap, use as registerEChartsModules } from "echarts/core";
 import type { EChartsOption } from "echarts";
 import type { EChartsType } from "echarts/core";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
@@ -16,16 +23,20 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
+  useState,
 } from "react";
 import type { CSSProperties } from "react";
 import { resolveJavaScriptFunctions } from "../utils/resolveJavaScriptFunctions";
+import { loadEChartsGL } from "../utils/loadEChartsGL";
 
 registerEChartsModules([
   BarChart,
   CustomChart,
   LineChart,
+  MapChart,
   PieChart,
   DataZoomComponent,
+  GeoComponent,
   GridComponent,
   LegendComponent,
   TitleComponent,
@@ -112,6 +123,15 @@ export type DashEChartsXHandle = {
   getInstance: () => EChartsType | null;
 };
 
+type DashEChartsMap = {
+  /** Map name referenced in the ECharts option. */
+  name: string;
+  /** GeoJSON source or an SVG definition such as {svg: "<svg>...</svg>"}. */
+  geoJSON: Parameters<typeof registerMap>[1];
+  /** Optional geographic area overrides. */
+  specialAreas?: Parameters<typeof registerMap>[2];
+};
+
 type DashEChartsXProps = {
   /** Unique identifier for the component. */
   id?: string;
@@ -121,6 +141,12 @@ type DashEChartsXProps = {
   style?: CSSProperties;
   /** ECharts option object. */
   option?: EChartsOption;
+  /** GeoJSON or SVG map definitions registered before applying the option. */
+  maps?: DashEChartsMap[];
+  /** Lazily load ECharts-GL before applying 3D/WebGL options. */
+  enable_gl?: boolean;
+  /** Optional URL override for the separately served ECharts-GL bundle. */
+  gl_bundle_url?: string;
   /** Replace the current option instead of merging it. */
   notMerge?: boolean;
   /** Defer option updates until the next animation frame. */
@@ -154,6 +180,9 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       className,
       style,
       option,
+      maps,
+      enable_gl = false,
+      gl_bundle_url,
       notMerge = false,
       lazyUpdate = false,
       renderer = "canvas",
@@ -166,6 +195,7 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<EChartsType | null>(null);
     const setPropsRef = useRef<DashSetProps | undefined>(undefined);
+    const [chartReady, setChartReady] = useState(false);
 
     useEffect(() => {
       setPropsRef.current = dashSetProps;
@@ -178,159 +208,192 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
     );
 
     useEffect(() => {
-      const container = containerRef.current;
-      if (!container) return;
+      let disposeChart: (() => void) | undefined;
+      let cancelled = false;
 
-      const resolvedTheme =
-        typeof theme === "string" ? namedThemes[theme] : theme;
-      const chart = init(container, resolvedTheme, { renderer });
-      chartRef.current = chart;
+      const initializeChart = () => {
+        if (cancelled) return;
 
-      const listeners: Array<[string, (params: unknown) => void]> = [
-        [
-          "click",
-          (params) =>
-            setPropsRef.current?.({
-              click_data: eventPayload(params, [
-                "seriesIndex",
-                "dataIndex",
-                "name",
-                "value",
-              ]),
-            }),
-        ],
-        [
-          "dblclick",
-          (params) =>
-            setPropsRef.current?.({
-              dblclick_data: eventPayload(params, [
-                "seriesIndex",
-                "dataIndex",
-                "name",
-                "value",
-              ]),
-            }),
-        ],
-        [
-          "mouseover",
-          (params) =>
-            setPropsRef.current?.({
-              hover_data: eventPayload(params, [
-                "seriesIndex",
-                "dataIndex",
-                "name",
-                "value",
-              ]),
-            }),
-        ],
-        [
-          "selectchanged",
-          (params) =>
-            setPropsRef.current?.({
-              selected_data: eventPayload(params, [
-                "type",
-                "fromAction",
-                "isFromClick",
-                "seriesIndex",
-                "dataIndex",
-                "name",
-                "value",
-                "selected",
-              ]),
-            }),
-        ],
-        [
-          "legendselectchanged",
-          (params) =>
-            setPropsRef.current?.({
-              legend_status: eventPayload(params, ["name", "selected"]),
-            }),
-        ],
-        [
-          "legendselected",
-          (params) =>
-            setPropsRef.current?.({
-              legend_status: eventPayload(params, ["name", "selected"]),
-            }),
-        ],
-        [
-          "datazoom",
-          (params) =>
-            setPropsRef.current?.({
-              zoom_data: eventPayload(params, [
-                "dataZoomId",
-                "dataZoomIndex",
-                "start",
-                "end",
-                "startValue",
-                "endValue",
-                "batch",
-              ]),
-            }),
-        ],
-      ];
-      listeners.forEach(([event, handler]) => chart.on(event, handler));
+        const container = containerRef.current;
+        if (!container) return;
 
-      let resizeFrame: number | null = null;
-      const scheduleResize = () => {
-        if (resizeFrame !== null) return;
+        const resolvedTheme =
+          typeof theme === "string" ? namedThemes[theme] : theme;
+        const chart = init(container, resolvedTheme, { renderer });
+        chartRef.current = chart;
 
-        resizeFrame = requestAnimationFrame(() => {
-          resizeFrame = null;
-          if (container.clientWidth > 0 && container.clientHeight > 0) {
-            chart.resize();
+        const listeners: Array<[string, (params: unknown) => void]> = [
+          [
+            "click",
+            (params) =>
+              setPropsRef.current?.({
+                click_data: eventPayload(params, [
+                  "seriesIndex",
+                  "dataIndex",
+                  "name",
+                  "value",
+                ]),
+              }),
+          ],
+          [
+            "dblclick",
+            (params) =>
+              setPropsRef.current?.({
+                dblclick_data: eventPayload(params, [
+                  "seriesIndex",
+                  "dataIndex",
+                  "name",
+                  "value",
+                ]),
+              }),
+          ],
+          [
+            "mouseover",
+            (params) =>
+              setPropsRef.current?.({
+                hover_data: eventPayload(params, [
+                  "seriesIndex",
+                  "dataIndex",
+                  "name",
+                  "value",
+                ]),
+              }),
+          ],
+          [
+            "selectchanged",
+            (params) =>
+              setPropsRef.current?.({
+                selected_data: eventPayload(params, [
+                  "type",
+                  "fromAction",
+                  "isFromClick",
+                  "seriesIndex",
+                  "dataIndex",
+                  "name",
+                  "value",
+                  "selected",
+                ]),
+              }),
+          ],
+          [
+            "legendselectchanged",
+            (params) =>
+              setPropsRef.current?.({
+                legend_status: eventPayload(params, ["name", "selected"]),
+              }),
+          ],
+          [
+            "legendselected",
+            (params) =>
+              setPropsRef.current?.({
+                legend_status: eventPayload(params, ["name", "selected"]),
+              }),
+          ],
+          [
+            "datazoom",
+            (params) =>
+              setPropsRef.current?.({
+                zoom_data: eventPayload(params, [
+                  "dataZoomId",
+                  "dataZoomIndex",
+                  "start",
+                  "end",
+                  "startValue",
+                  "endValue",
+                  "batch",
+                ]),
+              }),
+          ],
+        ];
+        listeners.forEach(([event, handler]) => chart.on(event, handler));
+
+        let resizeFrame: number | null = null;
+        const scheduleResize = () => {
+          if (resizeFrame !== null) return;
+
+          resizeFrame = requestAnimationFrame(() => {
+            resizeFrame = null;
+            if (container.clientWidth > 0 && container.clientHeight > 0) {
+              chart.resize();
+            }
+          });
+        };
+
+        const cancelScheduledResize = () => {
+          if (resizeFrame !== null) {
+            cancelAnimationFrame(resizeFrame);
+            resizeFrame = null;
           }
-        });
-      };
+        };
 
-      const cancelScheduledResize = () => {
-        if (resizeFrame !== null) {
-          cancelAnimationFrame(resizeFrame);
-          resizeFrame = null;
-        }
-      };
-
-      if (typeof ResizeObserver !== "undefined") {
-        const resizeObserver = new ResizeObserver(scheduleResize);
-        resizeObserver.observe(container);
-        scheduleResize();
-
-        return () => {
-          resizeObserver.disconnect();
+        const cleanup = () => {
           cancelScheduledResize();
           listeners.forEach(([event, handler]) => chart.off(event, handler));
           chart.dispose();
           chartRef.current = null;
+          setChartReady(false);
         };
+
+        if (typeof ResizeObserver !== "undefined") {
+          const resizeObserver = new ResizeObserver(scheduleResize);
+          resizeObserver.observe(container);
+          scheduleResize();
+          disposeChart = () => {
+            resizeObserver.disconnect();
+            cleanup();
+          };
+        } else {
+          window.addEventListener("resize", scheduleResize);
+          scheduleResize();
+          disposeChart = () => {
+            window.removeEventListener("resize", scheduleResize);
+            cleanup();
+          };
+        }
+
+        setChartReady(true);
+      };
+
+      if (enable_gl) {
+        loadEChartsGL(gl_bundle_url)
+          .then(initializeChart)
+          .catch((error) => {
+            console.error(
+              "[DashEChartsX] Failed to load the optional ECharts-GL bundle.",
+              error,
+            );
+          });
+      } else {
+        initializeChart();
       }
 
-      window.addEventListener("resize", scheduleResize);
-      scheduleResize();
-
       return () => {
-        window.removeEventListener("resize", scheduleResize);
-        cancelScheduledResize();
-        listeners.forEach(([event, handler]) => chart.off(event, handler));
-        chart.dispose();
-        chartRef.current = null;
+        cancelled = true;
+        disposeChart?.();
       };
-    }, [renderer, theme]);
+    }, [enable_gl, gl_bundle_url, renderer, theme]);
 
     useEffect(() => {
-      if (option) {
+      maps?.forEach(({ name, geoJSON, specialAreas }) => {
+        registerMap(name, geoJSON, specialAreas);
+      });
+    }, [maps]);
+
+    useEffect(() => {
+      if (chartReady && option) {
         chartRef.current?.setOption(
           resolveJavaScriptFunctions(option),
           notMerge,
           lazyUpdate,
         );
       }
-    }, [lazyUpdate, notMerge, option, renderer, theme]);
+    }, [chartReady, lazyUpdate, maps, notMerge, option, renderer, theme]);
 
     useEffect(() => {
-      if (dispatch_action !== undefined && chartRef.current) {
+      if (chartReady && dispatch_action !== undefined && chartRef.current) {
         dispatchChartAction(chartRef.current, dispatch_action);
       }
-    }, [dispatch_action]);
+    }, [chartReady, dispatch_action]);
 
     return (
       <div

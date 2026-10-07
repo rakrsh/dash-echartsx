@@ -43,6 +43,12 @@ Keyword arguments:
 - dispatch_action (boolean | number | string | dict | list; optional):
     Dispatch a supported ECharts action when this payload changes.
 
+- enable_gl (boolean; optional):
+    Lazily load ECharts-GL before applying 3D/WebGL options.
+
+- gl_bundle_url (string; optional):
+    Optional URL override for the separately served ECharts-GL bundle.
+
 - hover_data (boolean | number | string | dict | list; optional):
     Latest pointer-over event with seriesIndex, dataIndex, name, and
     value when available.
@@ -55,6 +61,10 @@ Keyword arguments:
 - legend_status (boolean | number | string | dict | list; optional):
     Latest legend selection event with the legend name and selection
     state.
+
+- maps (boolean | number | string | dict | list; optional):
+    GeoJSON or SVG map definitions registered before applying the
+    option.
 
 - notMerge (boolean; optional):
     Replace the current option instead of merging it.
@@ -93,6 +103,9 @@ Keyword arguments:
         className: typing.Optional[typing.Union[str]] = None,
         style: typing.Optional[typing.Any] = None,
         option: typing.Optional[typing.Any] = None,
+        maps: typing.Optional[typing.Any] = None,
+        enable_gl: typing.Optional[typing.Union[bool]] = None,
+        gl_bundle_url: typing.Optional[typing.Union[str]] = None,
         notMerge: typing.Optional[typing.Union[bool]] = None,
         lazyUpdate: typing.Optional[typing.Union[bool]] = None,
         renderer: typing.Optional[Literal[None, "canvas", "svg"]] = None,
@@ -108,9 +121,9 @@ Keyword arguments:
         key: typing.Optional[typing.Union[str, NumberType]] = None,
         **kwargs
     ):
-        self._prop_names = ['id', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
+        self._prop_names = ['id', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
+        self.available_properties = ['id', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

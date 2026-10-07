@@ -1,6 +1,6 @@
 # dash-echartsx
 
-A high-performance, developer-friendly Python wrapper for Apache ECharts 6+ in Plotly Dash.
+A high-performance, developer-friendly Python wrapper for Apache ECharts 5.6+ and 6 in Plotly Dash.
 
 ## JavaScript option functions
 
@@ -44,6 +44,56 @@ Because compilation uses the JavaScript `Function` constructor, deployments with
 a Content Security Policy that disallows `unsafe-eval` cannot use marked
 functions. Compilation errors and invalid marker objects are reported rather
 than silently ignored.
+
+## Custom maps and 3D charts
+
+Register custom GeoJSON maps with the `maps` property. Definitions are
+registered with ECharts before the option is applied:
+
+```python
+from dash_echartsx import DashEChartsX
+
+DashEChartsX(
+    maps=[{"name": "districts", "geoJSON": geojson}],
+    option={
+        "series": [
+            {"type": "map", "map": "districts", "data": region_values}
+        ]
+    },
+)
+```
+
+SVG map data uses ECharts' `{ "svg": ... }` map definition in the same property:
+
+```python
+from dash_echartsx import DashEChartsX
+
+DashEChartsX(
+    maps=[{"name": "floorplan", "geoJSON": {"svg": svg_markup}}],
+    option={"geo": {"map": "floorplan"}, "series": []},
+)
+```
+
+ECharts-GL charts use a separate bundle and load only when `enable_gl=True`:
+
+```python
+from dash_echartsx import DashEChartsX
+
+DashEChartsX(
+    enable_gl=True,
+    option={
+        "grid3D": {},
+        "xAxis3D": {},
+        "yAxis3D": {},
+        "zAxis3D": {},
+        "series": [{"type": "scatter3D", "data": [[0, 0, 0], [1, 1, 1]]}],
+    },
+)
+```
+
+The GL bundle is served by Dash alongside the core bundle but is not requested
+unless enabled. Set `gl_bundle_url` if hosting that bundle separately. The
+project supports ECharts 5.6 and 6.x; CI builds against both.
 
 ## Event callbacks
 

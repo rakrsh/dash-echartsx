@@ -18,6 +18,24 @@ def test_generated_component_and_runtime_assets_are_registered():
     assert any(
         asset["relative_package_path"] == "dash_echartsx.umd.js" for asset in _js_dist
     )
+    assert any(
+        asset["relative_package_path"] == "dash_echartsx.gl.umd.js" and asset["dynamic"]
+        for asset in _js_dist
+    )
+
+
+def test_custom_map_and_optional_gl_props_are_available():
+    component = DashEChartsX(
+        maps=[{"name": "custom", "geoJSON": {"type": "FeatureCollection"}}],
+        enable_gl=True,
+        gl_bundle_url="/assets/dash_echartsx.gl.umd.js",
+    )
+    assert component.maps == [
+        {"name": "custom", "geoJSON": {"type": "FeatureCollection"}}
+    ]
+    assert component.enable_gl is True
+    assert component.gl_bundle_url == "/assets/dash_echartsx.gl.umd.js"
+    assert {"maps", "enable_gl", "gl_bundle_url"} <= set(component.available_properties)
 
 
 def test_event_props_are_available_to_dash_callbacks():
