@@ -40,8 +40,10 @@ Only objects containing the `__js_eval__` marker are compiled; ordinary option
 strings are not evaluated. Marked source is executable JavaScript, not a
 sandboxed expression: use it only for code authored and reviewed by the
 application developer. Never build it from user input or untrusted data.
-Compilation errors and invalid marker objects are reported rather than silently
-ignored.
+Because compilation uses the JavaScript `Function` constructor, deployments with
+a Content Security Policy that disallows `unsafe-eval` cannot use marked
+functions. Compilation errors and invalid marker objects are reported rather
+than silently ignored.
 
 ## Event callbacks
 
