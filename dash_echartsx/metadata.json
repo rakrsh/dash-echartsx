@@ -31,6 +31,29 @@
         "required": false,
         "type": { "name": "any", "raw": "EChartsOption | undefined" }
       },
+      "maps": {
+        "description": "GeoJSON or SVG map definitions registered before applying the option.",
+        "required": false,
+        "type": { "name": "any", "raw": "DashEChartsMap[] | undefined" }
+      },
+      "enable_gl": {
+        "description": "Lazily load ECharts-GL before applying 3D/WebGL options.",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [{ "name": "bool", "raw": "false" }],
+          "raw": "boolean | undefined"
+        }
+      },
+      "gl_bundle_url": {
+        "description": "Optional URL override for the separately served ECharts-GL bundle.",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [{ "name": "string", "raw": "string" }],
+          "raw": "string | undefined"
+        }
+      },
       "notMerge": {
         "description": "Replace the current option instead of merging it.",
         "required": false,

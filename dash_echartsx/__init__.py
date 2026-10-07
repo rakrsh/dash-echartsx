@@ -8,6 +8,11 @@ _js_dist = [
         "namespace": "dash_echartsx",
     },
     {
+        "relative_package_path": "dash_echartsx.gl.umd.js",
+        "namespace": "dash_echartsx",
+        "dynamic": True,
+    },
+    {
         "dev_package_path": "proptypes.js",
         "namespace": "dash_echartsx",
         "dev_only": True,

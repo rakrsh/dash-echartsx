@@ -1,13 +1,20 @@
-import { BarChart, CustomChart, LineChart, PieChart } from "echarts/charts";
+import {
+  BarChart,
+  CustomChart,
+  LineChart,
+  MapChart,
+  PieChart,
+} from "echarts/charts";
 import {
   DataZoomComponent,
+  GeoComponent,
   GridComponent,
   LegendComponent,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,
 } from "echarts/components";
-import { init, use as registerEChartsModules } from "echarts/core";
+import { init, registerMap, use as registerEChartsModules } from "echarts/core";
 import type { EChartsOption } from "echarts";
 import type { EChartsType } from "echarts/core";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
@@ -19,13 +26,16 @@ import React, {
 } from "react";
 import type { CSSProperties } from "react";
 import { resolveJavaScriptFunctions } from "../utils/resolveJavaScriptFunctions";
+import { loadEChartsGL } from "../utils/loadEChartsGL";
 
 registerEChartsModules([
   BarChart,
   CustomChart,
   LineChart,
+  MapChart,
   PieChart,
   DataZoomComponent,
+  GeoComponent,
   GridComponent,
   LegendComponent,
   TitleComponent,
@@ -112,6 +122,15 @@ export type DashEChartsXHandle = {
   getInstance: () => EChartsType | null;
 };
 
+type DashEChartsMap = {
+  /** Map name referenced in the ECharts option. */
+  name: string;
+  /** GeoJSON source or an SVG definition such as {svg: "<svg>...</svg>"}. */
+  geoJSON: Parameters<typeof registerMap>[1];
+  /** Optional geographic area overrides. */
+  specialAreas?: Parameters<typeof registerMap>[2];
+};
+
 type DashEChartsXProps = {
   /** Unique identifier for the component. */
   id?: string;
@@ -121,6 +140,12 @@ type DashEChartsXProps = {
   style?: CSSProperties;
   /** ECharts option object. */
   option?: EChartsOption;
+  /** GeoJSON or SVG map definitions registered before applying the option. */
+  maps?: DashEChartsMap[];
+  /** Lazily load ECharts-GL before applying 3D/WebGL options. */
+  enable_gl?: boolean;
+  /** Optional URL override for the separately served ECharts-GL bundle. */
+  gl_bundle_url?: string;
   /** Replace the current option instead of merging it. */
   notMerge?: boolean;
   /** Defer option updates until the next animation frame. */
@@ -154,6 +179,9 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       className,
       style,
       option,
+      maps,
+      enable_gl = false,
+      gl_bundle_url,
       notMerge = false,
       lazyUpdate = false,
       renderer = "canvas",
@@ -317,14 +345,49 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
     }, [renderer, theme]);
 
     useEffect(() => {
-      if (option) {
-        chartRef.current?.setOption(
-          resolveJavaScriptFunctions(option),
-          notMerge,
-          lazyUpdate,
-        );
+      maps?.forEach(({ name, geoJSON, specialAreas }) => {
+        registerMap(name, geoJSON, specialAreas);
+      });
+    }, [maps]);
+
+    useEffect(() => {
+      let active = true;
+      const setChartOption = () => {
+        if (active && option) {
+          chartRef.current?.setOption(
+            resolveJavaScriptFunctions(option),
+            notMerge,
+            lazyUpdate,
+          );
+        }
+      };
+
+      if (enable_gl) {
+        loadEChartsGL(gl_bundle_url)
+          .then(setChartOption)
+          .catch((error) => {
+            console.error(
+              "[DashEChartsX] Failed to load the optional ECharts-GL bundle.",
+              error,
+            );
+          });
+      } else {
+        setChartOption();
       }
-    }, [lazyUpdate, notMerge, option, renderer, theme]);
+
+      return () => {
+        active = false;
+      };
+    }, [
+      enable_gl,
+      gl_bundle_url,
+      lazyUpdate,
+      maps,
+      notMerge,
+      option,
+      renderer,
+      theme,
+    ]);
 
     useEffect(() => {
       if (dispatch_action !== undefined && chartRef.current) {
