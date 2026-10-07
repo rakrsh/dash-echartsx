@@ -1,4 +1,4 @@
-import { BarChart, LineChart, PieChart } from "echarts/charts";
+import { BarChart, CustomChart, LineChart, PieChart } from "echarts/charts";
 import {
   DataZoomComponent,
   GridComponent,
@@ -18,9 +18,11 @@ import React, {
   useRef,
 } from "react";
 import type { CSSProperties } from "react";
+import { resolveJavaScriptFunctions } from "../utils/resolveJavaScriptFunctions";
 
 registerEChartsModules([
   BarChart,
+  CustomChart,
   LineChart,
   PieChart,
   DataZoomComponent,
@@ -316,7 +318,11 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
 
     useEffect(() => {
       if (option) {
-        chartRef.current?.setOption(option, notMerge, lazyUpdate);
+        chartRef.current?.setOption(
+          resolveJavaScriptFunctions(option),
+          notMerge,
+          lazyUpdate,
+        );
       }
     }, [lazyUpdate, notMerge, option, renderer, theme]);
 
