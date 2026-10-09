@@ -50,3 +50,9 @@ def test_event_props_are_available_to_dash_callbacks():
     }
     component = DashEChartsX(id="chart")
     assert event_props <= set(component.available_properties)
+
+
+def test_append_data_prop_is_available_for_streaming_updates():
+    component = DashEChartsX(id="chart", append_data={"seriesIndex": 0, "data": []})
+    assert component.append_data == {"seriesIndex": 0, "data": []}
+    assert "append_data" in component.available_properties

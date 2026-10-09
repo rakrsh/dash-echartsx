@@ -29,6 +29,16 @@ Keyword arguments:
 - id (string; optional):
     Unique identifier for the component.
 
+- append_data (dict; optional):
+    Append a batch of data to an ECharts series without resending its
+    full option.
+
+    `append_data` is a dict with keys:
+
+    - seriesIndex (number; required)
+
+    - data (boolean | number | string | dict | list; required)
+
 - className (string; optional):
     CSS class applied to the component container.
 
@@ -95,6 +105,13 @@ Keyword arguments:
     _base_nodes = ['children']
     _namespace = 'dash_echartsx'
     _type = 'DashEChartsX'
+    AppendData = TypedDict(
+        "AppendData",
+            {
+            "seriesIndex": NumberType,
+            "data": typing.Any
+        }
+    )
 
 
     def __init__(
@@ -117,13 +134,14 @@ Keyword arguments:
         legend_status: typing.Optional[typing.Any] = None,
         zoom_data: typing.Optional[typing.Any] = None,
         dispatch_action: typing.Optional[typing.Any] = None,
+        append_data: typing.Optional[typing.Union["AppendData"]] = None,
         ref: typing.Optional[typing.Union[str, typing.Any]] = None,
         key: typing.Optional[typing.Union[str, NumberType]] = None,
         **kwargs
     ):
-        self._prop_names = ['id', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
+        self._prop_names = ['id', 'append_data', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
+        self.available_properties = ['id', 'append_data', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

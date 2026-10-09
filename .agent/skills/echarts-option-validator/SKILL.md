@@ -21,6 +21,7 @@ Review Python-supplied options and React module registrations against ECharts 6 
 - Check installed ECharts 6 declarations for uncertain option fields.
 - Add focused Python helper tests as needed.
 - For runtime behavior, use a Dash `dash_duo` test and assert the expected canvas/SVG node and absence of browser errors.
+- Reuse the ChromeDriver and browser setup in `tests/conftest.py`; CI runs browser tests headlessly on Ubuntu and Windows.
 - Run `npm run build`, `npm run typecheck`, `npm run lint`, and `uv run pytest`.
 
 Report findings as `path | issue | evidence | correction`. Do not rewrite options during an audit-only request.

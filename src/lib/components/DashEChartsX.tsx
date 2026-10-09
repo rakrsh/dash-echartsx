@@ -66,6 +66,7 @@ const supportedActions = new Set([
   "hideTip",
   "selectDataRange",
   "legendSelect",
+  "dataZoom",
 ]);
 
 function dispatchChartAction(chart: EChartsType, action: unknown): void {
@@ -169,6 +170,8 @@ type DashEChartsXProps = {
   zoom_data?: Record<string, unknown>;
   /** Dispatch a supported ECharts action when this payload changes. */
   dispatch_action?: Record<string, unknown>;
+  /** Append a batch of data to an ECharts series without resending its full option. */
+  append_data?: Parameters<EChartsType["appendData"]>[0];
 };
 
 type DashSetProps = (props: Partial<DashEChartsXProps>) => void;
@@ -188,6 +191,7 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       renderer = "canvas",
       theme,
       dispatch_action,
+      append_data,
     } = componentProps;
     const dashSetProps = (
       componentProps as DashEChartsXProps & { setProps?: DashSetProps }
@@ -195,6 +199,8 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<EChartsType | null>(null);
     const setPropsRef = useRef<DashSetProps | undefined>(undefined);
+    const lastAppendDataRef =
+      useRef<DashEChartsXProps["append_data"]>(undefined);
     const [chartReady, setChartReady] = useState(false);
 
     useEffect(() => {
@@ -394,6 +400,24 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
         dispatchChartAction(chartRef.current, dispatch_action);
       }
     }, [chartReady, dispatch_action]);
+
+    useEffect(() => {
+      if (append_data === undefined) {
+        lastAppendDataRef.current = undefined;
+        return;
+      }
+
+      if (
+        !chartReady ||
+        append_data === lastAppendDataRef.current ||
+        !chartRef.current
+      ) {
+        return;
+      }
+
+      chartRef.current.appendData(append_data);
+      lastAppendDataRef.current = append_data;
+    }, [append_data, chartReady]);
 
     return (
       <div

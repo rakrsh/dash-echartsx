@@ -28,7 +28,7 @@ def test_chart_renders(dash_duo):
         style={"width": "60vw"},
     )
     dash_duo.start_server(app)
-    dash_duo.wait_for_element("#chart canvas")
+    dash_duo.wait_for_element("#chart canvas", timeout=30)
     assert dash_duo.get_logs() == []
 ```
 
@@ -42,3 +42,10 @@ def test_chart_renders(dash_duo):
 - For Dash callback behavior, assert the Python output reflects the updated component prop, not only that a click occurred.
 
 Keep browser tests in `tests/` with clear names; the repository currently has a flat test layout. Ensure `dash[testing]` is installed with `uv sync --group dev`. Do not assume a separate `tests/integration` folder or Linux `xvfb-run` setup exists.
+
+`tests/conftest.py` is the shared Selenium setup: it installs a matching
+ChromeDriver, enables headless Chrome when `CI` is set, and configures
+WebGL/SwiftShader for Linux. CI runs tests on Ubuntu and Windows. Use its
+`dash_duo` fixture instead of installing or configuring a driver in an
+individual test. When a browser wait fails, inspect browser logs and the
+application's rendered state before increasing the timeout.

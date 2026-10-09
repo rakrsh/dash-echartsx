@@ -95,6 +95,59 @@ The GL bundle is served by Dash alongside the core bundle but is not requested
 unless enabled. Set `gl_bundle_url` if hosting that bundle separately. The
 project supports ECharts 5.6 and 6.x; CI builds against both.
 
+## Streaming and large datasets
+
+For regular option updates, DashEChartsX calls ECharts `setOption` with merge
+enabled by default (`notMerge=False`). This applies partial option updates
+without replacing the whole chart configuration. Set `lazyUpdate=True` to
+defer option processing, or set `notMerge=True` when an update should replace
+the existing option.
+
+For supported series types, send new data in batches with `append_data` instead
+of resending the entire option and dataset on every callback:
+
+```python
+from dash import Input, Output, callback
+from dash_echartsx import DashEChartsX
+
+chart = DashEChartsX(
+    id="telemetry",
+    notMerge=False,
+    lazyUpdate=True,
+    option={
+        "xAxis": {"type": "time"},
+        "yAxis": {"type": "value"},
+        "series": [
+            {
+                "type": "scatter",
+                "symbolSize": 4,
+                "progressive": 5000,
+                "progressiveThreshold": 10000,
+                "data": [],
+            }
+        ],
+    },
+)
+
+
+@callback(
+    Output("telemetry", "append_data"),
+    Input("telemetry-batch", "data"),
+)
+def append_telemetry(batch):
+    return {"seriesIndex": 0, "data": batch}
+```
+
+`append_data` expects an object with a `seriesIndex` and a `data` batch
+matching that series' data format. ECharts only supports `appendData` for some
+series types; it cannot be used with `dataset`. Progressive rendering is
+configured on each series through the standard ECharts `progressive` and
+`progressiveThreshold` options. Choose batch sizes and progressive settings for
+the target chart and browser, and bound retained data when the application needs
+a fixed memory footprint. `appendData` does not recalculate coordinate-system
+axis extents, so configure fixed axis bounds for continuously appended data or
+update the chart option separately when bounds need to move.
+
 ## Event callbacks
 
 Chart interactions are exposed as Dash properties: `click_data`, `dblclick_data`,
@@ -115,7 +168,7 @@ def show_click(data):
 
 To trigger an ECharts action from Python, return a payload through
 `dispatch_action`. Supported action types are `highlight`, `downplay`, `showTip`,
-`hideTip`, `selectDataRange`, and `legendSelect`:
+`hideTip`, `selectDataRange`, `legendSelect`, and `dataZoom`:
 
 ```python
 @app.callback(

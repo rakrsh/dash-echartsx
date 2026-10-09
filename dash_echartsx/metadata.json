@@ -133,6 +133,34 @@
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
+      "append_data": {
+        "description": "Append a batch of data to an ECharts series without resending its full option.",
+        "required": false,
+        "type": {
+          "name": "union",
+          "value": [
+            {
+              "name": "shape",
+              "value": {
+                "seriesIndex": {
+                  "description": "",
+                  "required": true,
+                  "name": "number",
+                  "raw": "number"
+                },
+                "data": {
+                  "description": "",
+                  "required": true,
+                  "name": "any",
+                  "raw": "any"
+                }
+              },
+              "raw": "{ seriesIndex: number; data: any; }"
+            }
+          ],
+          "raw": "{ seriesIndex: number; data: any; } | undefined"
+        }
+      },
       "ref": {
         "description": "Allows getting a ref to the component instance.\nOnce the component unmounts, React will set `ref.current` to `null`\n(or call the ref with `null` if you passed a callback ref).\n@,see,,{@link ,https://react.dev/learn/referencing-values-with-refs#refs-and-the-dom React Docs,}",
         "required": false,

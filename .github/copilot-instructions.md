@@ -28,6 +28,11 @@ uv run pytest
 ```
 
 There is currently no `npm test` script or separate unit/integration directory. Browser tests can use `dash_duo` from `dash[testing]` in `tests/`.
+The shared Selenium configuration is in `tests/conftest.py`: it installs a
+matching ChromeDriver, enables headless mode when `CI` is set, and configures
+Linux WebGL/SwiftShader. The CI matrix runs the supported Python/ECharts
+combinations on both Ubuntu and Windows. Use the standard `uv run pytest`
+command; set `CI=true` to reproduce headless CI behavior locally.
 
 ## Skills
 

@@ -34,7 +34,8 @@ Python supplies props through Dash. For any future browser-to-Python events, use
 | `dash_echartsx/DashEChartsX.py`       | Generated Dash Python wrapper                                                  |
 | `dash_echartsx/dash_echartsx.es.js`   | Generated ESM bundle for bundler consumers                                     |
 | `dash_echartsx/dash_echartsx.umd.js`  | Generated UMD bundle loaded by Dash                                            |
-| `tests/`                              | Python tests; browser coverage can use `dash_duo`                              |
+| `tests/`                              | Flat Python and `dash_duo` browser test suite                                  |
+| `tests/conftest.py`                   | Shared ChromeDriver, headless CI, and Linux WebGL/SwiftShader setup            |
 
 ## Pitfalls
 
@@ -53,4 +54,4 @@ Python supplies props through Dash. For any future browser-to-Python events, use
 
 ## Commands
 
-The current checks are `npm run build`, `npm run lint`, `npm run typecheck`, `uv run ruff check .`, `uv run black --check dash_echartsx tests`, and `uv run pytest`. Tests currently live directly in `tests/`; there is no separate unit/integration tree or JavaScript test runner.
+The current checks are `npm run build`, `npm run lint`, `npm run typecheck`, `uv run ruff check .`, `uv run black --check dash_echartsx tests`, and `uv run pytest`. Tests live directly in `tests/`; there is no separate unit/integration tree or JavaScript test runner. `tests/conftest.py` installs a matching ChromeDriver and enables headless browser mode when `CI` is set. Linux browser tests use SwiftShader WebGL options. CI runs the Python/ECharts matrix on Ubuntu and Windows; use `CI=true uv run pytest` to reproduce its headless configuration locally.

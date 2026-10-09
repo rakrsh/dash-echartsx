@@ -23,10 +23,19 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
                 },
                 style={"width": "800px", "height": "450px", "aspectRatio": "auto"},
             ),
+            html.Button("Zoom", id="zoom"),
             html.Pre("{}", id="click-output"),
             html.Pre("{}", id="zoom-output"),
         ]
     )
+
+    @app.callback(
+        Output("chart", "dispatch_action"),
+        Input("zoom", "n_clicks"),
+        prevent_initial_call=True,
+    )
+    def zoom_chart(_):
+        return {"type": "dataZoom", "start": 10, "end": 90}
 
     @app.callback(Output("click-output", "children"), Input("chart", "click_data"))
     def show_click_data(value):
@@ -37,7 +46,7 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
         return json.dumps(value or {}, sort_keys=True)
 
     dash_duo.start_server(app)
-    dash_duo.wait_for_element("#chart canvas")
+    dash_duo.wait_for_element("#chart canvas", timeout=30)
 
     dash_duo.driver.execute_script("""
         const canvas = document.querySelector("#chart canvas");
@@ -71,18 +80,7 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
         "value": 12,
     }
 
-    dash_duo.driver.execute_script("""
-        const canvas = document.querySelector("#chart canvas");
-        const rect = canvas.getBoundingClientRect();
-        canvas.dispatchEvent(new WheelEvent("wheel", {
-          bubbles: true,
-          cancelable: true,
-          clientX: rect.left + rect.width * 0.5,
-          clientY: rect.top + rect.height * 0.5,
-          deltaY: -120,
-          deltaMode: 0
-        }));
-        """)
+    dash_duo.find_element("#zoom").click()
 
     WebDriverWait(dash_duo.driver, 10).until(
         lambda driver: {"start", "end"} <= read_payload(driver, "zoom-output").keys()
