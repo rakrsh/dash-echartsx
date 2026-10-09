@@ -31,7 +31,7 @@
     "prettier": "^3.3.0",
     "react-docgen": "^7.0.0",
     "typescript": "^5.5.0",
-    "typescript-eslint": "^8.0.0",
+    "typescript-eslint": "^8.71.1",
     "vite": "^8.3.2"
   },
   "lint-staged": {
