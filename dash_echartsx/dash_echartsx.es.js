@@ -30155,36 +30155,36 @@ function nG(e, t) {
 	return r;
 }
 var rG = t(function(t, o) {
-	let { id: s, className: c, style: l, option: u, maps: d, enable_gl: f = !1, gl_bundle_url: p, notMerge: m = !1, lazyUpdate: h = !1, renderer: g = "canvas", theme: _, dispatch_action: v } = t, y = t.setProps, b = i(null), x = i(null), S = i(void 0), [C, w] = a(!1);
+	let { id: s, className: c, style: l, option: u, maps: d, enable_gl: f = !1, gl_bundle_url: p, notMerge: m = !1, lazyUpdate: h = !1, renderer: g = "canvas", theme: _, dispatch_action: v, append_data: y } = t, b = t.setProps, x = i(null), S = i(null), C = i(void 0), w = i(void 0), [T, E] = a(!1);
 	return n(() => {
-		S.current = y;
-	}, [y]), r(o, () => ({ getInstance: () => x.current }), []), n(() => {
+		C.current = b;
+	}, [b]), r(o, () => ({ getInstance: () => S.current }), []), n(() => {
 		let e, t = !1, n = () => {
 			if (t) return;
-			let n = b.current;
+			let n = x.current;
 			if (!n) return;
 			let r = Jj(n, typeof _ == "string" ? $W[_] : _, { renderer: g });
-			x.current = r;
+			S.current = r;
 			let i = [
-				["click", (e) => S.current?.({ click_data: nG(e, [
+				["click", (e) => C.current?.({ click_data: nG(e, [
 					"seriesIndex",
 					"dataIndex",
 					"name",
 					"value"
 				]) })],
-				["dblclick", (e) => S.current?.({ dblclick_data: nG(e, [
+				["dblclick", (e) => C.current?.({ dblclick_data: nG(e, [
 					"seriesIndex",
 					"dataIndex",
 					"name",
 					"value"
 				]) })],
-				["mouseover", (e) => S.current?.({ hover_data: nG(e, [
+				["mouseover", (e) => C.current?.({ hover_data: nG(e, [
 					"seriesIndex",
 					"dataIndex",
 					"name",
 					"value"
 				]) })],
-				["selectchanged", (e) => S.current?.({ selected_data: nG(e, [
+				["selectchanged", (e) => C.current?.({ selected_data: nG(e, [
 					"type",
 					"fromAction",
 					"isFromClick",
@@ -30194,9 +30194,9 @@ var rG = t(function(t, o) {
 					"value",
 					"selected"
 				]) })],
-				["legendselectchanged", (e) => S.current?.({ legend_status: nG(e, ["name", "selected"]) })],
-				["legendselected", (e) => S.current?.({ legend_status: nG(e, ["name", "selected"]) })],
-				["datazoom", (e) => S.current?.({ zoom_data: nG(e, [
+				["legendselectchanged", (e) => C.current?.({ legend_status: nG(e, ["name", "selected"]) })],
+				["legendselected", (e) => C.current?.({ legend_status: nG(e, ["name", "selected"]) })],
+				["datazoom", (e) => C.current?.({ zoom_data: nG(e, [
 					"dataZoomId",
 					"dataZoomIndex",
 					"start",
@@ -30214,7 +30214,7 @@ var rG = t(function(t, o) {
 			}, s = () => {
 				a !== null && (cancelAnimationFrame(a), a = null);
 			}, c = () => {
-				s(), i.forEach(([e, t]) => r.off(e, t)), r.dispose(), x.current = null, w(!1);
+				s(), i.forEach(([e, t]) => r.off(e, t)), r.dispose(), S.current = null, E(!1);
 			};
 			if (typeof ResizeObserver < "u") {
 				let t = new ResizeObserver(o);
@@ -30224,7 +30224,7 @@ var rG = t(function(t, o) {
 			} else window.addEventListener("resize", o), o(), e = () => {
 				window.removeEventListener("resize", o), c();
 			};
-			w(!0);
+			E(!0);
 		};
 		return f ? QW(p).then(n).catch((e) => {
 			console.error("[DashEChartsX] Failed to load the optional ECharts-GL bundle.", e);
@@ -30241,9 +30241,9 @@ var rG = t(function(t, o) {
 			_M(e, t, n);
 		});
 	}, [d]), n(() => {
-		C && u && x.current?.setOption(YW(u), m, h);
+		T && u && S.current?.setOption(YW(u), m, h);
 	}, [
-		C,
+		T,
 		h,
 		d,
 		m,
@@ -30251,10 +30251,16 @@ var rG = t(function(t, o) {
 		g,
 		_
 	]), n(() => {
-		C && v !== void 0 && x.current && tG(x.current, v);
-	}, [C, v]), /* @__PURE__ */ e.createElement("div", {
+		T && v !== void 0 && S.current && tG(S.current, v);
+	}, [T, v]), n(() => {
+		if (y === void 0) {
+			w.current = void 0;
+			return;
+		}
+		T && y !== w.current && S.current && (S.current.appendData(y), w.current = y);
+	}, [y, T]), /* @__PURE__ */ e.createElement("div", {
 		id: s,
-		ref: b,
+		ref: x,
 		className: c,
 		style: {
 			width: "100%",
