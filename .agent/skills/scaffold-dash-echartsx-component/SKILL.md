@@ -33,3 +33,7 @@ uv run pytest
 ```
 
 Inspect generated wrapper, metadata, PropTypes, and bundle diffs. Add a `dash_duo` test under `tests/` for browser-dependent behavior.
+
+Browser tests use the shared Selenium configuration in `tests/conftest.py`.
+The CI matrix exercises the Python and ECharts versions on both Ubuntu and
+Windows.

@@ -29,4 +29,9 @@ uv run black --check dash_echartsx tests
 uv run pytest
 ```
 
+Browser tests use the shared Selenium setup in `tests/conftest.py`, which
+installs a matching ChromeDriver, enables headless mode in CI, and configures
+Linux WebGL/SwiftShader. The CI matrix covers Ubuntu and Windows. Set `CI=true`
+when reproducing the headless CI test environment locally.
+
 Use task-specific recipes under `.agent/skills/` and architecture notes in [AI_CONTEXT.md](../.github/AI_CONTEXT.md).
