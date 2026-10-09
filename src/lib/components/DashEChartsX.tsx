@@ -66,6 +66,7 @@ const supportedActions = new Set([
   "hideTip",
   "selectDataRange",
   "legendSelect",
+  "dataZoom",
 ]);
 
 function dispatchChartAction(chart: EChartsType, action: unknown): void {

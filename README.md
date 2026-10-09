@@ -119,8 +119,8 @@ chart = DashEChartsX(
         "yAxis": {"type": "value"},
         "series": [
             {
-                "type": "line",
-                "showSymbol": False,
+                "type": "scatter",
+                "symbolSize": 4,
                 "progressive": 5000,
                 "progressiveThreshold": 10000,
                 "data": [],
@@ -144,7 +144,9 @@ series types; it cannot be used with `dataset`. Progressive rendering is
 configured on each series through the standard ECharts `progressive` and
 `progressiveThreshold` options. Choose batch sizes and progressive settings for
 the target chart and browser, and bound retained data when the application needs
-a fixed memory footprint.
+a fixed memory footprint. `appendData` does not recalculate coordinate-system
+axis extents, so configure fixed axis bounds for continuously appended data or
+update the chart option separately when bounds need to move.
 
 ## Event callbacks
 
@@ -166,7 +168,7 @@ def show_click(data):
 
 To trigger an ECharts action from Python, return a payload through
 `dispatch_action`. Supported action types are `highlight`, `downplay`, `showTip`,
-`hideTip`, `selectDataRange`, and `legendSelect`:
+`hideTip`, `selectDataRange`, `legendSelect`, and `dataZoom`:
 
 ```python
 @app.callback(

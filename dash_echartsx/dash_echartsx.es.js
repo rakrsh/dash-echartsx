@@ -30127,7 +30127,8 @@ var $W = {
 	"showTip",
 	"hideTip",
 	"selectDataRange",
-	"legendSelect"
+	"legendSelect",
+	"dataZoom"
 ]);
 function tG(e, t) {
 	if (!t || typeof t != "object" || Array.isArray(t)) {
