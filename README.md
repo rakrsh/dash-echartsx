@@ -104,6 +104,13 @@ The GL bundle is served by Dash alongside the core bundle but is not requested
 unless enabled. Set `gl_bundle_url` if hosting that bundle separately. The
 project supports ECharts 5.6 and 6.x; CI builds against both.
 
+## Documentation
+
+The [documentation site](https://rakrsh.github.io/dash-echartsx/) includes the
+Python and TypeScript API references and a live option playground. Build it
+locally with `uv sync --group dev --group docs`, `npm ci`, and
+`npm run docs:build`.
+
 ## Streaming and large datasets
 
 For regular option updates, DashEChartsX calls ECharts `setOption` with merge
