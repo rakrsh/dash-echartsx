@@ -55,3 +55,19 @@ Python supplies props through Dash. For any future browser-to-Python events, use
 ## Commands
 
 The current checks are `npm run build`, `npm test`, `npm run lint`, `npm run typecheck`, `uv run ruff check .`, `uv run black --check dash_echartsx tests scripts`, and `uv run pytest`. JavaScript utility unit tests live in `src/lib/utils/`; Python component and Selenium integration tests live in `tests/` and use the `integration` marker. `tests/conftest.py` installs a matching ChromeDriver, configures Linux SwiftShader for WebGL, and enables headless browser mode when `CI` is set. The CI workflow runs the full test suite on pull requests to `main` and runs the non-WebGL integration tests in Firefox as well; use `CI=true uv run pytest` to reproduce the headless Chrome suite locally.
+
+## AI option generation
+
+Use `.github/skills/echarts-option-generator/SKILL.md` and its prompt
+templates when translating Python dictionaries or Pandas data into chart
+options. Validate JSON before using it in a Dash callback:
+
+```sh
+npm run echarts:validate -- path/to/option.json
+```
+
+The validator checks against the pinned ECharts 5.6.0 option declarations and
+verifies that core series types are registered by `DashEChartsX`. ECharts-GL
+options require `--enable-gl`; their extension fields are not fully covered by
+the core ECharts type schema. The ECharts declarations are extensible and may
+accept unknown option keys, so this is not a complete JSON Schema validator.
