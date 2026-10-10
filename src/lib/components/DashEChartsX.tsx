@@ -1,5 +1,6 @@
 import {
   BarChart,
+  CandlestickChart,
   CustomChart,
   LineChart,
   MapChart,
@@ -31,6 +32,7 @@ import { loadEChartsGL } from "../utils/loadEChartsGL";
 
 registerEChartsModules([
   BarChart,
+  CandlestickChart,
   CustomChart,
   LineChart,
   MapChart,
