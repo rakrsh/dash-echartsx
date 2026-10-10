@@ -45,3 +45,10 @@ Install the package and place a chart in a Dash layout:
 
    The component fills its parent. Give the parent a responsive width and height,
    or pass a ``style`` mapping to control the chart container.
+
+Documentation versions
+----------------------
+
+The ``dev`` edition tracks the ``main`` branch. Stable semantic-version tags
+are published as release editions and can be selected from the Version menu in
+the sidebar. Prerelease tags are not included.

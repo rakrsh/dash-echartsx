@@ -1,12 +1,10 @@
 import json
-import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METADATA_PATH = ROOT / "dash_echartsx" / "metadata.json"
 REFERENCE_PATH = ROOT / "docs" / "reference" / "typescript_props.rst"
 COMPONENT_BUNDLE = ROOT / "dash_echartsx" / "dash_echartsx.umd.js"
-STATIC_BUNDLE = ROOT / "docs" / "_static" / "generated" / "dash_echartsx.umd.js"
 
 
 def generate_typescript_reference() -> str:
@@ -48,8 +46,6 @@ def main() -> None:
 
     REFERENCE_PATH.parent.mkdir(parents=True, exist_ok=True)
     REFERENCE_PATH.write_text(generate_typescript_reference(), encoding="utf-8")
-    STATIC_BUNDLE.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(COMPONENT_BUNDLE, STATIC_BUNDLE)
 
 
 if __name__ == "__main__":

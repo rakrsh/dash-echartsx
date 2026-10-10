@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    tags: ["v*"]
+  release:
+    types: [published]
   pull_request:
     branches: [main]
     paths:
@@ -12,6 +15,7 @@ on:
       - "dash_echartsx/**"
       - "src/lib/components/**"
       - "scripts/generate_docs_reference.py"
+      - "scripts/build_versioned_docs.py"
       - "package.json"
       - "package-lock.json"
       - "pyproject.toml"
@@ -26,6 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure the development ref is available
+        run: |
+          if ! git show-ref --verify --quiet refs/heads/main; then
+            git branch main origin/main
+          fi
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -49,7 +61,12 @@ jobs:
           uv sync --group dev --group docs
 
       - name: Build and validate documentation
-        run: npm run docs:build
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            npm run docs:build:single
+          else
+            npm run docs:build
+          fi
 
       - name: Verify generated API references are committed
         run: git diff --exit-code -- dash_echartsx/metadata.json dash_echartsx/DashEChartsX.py dash_echartsx/DashEChartsX.pyi docs/reference/typescript_props.rst
@@ -60,7 +77,13 @@ jobs:
           path: docs/_build/html
 
   deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: >-
+      (github.event_name == 'push' &&
+        (github.ref == 'refs/heads/main' ||
+          (startsWith(github.ref, 'refs/tags/v') &&
+            !contains(github.ref, '-')))) ||
+      (github.event_name == 'release' &&
+        !github.event.release.prerelease)
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
