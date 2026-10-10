@@ -2,34 +2,38 @@ name: Release
 
 on:
   release:
-    types: [published]
+    types: [published, prereleased]
 
 permissions:
-  contents: write
-  id-token: write
-
 jobs:
   publish:
-    if: ${{ !github.event.release.prerelease }}
+    if: >-
+      startsWith(github.event.release.tag_name, 'v') &&
+      !github.event.release.prerelease
     runs-on: ubuntu-latest
     environment: pypi
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version: ${{ vars.NODE_VERSION || '20' }}
           cache: npm
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ vars.PYTHON_VERSION }}
+          python-version: ${{ vars.PYTHON_VERSION || '3.12' }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
+          version: ${{ vars.UV_VERSION || 'latest' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           enable-cache: true
 
       - name: Install dependencies
@@ -37,24 +41,30 @@ jobs:
           npm ci
           uv sync --group dev
 
-      - name: Build and verify
+      - name: Build component and generated API
+        run: npm run build
+
+      - name: Run release quality gates
         run: |
-          npm run build
+          npm test
           npm run lint
           npm run typecheck
           uv run ruff check .
-          uv run black --check dash_echartsx tests
+          uv run black --check dash_echartsx tests scripts
           uv run pytest
+
+      - name: Verify release tag and package versions
+        run: uv run python scripts/check_release_metadata.py "${{ github.event.release.tag_name }}"
 
       - name: Build Python distributions
         run: uv build
 
-      - name: Verify wheel installation
+      - name: Verify clean-environment wheel installation
         run: |
           uv venv .venv-check
           uv pip install --python .venv-check/bin/python dist/*.whl
           cd "$RUNNER_TEMP"
-          "$GITHUB_WORKSPACE/.venv-check/bin/python" -c "import dash_echartsx; print(dash_echartsx.__version__)"
+          "$GITHUB_WORKSPACE/.venv-check/bin/python" "$GITHUB_WORKSPACE/scripts/check_installed_package.py"
 
       - name: Upload distributions to GitHub Release
         env:
