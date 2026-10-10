@@ -9,7 +9,9 @@ React component and a Python-first API.
    :caption: Guide
 
    guide
+   examples
    playground
+   migration
 
 .. toctree::
    :maxdepth: 2

@@ -107,9 +107,10 @@ project supports ECharts 5.6 and 6.x; CI builds against both.
 ## Documentation
 
 The [documentation site](https://rakrsh.github.io/dash-echartsx/) includes the
-Python and TypeScript API references and a live option playground. Build it
-locally with `uv sync --group dev --group docs`, `npm ci`, and
-`npm run docs:build`.
+Python and TypeScript API references, a live option playground, and runnable
+examples. See the [example gallery](./examples/README.md) and
+[migration guide](./MIGRATION.md) for more. Build the docs locally with
+`uv sync --group dev --group docs`, `npm ci`, and `npm run docs:build`.
 
 ## Streaming and large datasets
 

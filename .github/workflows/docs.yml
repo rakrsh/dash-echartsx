@@ -11,6 +11,8 @@ on:
     branches: [main]
     paths:
       - "README.md"
+      - "MIGRATION.md"
+      - "examples/**"
       - "docs/**"
       - "dash_echartsx/**"
       - "src/lib/components/**"
