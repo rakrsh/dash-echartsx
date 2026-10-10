@@ -27,11 +27,12 @@ class DashEChartsX(Component):
 Keyword arguments:
 
 - id (string; optional):
-    Unique identifier for the component.
+    Unique identifier for the component. Defaults to None when
+    omitted.
 
 - append_data (dict; optional):
     Append a batch of data to an ECharts series without resending its
-    full option.
+    full option. Defaults to None when omitted.
 
     `append_data` is a dict with keys:
 
@@ -40,47 +41,53 @@ Keyword arguments:
     - data (boolean | number | string | dict | list; required)
 
 - className (string; optional):
-    CSS class applied to the component container.
+    CSS class applied to the component container. Defaults to None
+    when omitted.
 
 - click_data (boolean | number | string | dict | list; optional):
     Latest click event with seriesIndex, dataIndex, name, and value
-    when available.
+    when available. Defaults to None when omitted.
 
 - dblclick_data (boolean | number | string | dict | list; optional):
     Latest double-click event with seriesIndex, dataIndex, name, and
-    value when available.
+    value when available. Defaults to None when omitted.
 
 - dispatch_action (boolean | number | string | dict | list; optional):
     Dispatch a supported ECharts action when this payload changes.
+    Defaults to None when omitted.
 
 - enable_gl (boolean; optional):
-    Lazily load ECharts-GL before applying 3D/WebGL options.
+    Lazily load ECharts-GL before applying 3D/WebGL options. Defaults
+    to False.
 
 - gl_bundle_url (string; optional):
     Optional URL override for the separately served ECharts-GL bundle.
+    Defaults to None when omitted.
 
 - hover_data (boolean | number | string | dict | list; optional):
     Latest pointer-over event with seriesIndex, dataIndex, name, and
-    value when available.
+    value when available. Defaults to None when omitted.
 
 - key (string | number; optional)
 
 - lazyUpdate (boolean; optional):
-    Defer option updates until the next animation frame.
+    Defer option updates until the next animation frame. Defaults to
+    False.
 
 - legend_status (boolean | number | string | dict | list; optional):
     Latest legend selection event with the legend name and selection
-    state.
+    state. Defaults to None when omitted.
 
 - maps (boolean | number | string | dict | list; optional):
     GeoJSON or SVG map definitions registered before applying the
-    option.
+    option. Defaults to None when omitted.
 
 - notMerge (boolean; optional):
-    Replace the current option instead of merging it.
+    Replace the current option instead of merging it. Defaults to
+    False.
 
 - option (boolean | number | string | dict | list; optional):
-    ECharts option object.
+    ECharts option object. Defaults to None when omitted.
 
 - ref (string; optional):
     Allows getting a ref to the component instance. Once the component
@@ -90,17 +97,19 @@ Keyword arguments:
     React Docs,}.
 
 - renderer (a value equal to: None, 'canvas', 'svg'; optional):
-    Rendering engine used by ECharts.
+    Rendering engine used by ECharts. Defaults to \"canvas\".
 
 - selected_data (boolean | number | string | dict | list; optional):
     Latest selection-change event, including the selected series and
-    data indexes.
+    data indexes. Defaults to None when omitted.
 
 - theme (dict; optional):
-    Named light/dark theme or a custom ECharts theme object.
+    Named light/dark theme or a custom ECharts theme object. Defaults
+    to None when omitted.
 
 - zoom_data (boolean | number | string | dict | list; optional):
-    Latest data-zoom event with range and value bounds when available."""
+    Latest data-zoom event with range and value bounds when available.
+    Defaults to None when omitted."""
     _children_props: typing.List[str] = []
     _base_nodes = ['children']
     _namespace = 'dash_echartsx'

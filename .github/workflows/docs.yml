@@ -44,4 +44,4 @@ jobs:
         run: npm run build
 
       - name: Verify generated component metadata is committed
-        run: git diff --exit-code -- dash_echartsx/metadata.json dash_echartsx/DashEChartsX.py
+        run: git diff --exit-code -- dash_echartsx/metadata.json dash_echartsx/DashEChartsX.py dash_echartsx/DashEChartsX.pyi

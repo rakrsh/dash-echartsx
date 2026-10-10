@@ -4,7 +4,7 @@
     "description": "",
     "props": {
       "id": {
-        "description": "Unique identifier for the component.",
+        "description": "Unique identifier for the component. Defaults to None when omitted.",
         "required": false,
         "type": {
           "name": "union",
@@ -13,7 +13,7 @@
         }
       },
       "className": {
-        "description": "CSS class applied to the component container.",
+        "description": "CSS class applied to the component container. Defaults to None when omitted.",
         "required": false,
         "type": {
           "name": "union",
@@ -22,22 +22,22 @@
         }
       },
       "style": {
-        "description": "Inline styles applied to the component container.",
+        "description": "Inline styles applied to the component container. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "CSSProperties | undefined" }
       },
       "option": {
-        "description": "ECharts option object.",
+        "description": "ECharts option object. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "EChartsOption | undefined" }
       },
       "maps": {
-        "description": "GeoJSON or SVG map definitions registered before applying the option.",
+        "description": "GeoJSON or SVG map definitions registered before applying the option. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "DashEChartsMap[] | undefined" }
       },
       "enable_gl": {
-        "description": "Lazily load ECharts-GL before applying 3D/WebGL options.",
+        "description": "Lazily load ECharts-GL before applying 3D/WebGL options. Defaults to false.",
         "required": false,
         "type": {
           "name": "union",
@@ -46,7 +46,7 @@
         }
       },
       "gl_bundle_url": {
-        "description": "Optional URL override for the separately served ECharts-GL bundle.",
+        "description": "Optional URL override for the separately served ECharts-GL bundle. Defaults to None when omitted.",
         "required": false,
         "type": {
           "name": "union",
@@ -55,7 +55,7 @@
         }
       },
       "notMerge": {
-        "description": "Replace the current option instead of merging it.",
+        "description": "Replace the current option instead of merging it. Defaults to false.",
         "required": false,
         "type": {
           "name": "union",
@@ -64,7 +64,7 @@
         }
       },
       "lazyUpdate": {
-        "description": "Defer option updates until the next animation frame.",
+        "description": "Defer option updates until the next animation frame. Defaults to false.",
         "required": false,
         "type": {
           "name": "union",
@@ -73,7 +73,7 @@
         }
       },
       "renderer": {
-        "description": "Rendering engine used by ECharts.",
+        "description": "Rendering engine used by ECharts. Defaults to \"canvas\".",
         "required": false,
         "type": {
           "name": "enum",
@@ -86,7 +86,7 @@
         }
       },
       "theme": {
-        "description": "Named light/dark theme or a custom ECharts theme object.",
+        "description": "Named light/dark theme or a custom ECharts theme object. Defaults to None when omitted.",
         "required": false,
         "type": {
           "name": "union",
@@ -99,42 +99,42 @@
         }
       },
       "click_data": {
-        "description": "Latest click event with seriesIndex, dataIndex, name, and value when available.",
+        "description": "Latest click event with seriesIndex, dataIndex, name, and value when available. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
       "dblclick_data": {
-        "description": "Latest double-click event with seriesIndex, dataIndex, name, and value when available.",
+        "description": "Latest double-click event with seriesIndex, dataIndex, name, and value when available. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
       "hover_data": {
-        "description": "Latest pointer-over event with seriesIndex, dataIndex, name, and value when available.",
+        "description": "Latest pointer-over event with seriesIndex, dataIndex, name, and value when available. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
       "selected_data": {
-        "description": "Latest selection-change event, including the selected series and data indexes.",
+        "description": "Latest selection-change event, including the selected series and data indexes. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
       "legend_status": {
-        "description": "Latest legend selection event with the legend name and selection state.",
+        "description": "Latest legend selection event with the legend name and selection state. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
       "zoom_data": {
-        "description": "Latest data-zoom event with range and value bounds when available.",
+        "description": "Latest data-zoom event with range and value bounds when available. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
       "dispatch_action": {
-        "description": "Dispatch a supported ECharts action when this payload changes.",
+        "description": "Dispatch a supported ECharts action when this payload changes. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
       "append_data": {
-        "description": "Append a batch of data to an ECharts series without resending its full option.",
+        "description": "Append a batch of data to an ECharts series without resending its full option. Defaults to None when omitted.",
         "required": false,
         "type": {
           "name": "union",

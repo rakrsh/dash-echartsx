@@ -1,5 +1,33 @@
+from pathlib import Path
+
 from dash_echartsx import DashEChartsX, _js_dist
 from dash_echartsx.utils import js_function, option
+
+
+def test_generated_python_stub_exposes_typed_props_and_parameter_docs():
+    stub = (Path(__file__).parents[1] / "dash_echartsx" / "DashEChartsX.pyi").read_text(
+        encoding="utf-8"
+    )
+    normalized_stub = " ".join(stub.split())
+
+    assert 'renderer: Literal["canvas", "svg"] | None = ...' in stub
+    assert "maps: Sequence[MapDefinition] | None = ..." in stub
+    assert "append_data: AppendData | None = ..." in stub
+    assert 'renderer: Rendering engine used by ECharts. Defaults to "canvas".' in stub
+    assert (
+        "enable_gl: Lazily load ECharts-GL before applying 3D/WebGL options. "
+        "Defaults to false."
+    ) in normalized_stub
+    compile(stub, "DashEChartsX.pyi", "exec")
+
+
+def test_generated_component_docstring_includes_props_and_defaults():
+    docstring = DashEChartsX.__doc__
+
+    assert "option (boolean | number | string | dict | list; optional)" in docstring
+    assert "enable_gl (boolean; optional)" in docstring
+    assert "to False." in docstring
+    assert 'Defaults to "canvas".' in docstring
 
 
 def test_js_function_marks_source_for_evaluation():

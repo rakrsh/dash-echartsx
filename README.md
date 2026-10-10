@@ -2,6 +2,15 @@
 
 A high-performance, developer-friendly Python wrapper for Apache ECharts 5.6+ and 6 in Plotly Dash.
 
+## Python typing and IDE support
+
+`DashEChartsX` ships with a generated `DashEChartsX.pyi` stub. Its constructor
+provides typed, discoverable component props in editors such as VS Code and
+PyCharm, including the renderer literals, theme, maps, event payloads, and
+streaming data. Prop descriptions and defaults are included in the generated
+component documentation. The stub is regenerated from component metadata by
+`npm run build`.
+
 ## JavaScript option functions
 
 ECharts options can include formatter and callback functions through the
