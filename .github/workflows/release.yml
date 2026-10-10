@@ -19,13 +19,13 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ vars.NODE_VERSION }}
           cache: npm
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: ${{ vars.PYTHON_VERSION }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5

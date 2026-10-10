@@ -1,9 +1,11 @@
+import pytest
 from dash import Dash
 from selenium.webdriver.support.ui import WebDriverWait
 
 from dash_echartsx import DashEChartsX
 
 
+@pytest.mark.integration
 def test_geojson_and_svg_maps_render(dash_duo):
     app = Dash(__name__)
     app.layout = DashEChartsX(
@@ -59,6 +61,8 @@ def test_geojson_and_svg_maps_render(dash_duo):
     assert not dash_duo.driver.execute_script("return Boolean(window.dash_echartsx_gl)")
 
 
+@pytest.mark.integration
+@pytest.mark.webgl
 def test_echarts_gl_bundle_loads_only_when_enabled(dash_duo):
     app = Dash(__name__)
     app.layout = DashEChartsX(
