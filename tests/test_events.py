@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from dash import Dash, Input, Output, html
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from dash_echartsx import DashEChartsX
 
 
+@pytest.mark.integration
 def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
     app = Dash(__name__)
     app.layout = html.Div(
