@@ -28,7 +28,7 @@ def pytest_setup_options():
         return None
 
     if _WEBDRIVER == "firefox":
-        return [FirefoxOptions()]
+        return FirefoxOptions()
 
     options = ChromeOptions()
     options.add_argument("--enable-webgl")
@@ -36,4 +36,4 @@ def pytest_setup_options():
     options.add_argument("--use-gl=angle")
     options.add_argument("--use-angle=swiftshader")
     options.add_argument("--enable-unsafe-swiftshader")
-    return [options]
+    return options
