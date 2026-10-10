@@ -2,6 +2,13 @@
 
 A high-performance, developer-friendly Python wrapper for Apache ECharts 5.6+ and 6 in Plotly Dash.
 
+## Python support
+
+The package requires Python 3.10 or newer. CI tests Python 3.10 through 3.14
+on Ubuntu, macOS, and Windows, and builds wheel and source distributions for
+each matrix combination. Pull request runs upload those distributions as
+GitHub Actions artifacts for inspection before release.
+
 ## Python typing and IDE support
 
 `DashEChartsX` ships with a generated `DashEChartsX.pyi` stub. Its constructor
