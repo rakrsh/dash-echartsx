@@ -4,7 +4,6 @@ on:
   release:
     types: [published, prereleased]
 
-permissions:
 jobs:
   publish:
     if: >-
@@ -54,7 +53,9 @@ jobs:
           uv run pytest
 
       - name: Verify release tag and package versions
-        run: uv run python scripts/check_release_metadata.py "${{ github.event.release.tag_name }}"
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: uv run python scripts/check_release_metadata.py "$RELEASE_TAG"
 
       - name: Build Python distributions
         run: uv build
