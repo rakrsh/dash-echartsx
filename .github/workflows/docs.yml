@@ -73,41 +73,6 @@ jobs:
       - name: Verify generated API references are committed
         run: git diff --exit-code -- dash_echartsx/metadata.json dash_echartsx/DashEChartsX.py dash_echartsx/DashEChartsX.pyi docs/reference/typescript_props.rst
 
-      - name: Prepare gh-pages site metadata
-        if: github.event_name != 'pull_request'
-        run: |
-          python - <<'PY'
-          import json
-          import re
-          from pathlib import Path
-
-          site = Path("docs/_build/html")
-          releases = [
-              path.name
-              for path in site.iterdir()
-              if path.is_dir()
-              and (path / "index.html").is_file()
-              and re.fullmatch(r"v?\d+\.\d+\.\d+", path.name)
-          ]
-          releases.sort(
-              key=lambda version: tuple(
-                  int(part) for part in version.removeprefix("v").split(".")
-              ),
-              reverse=True,
-          )
-          versions = [
-              {"version": "dev", "title": "dev", "aliases": []},
-              *[
-                  {"version": version, "title": version, "aliases": []}
-                  for version in releases
-              ],
-          ]
-          (site / "versions.json").write_text(
-              json.dumps(versions, indent=2) + "\n", encoding="utf-8"
-          )
-          (site / ".nojekyll").touch()
-          PY
-
       - name: Upload versioned documentation artifact
         uses: actions/upload-artifact@v4
         with:

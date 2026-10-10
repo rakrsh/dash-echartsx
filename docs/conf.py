@@ -1,5 +1,3 @@
-import html
-import json
 import os
 import shutil
 import sys
@@ -69,37 +67,6 @@ def copy_playground_bundle(app):
     shutil.copy2(source, destination)
 
 
-def add_version_switcher_data(app, pagename, templatename, context, doctree):
-    versions = context.get("versions")
-    if versions is None:
-        return
-
-    entries = []
-    for version in versions:
-        url = context["vpathto"](version.name)
-        if version.name == "main":
-            url = "/".join(
-                "dev" if segment == "main" else segment for segment in url.split("/")
-            )
-        entries.append(
-            {
-                "name": version.name,
-                "label": "dev" if version.name == "main" else version.name,
-                "url": url,
-            }
-        )
-    context["version_switcher_data"] = {
-        "current": context["current_version"].name,
-        "versions": entries,
-    }
-    payload = html.escape(json.dumps(context["version_switcher_data"]), quote=True)
-    context["metatags"] = (
-        f'{context.get("metatags", "")}'
-        f'<meta name="dash-echartsx-versions" content="{payload}">'
-    )
-
-
 def setup(app):
     app.connect("builder-inited", copy_playground_bundle)
-    app.connect("html-page-context", add_version_switcher_data, priority=800)
     return {"parallel_read_safe": True, "parallel_write_safe": True}
