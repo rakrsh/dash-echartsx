@@ -225,3 +225,16 @@ Run the JavaScript/TypeScript lint and formatting checks with `npm run lint`.
 Run Python linting and formatting checks with `uv run ruff check .` and
 `uv run black --check dash_echartsx tests`. Pre-commit hooks run lint-staged
 automatically after `npm install` configures Husky.
+
+## Releasing
+
+Update the version in `pyproject.toml`, `package.json`, and
+`dash_echartsx/__init__.py`, and record the release in [CHANGELOG.md](CHANGELOG.md).
+Publishing a GitHub release with a `vMAJOR.MINOR.PATCH` tag runs the
+[release workflow](.github/workflows/release.yml), which validates the versions,
+runs quality checks, builds and verifies the distributions, attaches them to
+the GitHub release, and publishes to PyPI through OIDC.
+
+Before the first release, configure a PyPI Trusted Publisher for owner
+`rakrsh`, repository `dash-echartsx`, workflow `release.yml`, and GitHub
+environment `pypi`. No PyPI API token secret is required.
