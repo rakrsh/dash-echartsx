@@ -1,7 +1,9 @@
 # GitHub Copilot Instructions — dash-echartsx
 
 These repository-wide rules describe the current Dash/EChartsX architecture.
-See [AI_CONTEXT.md](AI_CONTEXT.md) for data flow and `.agent/skills/` for task-specific workflows.
+See [AI_CONTEXT.md](AI_CONTEXT.md) for data flow and `.agent/skills/` plus
+`.github/skills/` for task-specific workflows. Use the
+`echarts-option-generator` skill when generating or validating option payloads.
 
 ## Project Invariants
 
