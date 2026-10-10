@@ -134,48 +134,55 @@ type DashEChartsMap = {
 };
 
 type DashEChartsXProps = {
-  /** Unique identifier for the component. */
+  /** Unique identifier for the component. Defaults to None when omitted. */
   id?: string;
-  /** CSS class applied to the component container. */
+  /** CSS class applied to the component container. Defaults to None when omitted. */
   className?: string;
-  /** Inline styles applied to the component container. */
+  /** Inline styles applied to the component container. Defaults to None when omitted. */
   style?: CSSProperties;
-  /** ECharts option object. */
+  /** ECharts option object. Defaults to None when omitted. */
   option?: EChartsOption;
-  /** GeoJSON or SVG map definitions registered before applying the option. */
+  /** GeoJSON or SVG map definitions registered before applying the option. Defaults to None when omitted. */
   maps?: DashEChartsMap[];
-  /** Lazily load ECharts-GL before applying 3D/WebGL options. */
+  /** Lazily load ECharts-GL before applying 3D/WebGL options. Defaults to false. */
   enable_gl?: boolean;
-  /** Optional URL override for the separately served ECharts-GL bundle. */
+  /** Optional URL override for the separately served ECharts-GL bundle. Defaults to None when omitted. */
   gl_bundle_url?: string;
-  /** Replace the current option instead of merging it. */
+  /** Replace the current option instead of merging it. Defaults to false. */
   notMerge?: boolean;
-  /** Defer option updates until the next animation frame. */
+  /** Defer option updates until the next animation frame. Defaults to false. */
   lazyUpdate?: boolean;
-  /** Rendering engine used by ECharts. */
+  /** Rendering engine used by ECharts. Defaults to "canvas". */
   renderer?: "canvas" | "svg";
-  /** Named light/dark theme or a custom ECharts theme object. */
+  /** Named light/dark theme or a custom ECharts theme object. Defaults to None when omitted. */
   theme?: "light" | "dark" | object;
-  /** Latest click event with seriesIndex, dataIndex, name, and value when available. */
+  /** Latest click event with seriesIndex, dataIndex, name, and value when available. Defaults to None when omitted. */
   click_data?: Record<string, unknown>;
-  /** Latest double-click event with seriesIndex, dataIndex, name, and value when available. */
+  /** Latest double-click event with seriesIndex, dataIndex, name, and value when available. Defaults to None when omitted. */
   dblclick_data?: Record<string, unknown>;
-  /** Latest pointer-over event with seriesIndex, dataIndex, name, and value when available. */
+  /** Latest pointer-over event with seriesIndex, dataIndex, name, and value when available. Defaults to None when omitted. */
   hover_data?: Record<string, unknown>;
-  /** Latest selection-change event, including the selected series and data indexes. */
+  /** Latest selection-change event, including the selected series and data indexes. Defaults to None when omitted. */
   selected_data?: Record<string, unknown>;
-  /** Latest legend selection event with the legend name and selection state. */
+  /** Latest legend selection event with the legend name and selection state. Defaults to None when omitted. */
   legend_status?: Record<string, unknown>;
-  /** Latest data-zoom event with range and value bounds when available. */
+  /** Latest data-zoom event with range and value bounds when available. Defaults to None when omitted. */
   zoom_data?: Record<string, unknown>;
-  /** Dispatch a supported ECharts action when this payload changes. */
+  /** Dispatch a supported ECharts action when this payload changes. Defaults to None when omitted. */
   dispatch_action?: Record<string, unknown>;
-  /** Append a batch of data to an ECharts series without resending its full option. */
+  /** Append a batch of data to an ECharts series without resending its full option. Defaults to None when omitted. */
   append_data?: Parameters<EChartsType["appendData"]>[0];
 };
 
 type DashSetProps = (props: Partial<DashEChartsXProps>) => void;
 
+/**
+ * A responsive Apache ECharts component for Dash.
+ *
+ * All props are optional. If omitted, the option and theme remain unset;
+ * enable_gl, notMerge, and lazyUpdate default to false, and renderer defaults
+ * to canvas.
+ */
 const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
   function DashEChartsX(componentProps, forwardedRef) {
     const {
