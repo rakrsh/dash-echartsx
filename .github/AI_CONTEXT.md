@@ -54,7 +54,7 @@ Python supplies props through Dash. For any future browser-to-Python events, use
 
 ## Commands
 
-The current checks are `npm run build`, `npm test`, `npm run lint`, `npm run typecheck`, `uv run ruff check .`, `uv run black --check dash_echartsx tests scripts`, and `uv run pytest`. JavaScript utility unit tests live in `src/lib/utils/`; Python component and Selenium integration tests live in `tests/` and use the `integration` marker. `tests/conftest.py` installs a matching ChromeDriver, configures Linux SwiftShader for WebGL, and enables headless browser mode when `CI` is set. The CI workflow runs the full test suite on pull requests to `main` and runs the non-WebGL integration tests in Firefox as well; use `CI=true uv run pytest` to reproduce the headless Chrome suite locally.
+The current checks are `npm run build`, `npm test`, `npm run lint`, `npm run typecheck`, `uv run ruff check .`, `uv run black --check dash_echartsx tests scripts`, and `uv run pytest`. JavaScript utility unit tests live in `src/lib/utils/`; Python component and Selenium integration tests live in `tests/` and use the `integration` marker. `tests/conftest.py` installs a matching ChromeDriver, configures Linux SwiftShader for WebGL, and enables headless browser mode when `CI` is set. The CI workflow tests Python 3.10–3.14 and ECharts 5/6 on Ubuntu, macOS, and Windows, and builds wheel/source distribution artifacts for every OS/Python pair; pull request runs upload those artifacts for review. Firefox integration tests run separately on Ubuntu. Use `CI=true uv run pytest` to reproduce the headless Chrome suite locally.
 
 ## AI option generation
 
