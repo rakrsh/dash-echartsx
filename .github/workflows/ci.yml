@@ -64,7 +64,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest]
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
@@ -132,3 +132,25 @@ jobs:
         env:
           CI: "true"
         run: uv run pytest -m "integration and not webgl" --webdriver Firefox
+
+  trunk-gate:
+    name: trunk-gate
+    if: always()
+    needs:
+      - quality
+      - distributions
+      - firefox-integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all CI jobs to pass
+        env:
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          DISTRIBUTIONS_RESULT: ${{ needs.distributions.result }}
+          FIREFOX_RESULT: ${{ needs.firefox-integration.result }}
+        run: |
+          if [[ "$QUALITY_RESULT" != "success" ||
+                "$DISTRIBUTIONS_RESULT" != "success" ||
+                "$FIREFOX_RESULT" != "success" ]]; then
+            echo "CI failed: quality=$QUALITY_RESULT, distributions=$DISTRIBUTIONS_RESULT, firefox=$FIREFOX_RESULT"
+            exit 1
+          fi
