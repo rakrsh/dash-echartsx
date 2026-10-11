@@ -4,6 +4,19 @@ Notable changes for each release are recorded here.
 
 ## Unreleased
 
+## 0.1.0 - 2026-10-11
+
 ### Added
 
-- Automated release checks and OIDC-based PyPI publishing for tagged releases.
+- A Python Dash component for Apache ECharts 5.6+ and 6.x, with typed props,
+  responsive rendering, canvas/SVG renderers, and light/dark/custom themes.
+- Dash callback properties for chart events, supported ECharts actions, and
+  batched streaming data.
+- Custom GeoJSON and SVG maps, plus optional ECharts-GL charts.
+- Python helpers for option construction and explicitly marked JavaScript
+  functions.
+- Versioned documentation, runnable examples, and migration guidance.
+
+### Developer tooling
+
+- Cross-platform CI and tag-validated releases with OIDC-based PyPI publishing.

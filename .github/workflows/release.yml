@@ -16,6 +16,15 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify release commit is on main
+        run: |
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "Release commit $GITHUB_SHA is not on main."
+            exit 1
+          fi
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -42,6 +51,9 @@ jobs:
 
       - name: Build component and generated API
         run: npm run build
+
+      - name: Verify generated files are committed
+        run: git diff --exit-code -- dash_echartsx
 
       - name: Run release quality gates
         run: |
