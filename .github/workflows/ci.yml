@@ -37,6 +37,10 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Set up matching ChromeDriver
+        if: runner.os == 'macOS'
+        uses: nanasess/setup-chromedriver@v3
+
       - name: Install dependencies
         run: |
           npm ci
