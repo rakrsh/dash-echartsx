@@ -1,12 +1,8 @@
 import os
 import sys
 
-import chromedriver_autoinstaller
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-
-# Install a ChromeDriver matching the browser available in the test environment.
-chromedriver_autoinstaller.install()
 
 _WEBDRIVER = "chrome"
 
