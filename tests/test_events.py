@@ -28,6 +28,7 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
             ),
             html.Button("Zoom", id="zoom"),
             html.Pre("{}", id="click-output"),
+            html.Pre("{}", id="hover-output"),
             html.Pre("{}", id="zoom-output"),
         ]
     )
@@ -42,6 +43,10 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
 
     @app.callback(Output("click-output", "children"), Input("chart", "click_data"))
     def show_click_data(value):
+        return json.dumps(value or {}, sort_keys=True)
+
+    @app.callback(Output("hover-output", "children"), Input("chart", "hover_data"))
+    def show_hover_data(value):
         return json.dumps(value or {}, sort_keys=True)
 
     @app.callback(Output("zoom-output", "children"), Input("chart", "zoom_data"))
@@ -83,6 +88,17 @@ def test_click_and_zoom_events_update_dash_callbacks(dash_duo):
     )
     click_data = read_payload(dash_duo.driver, "click-output")
     assert click_data == {
+        "dataIndex": 0,
+        "name": "A",
+        "seriesIndex": 0,
+        "value": 12,
+    }
+
+    WebDriverWait(dash_duo.driver, 20).until(
+        lambda driver: read_payload(driver, "hover-output").get("dataIndex") == 0
+    )
+    hover_data = read_payload(dash_duo.driver, "hover-output")
+    assert hover_data == {
         "dataIndex": 0,
         "name": "A",
         "seriesIndex": 0,
