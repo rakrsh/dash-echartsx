@@ -1,12 +1,3 @@
----
-title: DashEChartsX Interactive Gallery
-emoji: 📊
-colorFrom: blue
-colorTo: green
-sdk: docker
-app_port: 7860
----
-
 # DashEChartsX Interactive Gallery
 
 An interactive gallery of DashEChartsX charts with Python configuration
@@ -36,16 +27,21 @@ python app.py
 
 ## Hugging Face Spaces deployment
 
-The deployment workflow targets the existing public Space
-[`ravikrsh/Dash-App-Gallery`](https://huggingface.co/spaces/ravikrsh/Dash-App-Gallery).
-It is currently a static Space; deploying this gallery replaces its static app
-with the Docker-based Dash server. Configure the source GitHub repository with:
+The public Space
+[`ravikrsh/Dash-App-Gallery`](https://huggingface.co/spaces/ravikrsh/Dash-App-Gallery)
+is a free Static Space. It hosts a visual gallery of screenshots and GIF
+previews and does not run the interactive Dash server. Its page source is in
+[`static_space`](./static_space/).
+
+The deployment workflow stages that static page and the images from
+`docs/_static/images/`, then uploads them to the Space. Configure the source
+GitHub repository with:
 
 - Repository secret `HF_SPACE_ID`, set to `ravikrsh/Dash-App-Gallery`.
 - Repository secret `HF_TOKEN`, a Hugging Face token with write access to that
   Space.
 
-The `Deploy demo to Hugging Face Spaces` workflow uploads this directory when
-manually dispatched or when changes to `example_app/` are pushed to `main`.
-The public Space URL is
-`https://huggingface.co/spaces/ravikrsh/Dash-App-Gallery`.
+The `Deploy static gallery to Hugging Face Spaces` workflow runs manually or
+when the static page, its media, or the workflow changes on `main`. Run the
+Dash application locally to interact with charts and inspect their Python
+configuration.

@@ -2,15 +2,16 @@
 
 A high-performance, developer-friendly Python wrapper for Apache ECharts 5.6+ and 6 in Plotly Dash.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Hugging%20Face%20Spaces-yellow?logo=huggingface)](https://huggingface.co/spaces/ravikrsh/Dash-App-Gallery)
+[![Static Gallery](https://img.shields.io/badge/Static%20Gallery-Hugging%20Face%20Spaces-yellow?logo=huggingface)](https://huggingface.co/spaces/ravikrsh/Dash-App-Gallery)
 
 ## Interactive demo gallery
 
-The source for the multi-chart gallery, its live Python option viewer, and
-Hugging Face Spaces deployment instructions is in
-[example_app](./example_app/README.md). Run it locally from that directory with
-`python app.py`. Deployment replaces the linked Space's current static app with
-the Docker-based Dash gallery.
+The local Dash gallery and its live Python option viewer are in
+[example_app](./example_app/README.md). Run it from that directory with
+`python app.py` to use interactive charts. The linked Hugging Face Space is a
+free static showcase of screenshots and GIFs; it does not run a Dash server.
+Its HTML source and deployment instructions are in
+[example_app/static_space](./example_app/static_space/).
 
 Browse examples by chart type, search for a specific pattern, then open a chart
 to explore it alongside its Python configuration.
