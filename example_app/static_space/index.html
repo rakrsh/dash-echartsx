@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A static visual gallery of DashEChartsX chart examples."
+    />
+    <title>DashEChartsX Examples</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: #0b1120;
+        color: #e6edf7;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        line-height: 1.6;
+        background:
+          radial-gradient(ellipse at 75% -15%, #19304a 0, transparent 42%),
+          #0b1120;
+      }
+
+      a {
+        color: #8dc8ff;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: #c2e1ff;
+        text-decoration: underline;
+      }
+
+      .site-header,
+      main,
+      footer {
+        width: min(1120px, calc(100% - 40px));
+        margin-inline: auto;
+      }
+
+      .site-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        padding-block: 24px;
+        border-bottom: 1px solid #243247;
+      }
+
+      .brand {
+        color: #f7f9fc;
+        font-size: 1.05rem;
+        font-weight: 750;
+      }
+
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        font-size: 0.92rem;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        align-items: center;
+        gap: 42px;
+        padding-block: 64px 52px;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: #72d7c2;
+        font-size: 0.77rem;
+        font-weight: 750;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 12ch;
+        margin-bottom: 18px;
+        font-size: clamp(2.7rem, 6vw, 4.8rem);
+        letter-spacing: -0.055em;
+        line-height: 1.02;
+      }
+
+      .hero-copy > p:not(.eyebrow) {
+        max-width: 48ch;
+        color: #aab8cc;
+        font-size: 1.08rem;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 26px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 9px 16px;
+        border: 1px solid #3e5674;
+        border-radius: 8px;
+        color: #f7f9fc;
+        font-weight: 650;
+      }
+
+      .button-primary {
+        border-color: #ef5271;
+        background: #ef5271;
+        color: #fff;
+      }
+
+      .hero-preview,
+      .example-card,
+      .catalog-preview {
+        overflow: hidden;
+        border: 1px solid #2a3a51;
+        border-radius: 14px;
+        background: #111a2a;
+        box-shadow: 0 18px 60px #02071366;
+      }
+
+      .hero-preview img,
+      .catalog-preview img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .static-note {
+        margin-bottom: 58px;
+        padding: 16px 18px;
+        border: 1px solid #294c53;
+        border-radius: 10px;
+        background: #102328;
+        color: #c7e4df;
+      }
+
+      .static-note strong {
+        color: #fff;
+      }
+
+      .section-heading {
+        max-width: 650px;
+        margin-bottom: 24px;
+      }
+
+      .section-heading h2 {
+        margin-bottom: 8px;
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        letter-spacing: -0.035em;
+      }
+
+      .section-heading p,
+      .example-card p,
+      footer {
+        color: #aab8cc;
+      }
+
+      .examples {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+        gap: 20px;
+        margin-bottom: 54px;
+      }
+
+      .example-card {
+        padding: 20px;
+      }
+
+      .example-card h3 {
+        margin-bottom: 6px;
+        font-size: 1.3rem;
+      }
+
+      .example-card p {
+        margin-bottom: 16px;
+      }
+
+      .example-card img {
+        display: block;
+        width: 100%;
+        max-height: 440px;
+        margin-top: 12px;
+        border: 1px solid #27364b;
+        border-radius: 9px;
+        background: #101827;
+        object-fit: contain;
+      }
+
+      .card-links {
+        display: flex;
+        gap: 18px;
+        margin-top: 16px;
+        font-size: 0.92rem;
+        font-weight: 650;
+      }
+
+      .catalog-preview {
+        margin-bottom: 56px;
+      }
+
+      .catalog-preview summary {
+        padding: 16px 20px;
+        color: #f7f9fc;
+        cursor: pointer;
+        font-weight: 650;
+      }
+
+      .catalog-preview[open] img {
+        border-top: 1px solid #2a3a51;
+      }
+
+      footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 14px;
+        padding-block: 22px 34px;
+        border-top: 1px solid #243247;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 760px) {
+        .site-header {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .hero,
+        .examples {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          gap: 28px;
+          padding-block: 44px 36px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="https://github.com/rakrsh/dash-echartsx">
+        DashEChartsX
+      </a>
+      <nav aria-label="Project links">
+        <a href="https://rakrsh.github.io/dash-echartsx/dev/">Documentation</a>
+        <a href="https://github.com/rakrsh/dash-echartsx">Source</a>
+        <a href="https://github.com/rakrsh/dash-echartsx/tree/main/example_app">
+          Run locally
+        </a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Apache ECharts for Plotly Dash</p>
+          <h1 id="page-title">A visual tour of DashEChartsX.</h1>
+          <p>
+            Browse chart families and see short previews of animation, zoom,
+            and map selection. Open the documentation or source to build the
+            interactive examples yourself.
+          </p>
+          <div class="actions">
+            <a class="button button-primary" href="https://rakrsh.github.io/dash-echartsx/dev/">
+              Read the documentation
+            </a>
+            <a class="button" href="https://github.com/rakrsh/dash-echartsx">
+              View source
+            </a>
+          </div>
+        </div>
+        <a
+          class="hero-preview"
+          href="assets/gallery-catalog.png"
+          aria-label="Open the full examples gallery image"
+        >
+          <img
+            src="assets/gallery-preview.png"
+            alt="Examples catalog with searchable chart cards grouped by type."
+          />
+        </a>
+      </section>
+
+      <aside class="static-note">
+        <strong>Static gallery:</strong> this free Space shows images and
+        animated previews; it does not run a Dash server or live chart
+        callbacks. Follow
+        <a href="https://github.com/rakrsh/dash-echartsx/tree/main/example_app">
+          the local run instructions
+        </a>
+        for interactive charts and Python configuration.
+      </aside>
+
+      <section aria-labelledby="examples-title">
+        <div class="section-heading">
+          <p class="eyebrow">Selected examples</p>
+          <h2 id="examples-title">Charts in motion</h2>
+          <p>
+            These previews use bundled sample data. Each interaction is
+            captured from the local Dash gallery.
+          </p>
+        </div>
+
+        <div class="examples">
+          <article class="example-card">
+            <h3>Animated bar race</h3>
+            <p>Watch category rankings update with smooth transitions.</p>
+            <img
+              src="assets/bar-race.gif"
+              alt="Animated horizontal bar chart with categories changing rank."
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="card-links">
+              <a href="https://github.com/rakrsh/dash-echartsx/blob/main/example_app/demos.py">
+                Example source
+              </a>
+              <a href="https://rakrsh.github.io/dash-echartsx/dev/examples.html">
+                More examples
+              </a>
+            </div>
+          </article>
+
+          <article class="example-card">
+            <h3>Financial markets</h3>
+            <p>Inspect candlesticks and zoom into a date range with the slider.</p>
+            <img
+              src="assets/financial-example.png"
+              alt="Candlestick chart with its date-range slider and Python configuration."
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              src="assets/financial-zoom.gif"
+              alt="The financial chart zooms to a selected date range."
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="card-links">
+              <a href="https://github.com/rakrsh/dash-echartsx/blob/main/example_app/demos.py">
+                Example source
+              </a>
+              <a href="https://rakrsh.github.io/dash-echartsx/dev/examples.html">
+                More examples
+              </a>
+            </div>
+          </article>
+
+          <article class="example-card">
+            <h3>Custom vector map</h3>
+            <p>Select a GeoJSON boundary to report its sample index.</p>
+            <img
+              src="assets/map-example.png"
+              alt="Three-region custom vector map registered from local GeoJSON."
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              src="assets/map-interaction.gif"
+              alt="Selecting map boundaries updates the displayed region index."
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="card-links">
+              <a href="https://github.com/rakrsh/dash-echartsx/blob/main/example_app/demos.py">
+                Example source
+              </a>
+              <a href="https://rakrsh.github.io/dash-echartsx/dev/examples.html">
+                More examples
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <details class="catalog-preview">
+        <summary>See the full gallery catalog</summary>
+        <img
+          src="assets/gallery-catalog.png"
+          alt="Full examples catalog grouped into line, bar, pie, financial, map, and 3D charts."
+          loading="lazy"
+          decoding="async"
+        />
+      </details>
+    </main>
+
+    <footer>
+      <span>DashEChartsX · illustrative sample data</span>
+      <span>
+        <a href="https://rakrsh.github.io/dash-echartsx/dev/">Documentation</a>
+        ·
+        <a href="https://github.com/rakrsh/dash-echartsx">GitHub repository</a>
+      </span>
+    </footer>
+  </body>
+</html>
