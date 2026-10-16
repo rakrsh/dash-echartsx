@@ -12,6 +12,15 @@ Hugging Face Spaces deployment instructions is in
 `python app.py`. Deployment replaces the linked Space's current static app with
 the Docker-based Dash gallery.
 
+Browse examples by chart type, search for a specific pattern, then open a chart
+to explore it alongside its Python configuration.
+
+![DashEChartsX examples gallery showing searchable chart cards grouped by type](docs/_static/images/gallery-preview.png)
+
+The animated bar-race example updates its rankings in place:
+
+![Animated bar-race chart](docs/_static/images/bar-race.gif)
+
 ## Python support
 
 The package requires Python 3.10 or newer. CI tests Python 3.10 through 3.14

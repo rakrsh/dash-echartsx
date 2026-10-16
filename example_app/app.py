@@ -4,7 +4,7 @@ import os
 from pprint import pformat
 from typing import Any
 
-from dash import ALL, Dash, Input, Output, State, ctx, dcc, html, no_update
+from dash import Dash, Input, Output, State, dcc, html, no_update
 
 from dash_echartsx import DashEChartsX
 
@@ -173,9 +173,9 @@ def make_thumbnail(demo_id: str) -> html.Div:
     )
 
 
-def make_example_card(demo_id: str) -> html.Button:
+def make_example_card(demo_id: str) -> dcc.Link:
     details = DEMO_DETAILS[demo_id]
-    return html.Button(
+    return dcc.Link(
         [
             make_thumbnail(demo_id),
             html.Div(
@@ -193,10 +193,9 @@ def make_example_card(demo_id: str) -> html.Button:
                 className="card-copy",
             ),
         ],
-        id={"type": "example-card", "index": demo_id},
+        href=f"/examples/{demo_id}",
         className="example-card",
-        type="button",
-        **{"aria-label": f"Open {details['title']} example"},
+        title=f"Open {details['title']} example",
     )
 
 
@@ -271,8 +270,13 @@ def demo_content(demo_id: str) -> html.Div:
                 role="status",
             )
         )
+    if demo_id == "bar-race":
+        chart_children.append(
+            dcc.Interval(id="bar-race-clock", interval=1600, n_intervals=0)
+        )
     return html.Section(
         [
+            dcc.Link("← All examples", href="/", className="back-link"),
             html.Div(
                 [
                     html.Div(
@@ -318,6 +322,7 @@ def demo_content(demo_id: str) -> html.Div:
 
 app.layout = html.Div(
     [
+        dcc.Location(id="url", refresh=False),
         html.Header(
             [
                 html.A(
@@ -382,19 +387,11 @@ app.layout = html.Div(
             id="catalog-tools",
             className="catalog-tools",
         ),
-        html.Button(
-            "← All examples",
-            id="back-to-catalog",
-            type="button",
-            className="back-link is-hidden",
-        ),
         html.Main(
             id="page-content",
             children=render_gallery(),
             className="page-content",
         ),
-        dcc.Store(id="selected-demo", data=None),
-        dcc.Interval(id="bar-race-clock", interval=1600, n_intervals=0),
         html.Footer(
             [
                 html.Span("Built with DashEChartsX"),
@@ -408,57 +405,51 @@ app.layout = html.Div(
 
 
 @app.callback(
-    Output("selected-demo", "data"),
-    Input({"type": "example-card", "index": ALL}, "n_clicks"),
-    Input("back-to-catalog", "n_clicks"),
-    prevent_initial_call=True,
-)
-def choose_example(_card_clicks: list[int], _back_clicks: int | None) -> str | None:
-    triggered_id = ctx.triggered_id
-    if triggered_id == "back-to-catalog":
-        return None
-    if isinstance(triggered_id, dict):
-        demo_id = triggered_id.get("index")
-        if demo_id in DEMO_DETAILS:
-            return demo_id
-    return no_update
-
-
-@app.callback(
     Output("page-content", "children"),
     Output("catalog-tools", "className"),
-    Output("back-to-catalog", "className"),
-    Input("selected-demo", "data"),
+    Input("url", "pathname"),
     Input("example-search", "value"),
 )
-def render_page(demo_id: str | None, query: str | None) -> tuple[html.Div, str, str]:
-    if demo_id is not None:
+def render_page(pathname: str | None, query: str | None) -> tuple[html.Div, str]:
+    if pathname and pathname.startswith("/examples/"):
+        demo_id = pathname.removeprefix("/examples/")
         if demo_id not in DEMO_DETAILS:
             raise ValueError(f"Unknown demo: {demo_id}")
-        return demo_content(demo_id), "catalog-tools is-hidden", "back-link"
-    return render_gallery(query), "catalog-tools", "back-link is-hidden"
+        return demo_content(demo_id), "catalog-tools is-hidden"
+    if pathname not in (None, "/"):
+        return (
+            html.Div(
+                [
+                    html.H1("Example not found"),
+                    dcc.Link("Return to all examples", href="/"),
+                ],
+                className="empty-state",
+            ),
+            "catalog-tools is-hidden",
+        )
+    return render_gallery(query), "catalog-tools"
 
 
 @app.callback(
     Output("detail-chart", "option"),
     Output("detail-code", "children"),
     Input("bar-race-clock", "n_intervals"),
-    State("selected-demo", "data"),
+    State("url", "pathname"),
 )
-def advance_bar_race(tick: int, demo_id: str | None) -> tuple[Any, Any]:
-    if demo_id != "bar-race":
+def advance_bar_race(tick: int, pathname: str | None) -> tuple[Any, Any]:
+    if pathname != "/examples/bar-race":
         return no_update, no_update
-    option, maps, enable_gl = get_demo_config(demo_id, tick)
+    option, maps, enable_gl = get_demo_config("bar-race", tick)
     return option, make_python_snippet(option, maps, enable_gl)
 
 
 @app.callback(
     Output("region-detail", "children"),
     Input("detail-chart", "click_data"),
-    State("selected-demo", "data"),
+    State("url", "pathname"),
 )
-def describe_region(event: dict | None, demo_id: str | None) -> str | Any:
-    if demo_id != "map":
+def describe_region(event: dict | None, pathname: str | None) -> str | Any:
+    if pathname != "/examples/map":
         return no_update
     if not event:
         return "Click a boundary to inspect its index."

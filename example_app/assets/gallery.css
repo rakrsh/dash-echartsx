@@ -204,6 +204,7 @@ input {
   color: inherit;
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease,
@@ -296,7 +297,8 @@ input {
 }
 
 .thumb-horizontal {
-  align-items: start;
+  align-items: flex-start;
+  flex-direction: column;
   justify-content: center;
   gap: 0.45rem;
   padding: 12% 13%;
@@ -607,6 +609,7 @@ input {
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 650;
+  text-decoration: none;
 }
 
 .back-link.is-hidden {

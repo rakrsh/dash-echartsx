@@ -51,9 +51,9 @@ def test_example_catalog_opens_chart_and_configuration(dash_duo):
     assert len(dash_duo.find_elements(".example-card")) == 10
     assert "Financial" in dash_duo.driver.find_element("tag name", "body").text
 
-    dash_duo.find_element("button[aria-label='Open Animated bar race example']").click()
+    dash_duo.find_element("a[href='/examples/bar-race']").click()
     dash_duo.wait_for_element("#detail-chart canvas", timeout=30)
     assert "realtimeSort" in dash_duo.find_element("#detail-code").text
 
-    dash_duo.find_element("#back-to-catalog").click()
+    dash_duo.find_element("a[href='/']").click()
     dash_duo.wait_for_element(".example-card", timeout=10)

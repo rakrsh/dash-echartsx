@@ -30,6 +30,23 @@ Create a Dash app and provide a JSON-compatible ECharts option to
        style={"width": "90vw"},
    )
 
+.. figure:: _static/images/financial-example.png
+   :alt: Interactive candlestick chart with its Python configuration.
+   :width: 100%
+   :align: center
+
+   An example detail page pairs an interactive chart with the Python setup
+   used to create it.
+
+The gallery also includes animated examples, such as this bar race:
+
+.. figure:: _static/images/bar-race.gif
+   :alt: Animated bar chart whose category rankings update over time.
+   :width: 100%
+   :align: center
+
+   A short capture of the animated bar-race example.
+
 The component supports canvas and SVG rendering, light and dark named themes,
 custom maps, event callbacks, ECharts actions, incremental ``append_data``, and
 optional ECharts-GL loading. See the :doc:`reference/python_api` and the
