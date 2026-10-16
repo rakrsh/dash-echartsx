@@ -21,6 +21,14 @@ The animated bar-race example updates its rankings in place:
 
 ![Animated bar-race chart](docs/_static/images/bar-race.gif)
 
+Drag the financial chart's slider to zoom into a date range:
+
+![Candlestick chart zoomed with its data slider](docs/_static/images/financial-zoom.gif)
+
+Click a map boundary to select a region and read its index:
+
+![Map interaction showing selected region indices](docs/_static/images/map-interaction.gif)
+
 ## Python support
 
 The package requires Python 3.10 or newer. CI tests Python 3.10 through 3.14

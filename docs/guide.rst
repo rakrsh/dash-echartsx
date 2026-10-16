@@ -38,6 +38,15 @@ Create a Dash app and provide a JSON-compatible ECharts option to
    An example detail page pairs an interactive chart with the Python setup
    used to create it.
 
+Drag the candlestick chart's slider to change the visible date range:
+
+.. figure:: _static/images/financial-zoom.gif
+   :alt: Candlestick chart zoomed to a selected date range with the data slider.
+   :width: 100%
+   :align: center
+
+   Zoom into the financial chart with its slider control.
+
 The gallery also includes animated examples, such as this bar race:
 
 .. figure:: _static/images/bar-race.gif

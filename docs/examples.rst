@@ -48,6 +48,15 @@ the clicked boundary.
 
    A locally registered map rendered alongside the Python component setup.
 
+Click a boundary to select a region and update its reported index:
+
+.. figure:: _static/images/map-interaction.gif
+   :alt: Map boundary selection updates the displayed region index.
+   :width: 100%
+   :align: center
+
+   The map's click event reports the selected region through Dash.
+
 .. literalinclude:: ../examples/geospatial_map.py
    :language: python
    :caption: examples/geospatial_map.py
