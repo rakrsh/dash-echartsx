@@ -22,11 +22,11 @@ jobs:
           python-version: "3.12"
       - name: Validate deployment settings
         env:
-          HF_SPACE_ID: ${{ vars.HF_SPACE_ID }}
+          HF_SPACE_ID: ${{ secrets.HF_SPACE_ID }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           if [ -z "$HF_SPACE_ID" ]; then
-            echo "::error::Set the HF_SPACE_ID repository variable."
+            echo "::error::Set the HF_SPACE_ID repository secret."
             exit 1
           fi
           if [ -z "$HF_TOKEN" ]; then
@@ -35,7 +35,7 @@ jobs:
           fi
       - name: Upload gallery to Space
         env:
-          HF_SPACE_ID: ${{ vars.HF_SPACE_ID }}
+          HF_SPACE_ID: ${{ secrets.HF_SPACE_ID }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           python -m pip install --upgrade huggingface_hub

@@ -31,13 +31,16 @@ python app.py
 
 ## Hugging Face Spaces deployment
 
-Create a public Docker Space, then configure the source GitHub repository with:
+The deployment workflow targets the existing public Space
+[`ravikrsh/Dash-App-Gallery`](https://huggingface.co/spaces/ravikrsh/Dash-App-Gallery).
+It is currently a static Space; deploying this gallery replaces its static app
+with the Docker-based Dash server. Configure the source GitHub repository with:
 
-- Repository variable `HF_SPACE_ID`, set to the Space ID (for example,
-  `account-name/space-name`).
+- Repository secret `HF_SPACE_ID`, set to `ravikrsh/Dash-App-Gallery`.
 - Repository secret `HF_TOKEN`, a Hugging Face token with write access to that
   Space.
 
 The `Deploy demo to Hugging Face Spaces` workflow uploads this directory when
 manually dispatched or when changes to `example_app/` are pushed to `main`.
-The Space URL is `https://huggingface.co/spaces/<HF_SPACE_ID>`.
+The public Space URL is
+`https://huggingface.co/spaces/ravikrsh/Dash-App-Gallery`.
