@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from example_app.app import app, make_python_snippet
+from example_app.app import app, make_python_snippet, render_gallery
 from example_app.demos import DEMO_DETAILS, get_demo_config
 
 
@@ -30,13 +30,30 @@ def test_live_snippet_includes_component_requirements():
     assert "enable_gl=True" in gl_snippet
 
 
+def test_example_catalog_groups_examples_and_filters_by_query():
+    catalog = render_gallery().children
+    assert len(catalog) == 6
+
+    sections = render_gallery("3d").children
+    assert len(sections) == 1
+    assert sections[0].children[0].children[0].children == "3D"
+
+
 def test_unknown_demo_is_reported():
     with pytest.raises(ValueError, match="Unknown demo"):
         get_demo_config("not-a-demo")
 
 
 @pytest.mark.integration
-def test_gallery_renders_chart_and_python_configuration(dash_duo):
+def test_example_catalog_opens_chart_and_configuration(dash_duo):
     dash_duo.start_server(app)
-    dash_duo.wait_for_element("#demo-chart canvas", timeout=30)
-    assert "realtimeSort" in dash_duo.find_element("#demo-code").text
+    dash_duo.wait_for_element(".example-card", timeout=30)
+    assert len(dash_duo.find_elements(".example-card")) == 10
+    assert "Financial" in dash_duo.driver.find_element("tag name", "body").text
+
+    dash_duo.find_element("button[aria-label='Open Animated bar race example']").click()
+    dash_duo.wait_for_element("#detail-chart canvas", timeout=30)
+    assert "realtimeSort" in dash_duo.find_element("#detail-code").text
+
+    dash_duo.find_element("#back-to-catalog").click()
+    dash_duo.wait_for_element(".example-card", timeout=10)

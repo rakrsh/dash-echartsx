@@ -34,6 +34,36 @@ DEMO_DETAILS = {
         "description": "Watch a ranked dataset evolve with smooth ECharts transitions.",
         "badge": "ECharts · animation",
     },
+    "bar-stacked": {
+        "title": "Stacked bar chart",
+        "description": "Compare category totals and their component series.",
+        "badge": "ECharts · bar",
+    },
+    "bar-horizontal": {
+        "title": "Horizontal bar chart",
+        "description": "Compare ranked values with an easy-to-scan horizontal layout.",
+        "badge": "ECharts · bar",
+    },
+    "line-trend": {
+        "title": "Smoothed line chart",
+        "description": "Follow a weekly trend with a responsive value axis.",
+        "badge": "ECharts · line",
+    },
+    "area-trend": {
+        "title": "Area chart",
+        "description": "Emphasize changing volume with a smooth filled line.",
+        "badge": "ECharts · area",
+    },
+    "pie-share": {
+        "title": "Doughnut chart",
+        "description": "Compare a category mix with a compact ring chart.",
+        "badge": "ECharts · pie",
+    },
+    "pie-rose": {
+        "title": "Rose chart",
+        "description": "Explore category values with a radius-encoded rose chart.",
+        "badge": "ECharts · pie",
+    },
     "financial": {
         "title": "Financial markets",
         "description": (
@@ -116,6 +146,142 @@ def build_bar_race_option(tick: int = 0) -> dict:
                 },
             }
         ],
+    }
+
+
+def build_stacked_bar_option() -> dict:
+    return {
+        "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
+        "legend": {"top": 8, "textStyle": {"color": "#dce6f2"}},
+        "grid": {"left": 48, "right": 24, "top": 56, "bottom": 34},
+        "xAxis": {
+            "type": "category",
+            "data": ["Q1", "Q2", "Q3", "Q4"],
+            "axisLabel": {"color": "#a9b7c8"},
+        },
+        "yAxis": {
+            "type": "value",
+            "axisLabel": {"color": "#a9b7c8"},
+            "splitLine": {"lineStyle": {"color": "#263449"}},
+        },
+        "series": [
+            {
+                "name": "Online",
+                "type": "bar",
+                "stack": "total",
+                "data": [120, 145, 168, 192],
+            },
+            {
+                "name": "Retail",
+                "type": "bar",
+                "stack": "total",
+                "data": [92, 104, 118, 126],
+            },
+            {
+                "name": "Partners",
+                "type": "bar",
+                "stack": "total",
+                "data": [45, 55, 63, 74],
+            },
+        ],
+    }
+
+
+def build_horizontal_bar_option() -> dict:
+    return {
+        "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
+        "grid": {
+            "left": 24,
+            "right": 48,
+            "top": 20,
+            "bottom": 24,
+            "containLabel": True,
+        },
+        "xAxis": {
+            "type": "value",
+            "axisLabel": {"color": "#a9b7c8"},
+            "splitLine": {"lineStyle": {"color": "#263449"}},
+        },
+        "yAxis": {
+            "type": "category",
+            "inverse": True,
+            "data": ["Oslo", "Tokyo", "Nairobi", "Lisbon", "Toronto"],
+            "axisLabel": {"color": "#e7edf5"},
+        },
+        "series": [
+            {
+                "type": "bar",
+                "data": [98, 86, 75, 68, 54],
+                "barMaxWidth": 26,
+                "itemStyle": {"color": "#5f91e8", "borderRadius": [0, 5, 5, 0]},
+                "label": {"show": True, "position": "right", "color": "#dce6f2"},
+            }
+        ],
+    }
+
+
+def build_line_option(area: bool = False) -> dict:
+    series = {
+        "name": "Visitors",
+        "type": "line",
+        "smooth": True,
+        "showSymbol": False,
+        "data": [28, 42, 35, 58, 52, 76, 64, 91, 82, 108, 96, 126],
+        "lineStyle": {"width": 3, "color": "#678de8"},
+    }
+    if area:
+        series["areaStyle"] = {"opacity": 0.2, "color": "#678de8"}
+    return {
+        "tooltip": {"trigger": "axis"},
+        "grid": {"left": 48, "right": 24, "top": 24, "bottom": 34},
+        "xAxis": {
+            "type": "category",
+            "boundaryGap": False,
+            "data": [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+            ],
+            "axisLabel": {"color": "#a9b7c8"},
+        },
+        "yAxis": {
+            "type": "value",
+            "axisLabel": {"color": "#a9b7c8"},
+            "splitLine": {"lineStyle": {"color": "#263449"}},
+        },
+        "series": [series],
+    }
+
+
+def build_pie_option(rose: bool = False) -> dict:
+    pie_series = {
+        "type": "pie",
+        "radius": ["38%", "70%"] if not rose else ["18%", "72%"],
+        "roseType": "radius" if rose else False,
+        "itemStyle": {"borderRadius": 6, "borderColor": "#101827", "borderWidth": 3},
+        "label": {"color": "#dce6f2"},
+        "data": [
+            {"name": "Direct", "value": 42},
+            {"name": "Search", "value": 28},
+            {"name": "Social", "value": 18},
+            {"name": "Referral", "value": 12},
+        ],
+    }
+    if not rose:
+        pie_series.pop("roseType")
+    return {
+        "tooltip": {"trigger": "item", "formatter": "{b}: {c} ({d}%)"},
+        "legend": {"bottom": 4, "textStyle": {"color": "#dce6f2"}},
+        "series": [pie_series],
     }
 
 
@@ -261,6 +427,18 @@ def build_scatter3d_option() -> dict:
 def get_demo_config(demo_id: str, tick: int = 0) -> tuple[dict, list[dict], bool]:
     if demo_id == "bar-race":
         return build_bar_race_option(tick), [], False
+    if demo_id == "bar-stacked":
+        return build_stacked_bar_option(), [], False
+    if demo_id == "bar-horizontal":
+        return build_horizontal_bar_option(), [], False
+    if demo_id == "line-trend":
+        return build_line_option(), [], False
+    if demo_id == "area-trend":
+        return build_line_option(area=True), [], False
+    if demo_id == "pie-share":
+        return build_pie_option(), [], False
+    if demo_id == "pie-rose":
+        return build_pie_option(rose=True), [], False
     if demo_id == "financial":
         return build_financial_option(), [], False
     if demo_id == "map":
