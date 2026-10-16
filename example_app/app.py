@@ -1,4 +1,4 @@
-"""Interactive, deployable DashEChartsX demo gallery."""
+"""Interactive, deployable DashEChartsX examples gallery."""
 
 import os
 from pprint import pformat
@@ -11,19 +11,21 @@ from dash_echartsx import DashEChartsX
 from .demos import DEMO_DETAILS, get_demo_config
 
 DEMO_IDS = tuple(DEMO_DETAILS)
+CATEGORY_EXAMPLES = (
+    ("Line", ("line-trend", "area-trend")),
+    ("Bar", ("bar-race", "bar-stacked", "bar-horizontal")),
+    ("Pie", ("pie-share", "pie-rose")),
+    ("Financial", ("financial",)),
+    ("Map", ("map",)),
+    ("3D", ("scatter3d",)),
+)
 CHART_STYLE = {"width": "100%", "height": "68vh", "aspectRatio": "auto"}
-APP_STYLE = {
-    "minHeight": "100vh",
-    "background": "#08111f",
-    "color": "#edf3fb",
-    "fontFamily": "Inter, ui-sans-serif, system-ui, sans-serif",
-}
 
 app = Dash(
     __name__,
     assets_folder="assets",
     suppress_callback_exceptions=True,
-    title="DashEChartsX · Interactive Gallery",
+    title="DashEChartsX Examples",
 )
 
 
@@ -44,12 +46,213 @@ def make_python_snippet(option: dict, maps: list[dict], enable_gl: bool) -> str:
     return "\n".join(lines)
 
 
+def make_thumbnail(demo_id: str) -> html.Div:
+    if demo_id == "bar-race":
+        heights = [42, 68, 54, 83, 62]
+        return html.Div(
+            [
+                html.Div(
+                    [
+                        html.Span(
+                            style={
+                                "width": f"{width}%",
+                                "height": "0.62rem",
+                                "background": color,
+                            }
+                        )
+                        for width, color in zip(
+                            (60, 82, 70, 96, 76),
+                            ("#7898ed", "#48b8b0", "#efb253", "#e27d72", "#9379d5"),
+                        )
+                    ],
+                    className="thumb-bars",
+                ),
+                html.Div(
+                    [html.Span(style={"height": f"{height}%"}) for height in heights],
+                    className="thumb-columns",
+                ),
+            ],
+            className="example-thumbnail thumb-bar-race",
+            **{"aria-hidden": "true"},
+        )
+    if demo_id == "bar-stacked":
+        return html.Div(
+            [
+                html.Div(
+                    [
+                        html.Span(),
+                        html.Span(),
+                        html.Span(),
+                    ],
+                    className="stack-column",
+                    style={"height": f"{height}%"},
+                )
+                for height in (48, 62, 75, 88)
+            ],
+            className="example-thumbnail thumb-stacked",
+            **{"aria-hidden": "true"},
+        )
+    if demo_id == "bar-horizontal":
+        widths = (84, 66, 95, 54, 74)
+        return html.Div(
+            [html.Span(style={"width": f"{width}%"}) for width in widths],
+            className="example-thumbnail thumb-horizontal",
+            **{"aria-hidden": "true"},
+        )
+    if demo_id in {"line-trend", "area-trend"}:
+        points = (
+            (9, 68),
+            (19, 57),
+            (29, 63),
+            (39, 44),
+            (49, 50),
+            (59, 35),
+            (69, 42),
+            (80, 23),
+            (91, 28),
+        )
+        return html.Div(
+            [html.Span(style={"left": f"{x}%", "top": f"{y}%"}) for x, y in points],
+            className=f"example-thumbnail thumb-line {demo_id}",
+            **{"aria-hidden": "true"},
+        )
+    if demo_id in {"pie-share", "pie-rose"}:
+        return html.Div(
+            html.Span() if demo_id == "pie-share" else None,
+            className=f"example-thumbnail thumb-pie {demo_id}",
+            **{"aria-hidden": "true"},
+        )
+    if demo_id == "financial":
+        candle_heights = [44, 66, 51, 79, 58, 88, 63, 73, 50, 82, 61]
+        return html.Div(
+            [
+                html.Span(
+                    [
+                        html.Span(className="candle-wick"),
+                        html.Span(className="candle-body"),
+                    ],
+                    className=f"mini-candle {'is-down' if index % 3 == 0 else 'is-up'}",
+                    style={"height": f"{height}%"},
+                )
+                for index, height in enumerate(candle_heights)
+            ],
+            className="example-thumbnail thumb-financial",
+            **{"aria-hidden": "true"},
+        )
+    if demo_id == "map":
+        return html.Div(
+            [
+                html.Span(className="map-region region-north"),
+                html.Span(className="map-region region-center"),
+                html.Span(className="map-region region-south"),
+            ],
+            className="example-thumbnail thumb-map",
+            **{"aria-hidden": "true"},
+        )
+    if demo_id != "scatter3d":
+        raise ValueError(f"Unknown demo thumbnail: {demo_id}")
+
+    points = (
+        (20, 26),
+        (39, 61),
+        (52, 34),
+        (64, 52),
+        (76, 28),
+        (34, 78),
+        (58, 82),
+        (81, 68),
+        (25, 49),
+        (69, 76),
+        (46, 19),
+        (88, 42),
+    )
+    return html.Div(
+        [html.Span(style={"left": f"{x}%", "top": f"{y}%"}) for x, y in points],
+        className="example-thumbnail thumb-scatter3d",
+        **{"aria-hidden": "true"},
+    )
+
+
+def make_example_card(demo_id: str) -> dcc.Link:
+    details = DEMO_DETAILS[demo_id]
+    return dcc.Link(
+        [
+            make_thumbnail(demo_id),
+            html.Div(
+                [
+                    html.Div(
+                        [
+                            html.H3(details["title"]),
+                            html.Span("↗", className="card-arrow"),
+                        ],
+                        className="card-title-row",
+                    ),
+                    html.P(details["description"], className="card-description"),
+                    html.Span(details["badge"], className="card-tag"),
+                ],
+                className="card-copy",
+            ),
+        ],
+        href=f"/examples/{demo_id}",
+        className="example-card",
+        title=f"Open {details['title']} example",
+    )
+
+
+def render_gallery(query: str | None = None) -> html.Div:
+    normalized_query = (query or "").strip().casefold()
+    sections = []
+    for category, demo_ids in CATEGORY_EXAMPLES:
+        matches = [
+            demo_id
+            for demo_id in demo_ids
+            if not normalized_query
+            or normalized_query
+            in " ".join((category, *DEMO_DETAILS[demo_id].values())).casefold()
+        ]
+        if not matches:
+            continue
+        sections.append(
+            html.Section(
+                [
+                    html.Div(
+                        [
+                            html.H2(category),
+                            html.Span(
+                                f"{len(matches):02d} "
+                                f"{'example' if len(matches) == 1 else 'examples'}",
+                                className="category-count",
+                            ),
+                        ],
+                        className="category-heading",
+                    ),
+                    html.Div(
+                        [make_example_card(demo_id) for demo_id in matches],
+                        className="example-grid",
+                    ),
+                ],
+                className="category-section",
+            )
+        )
+    if not sections:
+        sections.append(
+            html.Div(
+                [
+                    html.H2("No examples found"),
+                    html.P("Try a different title, chart type, or feature."),
+                ],
+                className="empty-state",
+            )
+        )
+    return html.Div(sections, className="catalog")
+
+
 def demo_content(demo_id: str) -> html.Div:
     details = DEMO_DETAILS[demo_id]
     option, maps, enable_gl = get_demo_config(demo_id)
     chart_children = [
         DashEChartsX(
-            id="demo-chart",
+            id="detail-chart",
             option=option,
             maps=maps,
             enable_gl=enable_gl,
@@ -67,128 +270,186 @@ def demo_content(demo_id: str) -> html.Div:
                 role="status",
             )
         )
-    return html.Div(
+    if demo_id == "bar-race":
+        chart_children.append(
+            dcc.Interval(id="bar-race-clock", interval=1600, n_intervals=0)
+        )
+    return html.Section(
         [
+            dcc.Link("← All examples", href="/", className="back-link"),
             html.Div(
                 [
                     html.Div(
                         [
-                            html.P(details["badge"], className="demo-eyebrow"),
-                            html.H2(details["title"]),
-                            html.P(details["description"], className="demo-copy"),
+                            html.Span(details["badge"], className="card-tag"),
+                            html.H1(details["title"]),
+                            html.P(details["description"], className="detail-copy"),
                         ],
-                        className="demo-heading",
+                        className="detail-heading",
                     ),
                     html.Div(
                         chart_children,
-                        className="chart-frame",
+                        className="detail-chart-frame",
                     ),
                 ],
-                className="chart-panel",
+                className="detail-chart-panel",
             ),
             html.Aside(
                 [
-                    html.P("LIVE CONFIGURATION", className="demo-eyebrow"),
+                    html.Div(
+                        [
+                            html.H2("Python configuration"),
+                            html.Span("DashEChartsX", className="code-language"),
+                        ],
+                        className="code-heading",
+                    ),
                     html.P(
-                        "This Python dictionary is the option used by the chart.",
-                        className="demo-copy",
+                        "This is the option and component setup used by the chart.",
+                        className="detail-copy",
                     ),
                     html.Pre(
                         make_python_snippet(option, maps, enable_gl),
-                        id="demo-code",
+                        id="detail-code",
                         className="code-viewer",
                     ),
                 ],
-                className="code-panel",
+                className="detail-code-panel",
             ),
         ],
-        className="demo-grid",
+        className="example-detail",
     )
 
 
-app.layout = html.Main(
+app.layout = html.Div(
     [
+        dcc.Location(id="url", refresh=False),
         html.Header(
             [
-                html.Div("DASH COMPONENT SHOWCASE", className="brand-label"),
-                html.H1(["Charts that ", html.Span("come alive.", className="accent")]),
-                html.P(
-                    "Explore interactive Apache ECharts demos powered by DashEChartsX. "
-                    "Every chart is driven by a Python option you can inspect.",
-                    className="intro",
+                html.A(
+                    [
+                        html.Span("DX", className="brand-mark"),
+                        html.Span("DashEChartsX", className="brand-name"),
+                    ],
+                    href="https://github.com/rakrsh/dash-echartsx",
+                    className="brand",
+                ),
+                html.Nav(
+                    [
+                        html.Span("Examples", className="nav-current"),
+                        html.A(
+                            "Documentation",
+                            href="https://rakrsh.github.io/dash-echartsx/",
+                        ),
+                        html.A(
+                            "GitHub",
+                            href="https://github.com/rakrsh/dash-echartsx",
+                        ),
+                    ],
+                    className="site-nav",
+                ),
+            ],
+            className="site-header",
+        ),
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.P("DASHECHARTSX GALLERY", className="eyebrow"),
+                        html.H1("Examples"),
+                        html.P(
+                            "Explore interactive charts built with Apache ECharts "
+                            "and Dash. Open an example to try it and inspect its "
+                            "Python configuration.",
+                            className="catalog-intro",
+                        ),
+                    ],
+                    className="catalog-intro-block",
                 ),
                 html.Div(
                     [
-                        html.Span("ECharts 5/6", className="header-chip"),
-                        html.Span("Responsive", className="header-chip"),
-                        html.Span("Python callbacks", className="header-chip"),
+                        html.Label(
+                            "Search examples",
+                            htmlFor="example-search",
+                            className="sr-only",
+                        ),
+                        dcc.Input(
+                            id="example-search",
+                            type="search",
+                            value="",
+                            debounce=True,
+                            placeholder="Search examples",
+                            className="example-search",
+                        ),
                     ],
-                    className="header-chips",
+                    className="search-control",
                 ),
             ],
-            className="hero",
+            id="catalog-tools",
+            className="catalog-tools",
         ),
-        html.Section(
-            [
-                dcc.Tabs(
-                    id="demo-tabs",
-                    value="bar-race",
-                    className="demo-tabs",
-                    children=[
-                        dcc.Tab(
-                            label=details["title"],
-                            value=demo_id,
-                            className="demo-tab",
-                            selected_className="demo-tab-selected",
-                        )
-                        for demo_id, details in DEMO_DETAILS.items()
-                    ],
-                ),
-                html.Div(id="demo-content", children=demo_content("bar-race")),
-            ],
-            className="gallery",
+        html.Main(
+            id="page-content",
+            children=render_gallery(),
+            className="page-content",
         ),
-        dcc.Interval(id="bar-race-clock", interval=1600, n_intervals=0),
         html.Footer(
             [
                 html.Span("Built with DashEChartsX"),
-                html.Span("Sample data · no external data services"),
+                html.Span("Illustrative sample data · no external data services"),
             ],
-            className="footer",
+            className="site-footer",
         ),
     ],
-    className="page",
-    style=APP_STYLE,
+    className="site-shell",
 )
-
-
-@app.callback(Output("demo-content", "children"), Input("demo-tabs", "value"))
-def select_demo(demo_id: str) -> html.Div:
-    if demo_id not in DEMO_IDS:
-        raise ValueError(f"Unknown demo: {demo_id}")
-    return demo_content(demo_id)
 
 
 @app.callback(
-    Output("demo-chart", "option"),
-    Output("demo-code", "children"),
-    Input("bar-race-clock", "n_intervals"),
-    State("demo-tabs", "value"),
+    Output("page-content", "children"),
+    Output("catalog-tools", "className"),
+    Input("url", "pathname"),
+    Input("example-search", "value"),
 )
-def advance_bar_race(tick: int, demo_id: str) -> tuple[Any, Any]:
-    if demo_id != "bar-race":
+def render_page(pathname: str | None, query: str | None) -> tuple[html.Div, str]:
+    if pathname and pathname.startswith("/examples/"):
+        demo_id = pathname.removeprefix("/examples/")
+        if demo_id not in DEMO_DETAILS:
+            raise ValueError(f"Unknown demo: {demo_id}")
+        return demo_content(demo_id), "catalog-tools is-hidden"
+    if pathname not in (None, "/"):
+        return (
+            html.Div(
+                [
+                    html.H1("Example not found"),
+                    dcc.Link("Return to all examples", href="/"),
+                ],
+                className="empty-state",
+            ),
+            "catalog-tools is-hidden",
+        )
+    return render_gallery(query), "catalog-tools"
+
+
+@app.callback(
+    Output("detail-chart", "option"),
+    Output("detail-code", "children"),
+    Input("bar-race-clock", "n_intervals"),
+    State("url", "pathname"),
+)
+def advance_bar_race(tick: int, pathname: str | None) -> tuple[Any, Any]:
+    if pathname != "/examples/bar-race":
         return no_update, no_update
-    option, maps, enable_gl = get_demo_config(demo_id, tick)
+    option, maps, enable_gl = get_demo_config("bar-race", tick)
     return option, make_python_snippet(option, maps, enable_gl)
 
 
 @app.callback(
     Output("region-detail", "children"),
-    Input("demo-chart", "click_data"),
-    State("demo-tabs", "value"),
+    Input("detail-chart", "click_data"),
+    State("url", "pathname"),
 )
-def describe_region(event: dict | None, demo_id: str) -> str | Any:
-    if demo_id != "map":
+def describe_region(event: dict | None, pathname: str | None) -> str | Any:
+    if pathname != "/examples/map":
         return no_update
     if not event:
         return "Click a boundary to inspect its index."

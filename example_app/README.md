@@ -13,12 +13,17 @@ An interactive gallery of DashEChartsX charts with Python configuration
 snippets. The demos use deterministic sample data and make no external data
 requests.
 
-## Demos
+## Examples catalog
 
-- Animated bar race with periodically updated Python options.
-- Candlestick chart with ECharts inside and slider zoom.
-- Custom GeoJSON map with click interaction.
-- ECharts-GL 3D scatter plot.
+The gallery groups searchable thumbnail cards by chart type. Open a card to
+interact with its chart and inspect the Python configuration used to create it.
+
+- **Line:** smoothed trend and filled-area charts.
+- **Bar:** animated bar race, stacked comparison, and horizontal ranking.
+- **Pie:** doughnut and rose charts.
+- **Financial:** candlestick chart with inside and slider zoom.
+- **Map:** custom GeoJSON map with click interaction.
+- **3D:** ECharts-GL scatter plot.
 
 ## Run locally
 
