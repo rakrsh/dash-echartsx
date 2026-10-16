@@ -1,0 +1,172 @@
+:root {
+  color-scheme: dark;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #08111f;
+}
+
+.page {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.hero {
+  padding: clamp(1rem, 4vw, 3rem) 0 2rem;
+}
+
+.brand-label,
+.demo-eyebrow {
+  color: #70e0c1;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+}
+
+.hero h1 {
+  max-width: 900px;
+  margin: 0.5rem 0;
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  letter-spacing: -0.07em;
+  line-height: 0.98;
+}
+
+.accent {
+  color: #70e0c1;
+}
+
+.intro,
+.demo-copy {
+  color: #a7b5c8;
+  line-height: 1.65;
+}
+
+.intro {
+  max-width: 700px;
+  font-size: 1.08rem;
+}
+
+.header-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.header-chip {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #26374d;
+  border-radius: 999px;
+  color: #c8d5e5;
+  font-size: 0.82rem;
+}
+
+.gallery {
+  margin-top: 1.5rem;
+}
+
+.demo-tabs {
+  margin-bottom: 1.2rem;
+}
+
+.demo-tab,
+.demo-tab-selected {
+  min-height: 3rem !important;
+  padding: 0.85rem 1.1rem !important;
+  border: 1px solid #1d2b3e !important;
+  background: #101c2d !important;
+  color: #a7b5c8 !important;
+  font-weight: 650 !important;
+}
+
+.demo-tab-selected {
+  border-color: #70e0c1 !important;
+  background: #132a35 !important;
+  color: #eafff8 !important;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(18rem, 0.8fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.chart-panel,
+.code-panel {
+  min-width: 0;
+  border: 1px solid #1d2b3e;
+  border-radius: 1rem;
+  background: #0d1828;
+}
+
+.chart-panel {
+  padding: clamp(1rem, 2vw, 1.6rem);
+}
+
+.demo-heading h2 {
+  margin: 0.3rem 0;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
+.demo-heading .demo-copy {
+  margin: 0.4rem 0 0;
+}
+
+.chart-frame {
+  margin-top: 1rem;
+  overflow: hidden;
+  border-radius: 0.7rem;
+  background: #101827;
+}
+
+.selection-note {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  color: #a7b5c8;
+}
+
+.code-panel {
+  padding: 1.2rem;
+}
+
+.code-viewer {
+  max-height: 68vh;
+  overflow: auto;
+  margin: 0.9rem 0 0;
+  padding: 1rem;
+  border: 1px solid #21324a;
+  border-radius: 0.65rem;
+  background: #07101c;
+  color: #cce4ff;
+  font: 0.78rem/1.55 "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  tab-size: 4;
+  white-space: pre;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.2rem;
+  color: #8091a8;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 900px) {
+  .demo-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .code-viewer {
+    max-height: 48vh;
+  }
+}

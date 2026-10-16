@@ -2,6 +2,14 @@
 
 A high-performance, developer-friendly Python wrapper for Apache ECharts 5.6+ and 6 in Plotly Dash.
 
+## Interactive demo gallery
+
+The source for the multi-chart gallery, its live Python option viewer, and
+Hugging Face Spaces deployment instructions is in
+[example_app](./example_app/README.md). Run it locally from that directory with
+`python app.py`. A public demo badge will be added once the Hugging Face Space
+has been created and its stable URL is available.
+
 ## Python support
 
 The package requires Python 3.10 or newer. CI tests Python 3.10 through 3.14

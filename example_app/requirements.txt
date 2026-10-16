@@ -1,0 +1,1 @@
+dash-echartsx>=0.1.0
