@@ -68,6 +68,7 @@ const supportedActions = new Set([
   "hideTip",
   "selectDataRange",
   "legendSelect",
+  "legendToggleSelect",
   "dataZoom",
 ]);
 
@@ -170,7 +171,7 @@ type DashEChartsXProps = {
   legend_status?: Record<string, unknown>;
   /** Latest data-zoom event with range and value bounds when available. Defaults to None when omitted. */
   zoom_data?: Record<string, unknown>;
-  /** Dispatch a supported ECharts action when this payload changes. Defaults to None when omitted. */
+  /** Dispatch an ECharts action when this payload changes. Supported types: highlight, downplay, showTip, hideTip, selectDataRange, legendSelect, legendToggleSelect, and dataZoom. Defaults to None when omitted. */
   dispatch_action?: Record<string, unknown>;
   /** Append a batch of data to an ECharts series without resending its full option. Defaults to None when omitted. */
   append_data?: Parameters<EChartsType["appendData"]>[0];

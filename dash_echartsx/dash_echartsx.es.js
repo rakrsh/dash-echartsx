@@ -30503,6 +30503,7 @@ var MG = {
 	"hideTip",
 	"selectDataRange",
 	"legendSelect",
+	"legendToggleSelect",
 	"dataZoom"
 ]);
 function PG(e, t) {

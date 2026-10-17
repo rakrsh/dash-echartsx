@@ -53,8 +53,10 @@ Keyword arguments:
     value when available. Defaults to None when omitted.
 
 - dispatch_action (boolean | number | string | dict | list; optional):
-    Dispatch a supported ECharts action when this payload changes.
-    Defaults to None when omitted.
+    Dispatch an ECharts action when this payload changes. Supported
+    types: highlight, downplay, showTip, hideTip, selectDataRange,
+    legendSelect, legendToggleSelect, and dataZoom. Defaults to None
+    when omitted.
 
 - enable_gl (boolean; optional):
     Lazily load ECharts-GL before applying 3D/WebGL options. Defaults
