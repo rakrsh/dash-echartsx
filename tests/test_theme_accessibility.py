@@ -67,19 +67,20 @@ def test_registered_theme_and_aria_decal_option_render(dash_duo):
     dash_duo.wait_for_element("#chart svg", timeout=30)
 
     def chart_is_accessible(driver):
-        chart = driver.find_element(By.ID, "chart")
-        return (
-            chart.get_attribute("role") == "img"
-            and chart.get_attribute("aria-label")
-            == "Bar chart comparing revenue by region"
+        chart = driver.execute_script(
+            "const chart = document.querySelector('#chart');"
+            "return chart ? [chart.getAttribute('role'), "
+            "chart.getAttribute('aria-label')] : null;"
         )
+        return chart == ["img", "Bar chart comparing revenue by region"]
 
     def chart_has_theme_color(color):
         def check(driver):
-            markup = driver.find_element(By.CSS_SELECTOR, "#chart svg").get_attribute(
-                "outerHTML"
+            markup = driver.execute_script(
+                "const svg = document.querySelector('#chart svg');"
+                "return svg ? svg.outerHTML : null;"
             )
-            return color in markup
+            return markup is not None and color in markup
 
         return check
 
