@@ -42,7 +42,7 @@ Generated from the TypeScript component metadata during the build.
      - Rendering engine used by ECharts. Defaults to "canvas".
    * - ``theme``
      - ``object | "light" | "dark" | undefined``
-     - Named light/dark theme or a custom ECharts theme object. Defaults to None when omitted.
+     - Named light/dark theme, custom ECharts theme object, or register_theme(...) descriptor. Defaults to None when omitted.
    * - ``click_data``
      - ``Record<string, unknown> | undefined``
      - Latest click event with seriesIndex, dataIndex, name, and value when available. Defaults to None when omitted.

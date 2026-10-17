@@ -106,8 +106,8 @@ Keyword arguments:
     data indexes. Defaults to None when omitted.
 
 - theme (dict; optional):
-    Named light/dark theme or a custom ECharts theme object. Defaults
-    to None when omitted.
+    Named light/dark theme, custom ECharts theme object, or
+    register_theme(...) descriptor. Defaults to None when omitted.
 
 - zoom_data (boolean | number | string | dict | list; optional):
     Latest data-zoom event with range and value bounds when available.

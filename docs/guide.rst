@@ -38,6 +38,68 @@ Create a Dash app and provide a JSON-compatible ECharts option to
    An example detail page pairs an interactive chart with the Python setup
    used to create it.
 
+Accessibility and themes
+------------------------
+
+ECharts' native ARIA and decal settings are accepted in the regular option.
+The component registers ECharts' ARIA module so the option below enables
+accessible descriptions and decal patterns:
+
+.. code-block:: python
+
+   from dash_echartsx import DashEChartsX, register_theme
+
+   accessible_option = {
+       "title": {"text": "Accessible revenue by region"},
+       "tooltip": {"trigger": "axis"},
+       "aria": {
+           "enabled": True,
+           "decal": {"show": True},
+           "label": {"description": "Bar chart comparing revenue by region"},
+       },
+       "xAxis": {
+           "type": "category",
+           "data": ["North", "South", "West"],
+       },
+       "yAxis": {"type": "value"},
+       "series": [
+           {"type": "bar", "name": "Revenue", "data": [18, 25, 21]}
+       ],
+   }
+
+   brand_theme = register_theme(
+       "brand",
+       {
+           "backgroundColor": "#f7f8fa",
+           "color": ["#3157a4", "#d57b2a", "#31866b"],
+           "textStyle": {"color": "#202124"},
+       },
+   )
+
+   chart = DashEChartsX(
+       id="revenue-chart",
+       option=accessible_option,
+       theme=brand_theme,
+       style={"width": "100%", "height": "60vh", "aspectRatio": "auto"},
+   )
+
+Pass ``"light"`` or ``"dark"`` to ``theme`` for the built-in palettes, or
+reuse the descriptor returned by ``register_theme`` across components and
+callbacks. The helper returns JSON-compatible data; the browser registers the
+named theme before initializing each chart. ECharts theme changes recreate the
+chart instance because themes are applied during initialization.
+
+Update the ``theme`` prop from a Dash callback to switch palettes while the
+app is running:
+
+.. code-block:: python
+
+   from dash import Input, Output, callback
+
+   @callback(Output("revenue-chart", "theme"), Input("dark-mode", "value"))
+   def switch_chart_theme(is_dark):
+       return "dark" if is_dark else "light"
+
 Drag the candlestick chart's slider to change the visible date range:
 
 .. figure:: _static/images/financial-zoom.gif
@@ -56,9 +118,10 @@ The gallery also includes animated examples, such as this bar race:
 
    A short capture of the animated bar-race example.
 
-The component supports canvas and SVG rendering, light and dark named themes,
-custom maps, event callbacks, ECharts actions, incremental ``append_data``, and
-optional ECharts-GL loading. See the :doc:`reference/python_api` and the
+The component supports canvas and SVG rendering, built-in and registered
+custom themes, native ECharts ARIA/decal options, custom maps, event callbacks,
+ECharts actions, incremental ``append_data``, and optional ECharts-GL loading.
+See the :doc:`reference/python_api` and the
 :doc:`reference/typescript_props` for the generated API details.
 
 JavaScript formatter functions
