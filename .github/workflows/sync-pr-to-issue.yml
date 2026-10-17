@@ -50,7 +50,7 @@ jobs:
               }
 
               // Post comment
-              await github.issues.createComment({
+              await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issueNumber,
@@ -58,7 +58,7 @@ jobs:
               });
 
               // Fetch issue to inspect labels
-              const { data: issue } = await github.issues.get({
+              const { data: issue } = await github.rest.issues.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issueNumber,
@@ -82,7 +82,7 @@ jobs:
               }
 
               // Update the issue body
-              await github.issues.update({
+              await github.rest.issues.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issueNumber,

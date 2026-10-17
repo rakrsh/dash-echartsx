@@ -120,11 +120,11 @@ def test_binary_dataset_renders_in_echarts_gl(dash_duo):
             const element = document.querySelector("#chart");
             if (!echarts || !element) return false;
             const chart = echarts.getInstanceByDom(element);
-            const series = chart?.getModel().getSeriesByIndex(0);
+            const series = chart?.getModel?.()?.getSeriesByIndex?.(0);
             return Boolean(
               chart &&
               series &&
-              series.getData().count() === 3 &&
+              series.getData?.()?.count?.() === 3 &&
               performance.getEntriesByType("resource").some((entry) =>
                 entry.name.includes("/_dash_echartsx/binary/")
               )
