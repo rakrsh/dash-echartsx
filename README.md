@@ -30,6 +30,10 @@ Click a map boundary to select a region and read its index:
 
 ![Map interaction showing selected region indices](docs/_static/images/map-interaction.gif)
 
+Reusable release banners, Python snippet cards, comparison graphics, and
+announcement copy are collected in the
+[promotion kit](./marketing/README.md).
+
 ## Python support
 
 The package requires Python 3.10 or newer. CI tests Python 3.10 through 3.14

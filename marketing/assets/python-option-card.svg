@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" role="img" aria-labelledby="title desc">
+  <title id="title">Python chart option card</title>
+  <desc id="desc">A concise Python line-chart configuration using DashEChartsX.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#152b43"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg)"/>
+  <circle cx="1010" cy="20" r="260" fill="#28577b" opacity=".13"/>
+  <g font-family="Inter, Segoe UI, Arial, sans-serif">
+    <rect x="60" y="56" width="48" height="48" rx="14" fill="#ef5271"/>
+    <text x="84" y="87" text-anchor="middle" fill="#fff" font-size="20" font-weight="800">DX</text>
+    <text x="124" y="87" fill="#f1f5fb" font-size="22" font-weight="720">DashEChartsX</text>
+    <text x="60" y="166" fill="#72d7c2" font-size="15" font-weight="750" letter-spacing="2">PYTHON SNIPPET · 01</text>
+    <text x="60" y="231" fill="#f5f8fc" font-size="48" font-weight="760" letter-spacing="-1.5">A chart option,</text>
+    <text x="60" y="286" fill="#f5f8fc" font-size="48" font-weight="760" letter-spacing="-1.5">plain Python.</text>
+    <text x="62" y="329" fill="#b7c5d8" font-size="20">ECharts configuration in a responsive Dash layout.</text>
+    <rect x="50" y="374" width="980" height="824" rx="20" fill="#101827" stroke="#34465f" stroke-width="2"/>
+    <circle cx="83" cy="411" r="7" fill="#ef5271"/><circle cx="108" cy="411" r="7" fill="#fddd60"/><circle cx="133" cy="411" r="7" fill="#72d7c2"/>
+    <text x="164" y="417" fill="#8496ae" font-size="14" font-weight="650">app.py</text>
+  </g>
+  <g font-family="Consolas, 'SFMono-Regular', monospace" font-size="19" xml:space="preserve">
+    <text x="84" y="473" fill="#72d7c2">from dash import Dash</text>
+    <text x="84" y="508" fill="#72d7c2">from dash_echartsx import DashEChartsX</text>
+    <text x="84" y="578" fill="#dce6f2">app = Dash(__name__)</text>
+    <text x="84" y="613" fill="#dce6f2">option = {</text>
+    <text x="84" y="648" fill="#a8b8ce">    "tooltip": {"trigger": "axis"},</text>
+    <text x="84" y="683" fill="#a8b8ce">    "xAxis": {"type": "category",</text>
+    <text x="84" y="718" fill="#a8b8ce">              "data": ["Mon", "Tue", "Wed"]},</text>
+    <text x="84" y="753" fill="#a8b8ce">    "yAxis": {"type": "value"},</text>
+    <text x="84" y="788" fill="#a8b8ce">    "series": [</text>
+    <text x="84" y="823" fill="#fddd60">        {"name": "Actual", "type": "line",</text>
+    <text x="84" y="858" fill="#fddd60">         "data": [10, 16, 13]},</text>
+    <text x="84" y="893" fill="#fddd60">        {"name": "Target", "type": "line",</text>
+    <text x="84" y="928" fill="#fddd60">         "data": [12, 12, 12]},</text>
+    <text x="84" y="963" fill="#a8b8ce">    ],</text>
+    <text x="84" y="998" fill="#dce6f2">}</text>
+    <text x="84" y="1068" fill="#72d7c2">app.layout = DashEChartsX(</text>
+    <text x="84" y="1103" fill="#a8b8ce">    id="trend", option=option,</text>
+    <text x="84" y="1138" fill="#a8b8ce">    style={"width": "100%", "height": "55vh"},</text>
+    <text x="84" y="1173" fill="#72d7c2">)</text>
+  </g>
+  <g font-family="Inter, Segoe UI, Arial, sans-serif">
+    <text x="60" y="1267" fill="#dce6f2" font-size="18" font-weight="700">Familiar ECharts options.</text>
+    <text x="60" y="1297" fill="#9aacc2" font-size="17">Interactive charts, Dash callbacks, and responsive layouts.</text>
+    <text x="1020" y="1297" text-anchor="end" fill="#72d7c2" font-size="17" font-weight="700">dash-echartsx</text>
+  </g>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="627" viewBox="0 0 1200 627" role="img" aria-labelledby="title desc">
+  <title id="title">DashEChartsX: Apache ECharts for Plotly Dash</title>
+  <desc id="desc">A feature banner showing a sample chart and the connection between Apache ECharts and Python Dash.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#14243b"/>
+    </linearGradient>
+    <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4992ff" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#4992ff" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="34" height="34" patternUnits="userSpaceOnUse">
+      <path d="M34 0H0V34" fill="none" stroke="#8aa0bd" stroke-opacity=".08"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="627" fill="url(#bg)"/>
+  <circle cx="1080" cy="38" r="300" fill="#28577b" opacity=".16"/>
+  <rect width="1200" height="627" fill="url(#grid)"/>
+  <g font-family="Inter, Segoe UI, Arial, sans-serif">
+    <rect x="68" y="55" width="44" height="44" rx="13" fill="#ef5271"/>
+    <text x="90" y="84" text-anchor="middle" fill="#fff" font-size="19" font-weight="800">DX</text>
+    <text x="127" y="83" fill="#f1f5fb" font-size="22" font-weight="720">DashEChartsX</text>
+    <text x="68" y="151" fill="#72d7c2" font-size="15" font-weight="750" letter-spacing="2.2">PYTHON-FIRST VISUALIZATION</text>
+    <text x="68" y="225" fill="#f5f8fc" font-size="53" font-weight="760" letter-spacing="-1.8">Apache ECharts.</text>
+    <text x="68" y="285" fill="#f5f8fc" font-size="53" font-weight="760" letter-spacing="-1.8">At home in Dash.</text>
+    <text x="70" y="333" fill="#b7c5d8" font-size="20">Keep the expressive ECharts option model.</text>
+    <text x="70" y="362" fill="#b7c5d8" font-size="20">Build interactive chart apps with Python.</text>
+    <rect x="68" y="411" width="266" height="48" rx="24" fill="#182a41" stroke="#355271"/>
+    <text x="201" y="441" text-anchor="middle" fill="#dce9f8" font-size="16" font-weight="650">Apache ECharts 5.6+ and 6</text>
+    <text x="68" y="550" fill="#8396ae" font-size="14" letter-spacing="1.5">OPEN SOURCE · DASH COMPONENT · RESPONSIVE CHARTS</text>
+  </g>
+  <g>
+    <rect x="620" y="90" width="520" height="410" rx="22" fill="#101827" stroke="#34465f" stroke-width="2"/>
+    <rect x="647" y="117" width="466" height="349" rx="12" fill="#0d1523"/>
+    <g stroke="#2c3b50" stroke-width="1">
+      <path d="M684 175H1080M684 235H1080M684 295H1080M684 355H1080M684 415H1080"/>
+      <path d="M684 160V420M783 160V420M882 160V420M981 160V420M1080 160V420"/>
+    </g>
+    <path d="M684 374L733 340L782 352L831 295L880 312L929 254L978 270L1027 211L1080 224V420H684Z" fill="url(#area)"/>
+    <path d="M684 374L733 340L782 352L831 295L880 312L929 254L978 270L1027 211L1080 224" fill="none" stroke="#68a8ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M684 386L733 378L782 367L831 362L880 346L929 339L978 328L1027 320L1080 304" fill="none" stroke="#72d7c2" stroke-width="3" stroke-dasharray="9 9" stroke-linecap="round"/>
+    <g fill="#68a8ff" stroke="#0d1523" stroke-width="3">
+      <circle cx="684" cy="374" r="7"/><circle cx="782" cy="352" r="7"/><circle cx="880" cy="312" r="7"/>
+      <circle cx="978" cy="270" r="7"/><circle cx="1080" cy="224" r="7"/>
+    </g>
+    <g font-family="Inter, Segoe UI, Arial, sans-serif" fill="#a8b8ce" font-size="13">
+      <text x="651" y="145">Revenue trend</text>
+      <text x="935" y="145" fill="#68a8ff">Actual</text>
+      <text x="1000" y="145" fill="#72d7c2">Target</text>
+      <text x="684" y="445">Week 1</text><text x="1000" y="445">Week 5</text>
+    </g>
+    <rect x="780" y="520" width="200" height="38" rx="19" fill="#ef5271"/>
+    <text x="880" y="545" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" fill="#fff" font-size="16" font-weight="750">Python + Dash</text>
+    <path d="M752 539H725M1008 539H1036" stroke="#72d7c2" stroke-width="3" stroke-linecap="round"/>
+    <path d="M732 532L722 539L732 546M1029 532L1039 539L1029 546" fill="none" stroke="#72d7c2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

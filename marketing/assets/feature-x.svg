@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">DashEChartsX brings Apache ECharts to Python Dash</title>
+  <desc id="desc">A wide feature graphic with a sample trend chart and DashEChartsX branding.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset=".58" stop-color="#14243b"/>
+      <stop offset="1" stop-color="#17314a"/>
+    </linearGradient>
+    <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4992ff" stop-opacity=".4"/>
+      <stop offset="1" stop-color="#4992ff" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#8aa0bd" stroke-opacity=".07"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1360" cy="120" r="440" fill="#28577b" opacity=".16"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <g font-family="Inter, Segoe UI, Arial, sans-serif">
+    <rect x="90" y="74" width="54" height="54" rx="16" fill="#ef5271"/>
+    <text x="117" y="110" text-anchor="middle" fill="#fff" font-size="22" font-weight="800">DX</text>
+    <text x="164" y="109" fill="#f1f5fb" font-size="27" font-weight="720">DashEChartsX</text>
+    <text x="92" y="244" fill="#72d7c2" font-size="17" font-weight="750" letter-spacing="2.8">APACHE ECHARTS 5.6+ &amp; 6 · PLOTLY DASH</text>
+    <text x="90" y="347" fill="#f5f8fc" font-size="78" font-weight="760" letter-spacing="-3">Rich charts.</text>
+    <text x="90" y="438" fill="#f5f8fc" font-size="78" font-weight="760" letter-spacing="-3">Python apps.</text>
+    <text x="94" y="501" fill="#b7c5d8" font-size="27">Bring the ECharts option model into your Dash layout.</text>
+    <rect x="90" y="574" width="270" height="60" rx="30" fill="#ef5271"/>
+    <text x="225" y="612" text-anchor="middle" fill="#fff" font-size="21" font-weight="750">dash-echartsx</text>
+    <text x="91" y="782" fill="#8396ae" font-size="17" letter-spacing="2">DECLARE IN PYTHON · EXPLORE IN THE BROWSER</text>
+  </g>
+  <g>
+    <rect x="805" y="166" width="690" height="520" rx="28" fill="#101827" stroke="#34465f" stroke-width="2"/>
+    <rect x="841" y="203" width="618" height="444" rx="17" fill="#0d1523"/>
+    <g stroke="#2c3b50" stroke-width="1.5">
+      <path d="M900 281H1400M900 354H1400M900 427H1400M900 500H1400M900 573H1400"/>
+      <path d="M900 260V594M1025 260V594M1150 260V594M1275 260V594M1400 260V594"/>
+    </g>
+    <path d="M900 520L962 477L1025 494L1087 418L1150 438L1212 369L1275 386L1337 306L1400 324V594H900Z" fill="url(#area)"/>
+    <path d="M900 520L962 477L1025 494L1087 418L1150 438L1212 369L1275 386L1337 306L1400 324" fill="none" stroke="#68a8ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M900 548L962 535L1025 520L1087 516L1150 494L1212 481L1275 465L1337 451L1400 427" fill="none" stroke="#72d7c2" stroke-width="4" stroke-dasharray="12 11" stroke-linecap="round"/>
+    <g fill="#68a8ff" stroke="#0d1523" stroke-width="4">
+      <circle cx="900" cy="520" r="9"/><circle cx="1025" cy="494" r="9"/><circle cx="1150" cy="438" r="9"/>
+      <circle cx="1275" cy="386" r="9"/><circle cx="1400" cy="324" r="9"/>
+    </g>
+    <g font-family="Inter, Segoe UI, Arial, sans-serif" fill="#a8b8ce" font-size="17">
+      <text x="900" y="238">A familiar option object, in a Dash app</text>
+      <text x="1260" y="238" fill="#68a8ff">Actual</text>
+      <text x="1350" y="238" fill="#72d7c2">Plan</text>
+      <text x="900" y="621">Week 1</text><text x="1330" y="621">Week 5</text>
+    </g>
+  </g>
+  <g font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="650">
+    <rect x="805" y="724" width="205" height="54" rx="27" fill="#17283c" stroke="#344b66"/>
+    <text x="907" y="758" text-anchor="middle" fill="#dce9f8">ECharts options</text>
+    <rect x="1031" y="724" width="181" height="54" rx="27" fill="#17283c" stroke="#344b66"/>
+    <text x="1121" y="758" text-anchor="middle" fill="#dce9f8">Python-first</text>
+    <rect x="1233" y="724" width="262" height="54" rx="27" fill="#17283c" stroke="#344b66"/>
+    <text x="1364" y="758" text-anchor="middle" fill="#dce9f8">Plotly Dash component</text>
+  </g>
+</svg>
