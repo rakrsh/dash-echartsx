@@ -4,6 +4,23 @@ Notable changes for each release are recorded here.
 
 ## Unreleased
 
+## 0.2.0 - 2026-10-17
+
+### Added
+
+- Dispatch supported ECharts actions from Dash, including legend toggles.
+- Register named custom themes and provide accessible chart labels and ARIA
+  descriptions.
+- Export rendered charts as PNG or SVG.
+- Serve NumPy arrays as short-lived binary resources for large ECharts-GL
+  datasets, with an opt-in benchmark against `dcc.Graph`.
+- Add a searchable interactive chart gallery and live Python option viewer.
+
+### Documentation
+
+- Document binary dataset setup, limits, security considerations, and measured
+  benchmark results.
+
 ## 0.1.0 - 2026-10-11
 
 ### Added

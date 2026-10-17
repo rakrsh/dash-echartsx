@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT))
 project = "Dash EChartsX"
 copyright = "2026, dash-echartsx contributors"
 author = "dash-echartsx contributors"
-release = "0.1.0"
+release = "0.2.0"
 
 extensions = [
     "sphinx.ext.autodoc",

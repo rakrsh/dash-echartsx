@@ -38,6 +38,9 @@ def main() -> int:
         else None
     )
     package_json = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+    component_package_json = json.loads(
+        (ROOT / "dash_echartsx" / "package.json").read_text(encoding="utf-8")
+    )
     init_source = (ROOT / "dash_echartsx" / "__init__.py").read_text(encoding="utf-8")
     init_match = re.search(r'^__version__ = "([^"]+)"$', init_source, re.MULTILINE)
 
@@ -49,6 +52,7 @@ def main() -> int:
         "release tag": tag_version,
         "pyproject.toml": project_version.group(1),
         "package.json": package_json["version"],
+        "dash_echartsx/package.json": component_package_json["version"],
         "dash_echartsx/__init__.py": init_match.group(1) if init_match else None,
     }
     mismatches = {
