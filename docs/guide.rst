@@ -100,6 +100,54 @@ app is running:
    def switch_chart_theme(is_dark):
        return "dark" if is_dark else "light"
 
+Exporting chart images
+----------------------
+
+ECharts' native ``toolbox.feature.saveAsImage`` is available in ``option``.
+Its ``pixelRatio`` setting can produce high-resolution PNGs:
+
+.. code-block:: python
+
+   option = {
+       "toolbox": {
+           "show": True,
+           "feature": {
+               "saveAsImage": {
+                   "show": True,
+                   "type": "png",
+                   "name": "quarterly-sales",
+                   "pixelRatio": 3,
+               }
+           },
+       },
+       "xAxis": {"type": "category", "data": ["Q1", "Q2", "Q3"]},
+       "yAxis": {"type": "value"},
+       "series": [{"type": "bar", "name": "Sales", "data": [120, 200, 150]}],
+   }
+
+For callback-driven downloads, return a new ``download_chart`` request from a
+Dash callback:
+
+.. code-block:: python
+
+   @callback(
+       Output("sales-chart", "download_chart"),
+       Input("download-png", "n_clicks"),
+       prevent_initial_call=True,
+   )
+   def download_sales_png(_):
+       return {
+           "type": "png",
+           "name": "quarterly-sales",
+           "pixelRatio": 3,
+       }
+
+Set ``type`` to ``"svg"`` for a vector download and set the chart's
+``renderer="svg"``. Callback downloads accept optional ``backgroundColor`` and
+``name``; raster ``pixelRatio`` values such as 2 or 3 scale the output for
+publication. Use the ECharts toolbox for its native PNG/JPEG controls, or
+``download_chart`` for callback-triggered PNG/SVG downloads.
+
 Drag the candlestick chart's slider to change the visible date range:
 
 .. figure:: _static/images/financial-zoom.gif

@@ -64,6 +64,9 @@ Generated from the TypeScript component metadata during the build.
    * - ``dispatch_action``
      - ``Record<string, unknown> | undefined``
      - Dispatch an ECharts action when this payload changes. Supported types: highlight, downplay, showTip, hideTip, selectDataRange, legendSelect, legendToggleSelect, and dataZoom. Defaults to None when omitted.
+   * - ``download_chart``
+     - ``DownloadChartRequest | undefined``
+     - Trigger a browser download when a new request is supplied. Use type "png" or "svg"; pixelRatio supports high-resolution raster exports.
    * - ``append_data``
      - ``{ seriesIndex: number; data: any; } | undefined``
      - Append a batch of data to an ECharts series without resending its full option. Defaults to None when omitted.

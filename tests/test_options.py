@@ -114,3 +114,19 @@ def test_append_data_prop_is_available_for_streaming_updates():
     component = DashEChartsX(id="chart", append_data={"seriesIndex": 0, "data": []})
     assert component.append_data == {"seriesIndex": 0, "data": []}
     assert "append_data" in component.available_properties
+
+
+def test_download_chart_prop_and_native_save_as_image_option_are_available():
+    option = {
+        "toolbox": {
+            "feature": {"saveAsImage": {"show": True, "type": "png", "pixelRatio": 3}}
+        },
+        "series": [],
+    }
+    request = {"type": "png", "name": "sales-chart", "pixelRatio": 2}
+
+    component = DashEChartsX(id="chart", option=option, download_chart=request)
+
+    assert component.option == option
+    assert component.download_chart == request
+    assert "download_chart" in component.available_properties
