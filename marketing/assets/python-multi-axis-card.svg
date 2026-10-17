@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" role="img" aria-labelledby="title desc">
+  <title id="title">Multi-panel chart option snippet card</title>
+  <desc id="desc">An excerpt showing linked category axes, three ECharts grids, and candlestick, volume, and MACD series.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#152b43"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg)"/>
+  <circle cx="1010" cy="20" r="260" fill="#28577b" opacity=".13"/>
+  <g font-family="Inter, Segoe UI, Arial, sans-serif">
+    <rect x="60" y="56" width="48" height="48" rx="14" fill="#ef5271"/>
+    <text x="84" y="87" text-anchor="middle" fill="#fff" font-size="20" font-weight="800">DX</text>
+    <text x="124" y="87" fill="#f1f5fb" font-size="22" font-weight="720">DashEChartsX</text>
+    <text x="60" y="166" fill="#72d7c2" font-size="15" font-weight="750" letter-spacing="2">PYTHON SNIPPET · 02</text>
+    <text x="60" y="231" fill="#f5f8fc" font-size="46" font-weight="760" letter-spacing="-1.5">One option.</text>
+    <text x="60" y="286" fill="#f5f8fc" font-size="46" font-weight="760" letter-spacing="-1.5">Three linked views.</text>
+    <text x="62" y="329" fill="#b7c5d8" font-size="20">Candles, volume, and MACD share the same time axis.</text>
+    <rect x="50" y="374" width="980" height="824" rx="20" fill="#101827" stroke="#34465f" stroke-width="2"/>
+    <circle cx="83" cy="411" r="7" fill="#ef5271"/><circle cx="108" cy="411" r="7" fill="#fddd60"/><circle cx="133" cy="411" r="7" fill="#72d7c2"/>
+    <text x="164" y="417" fill="#8496ae" font-size="14" font-weight="650">financial option excerpt</text>
+  </g>
+  <g font-family="Consolas, 'SFMono-Regular', monospace" font-size="16.5" xml:space="preserve">
+    <text x="80" y="463" fill="#dce6f2">option = {</text>
+    <text x="80" y="489" fill="#a8b8ce">    "axisPointer": {"link": [{"xAxisIndex": "all"}]},</text>
+    <text x="80" y="515" fill="#a8b8ce">    "grid": [</text>
+    <text x="80" y="541" fill="#a8b8ce">        {"height": "48%"},</text>
+    <text x="80" y="567" fill="#a8b8ce">        {"top": "64%", "height": "13%"},</text>
+    <text x="80" y="593" fill="#a8b8ce">        {"top": "82%", "height": "12%"},</text>
+    <text x="80" y="619" fill="#a8b8ce">    ],</text>
+    <text x="80" y="645" fill="#a8b8ce">    "xAxis": [</text>
+    <text x="80" y="671" fill="#a8b8ce">        {"type": "category", "data": dates, "gridIndex": 0},</text>
+    <text x="80" y="697" fill="#a8b8ce">        {"type": "category", "data": dates, "gridIndex": 1},</text>
+    <text x="80" y="723" fill="#a8b8ce">        {"type": "category", "data": dates, "gridIndex": 2},</text>
+    <text x="80" y="749" fill="#a8b8ce">    ],</text>
+    <text x="80" y="775" fill="#a8b8ce">    "yAxis": [</text>
+    <text x="80" y="801" fill="#a8b8ce">        {"type": "value", "gridIndex": 0},</text>
+    <text x="80" y="827" fill="#a8b8ce">        {"type": "value", "gridIndex": 1},</text>
+    <text x="80" y="853" fill="#a8b8ce">        {"type": "value", "gridIndex": 2},</text>
+    <text x="80" y="879" fill="#a8b8ce">    ],</text>
+    <text x="80" y="905" fill="#a8b8ce">    "dataZoom": [{"type": "inside",</text>
+    <text x="80" y="931" fill="#a8b8ce">                  "xAxisIndex": [0, 1, 2]}],</text>
+    <text x="80" y="957" fill="#a8b8ce">    "series": [</text>
+    <text x="80" y="983" fill="#fddd60">        {"name": "Price", "type": "candlestick",</text>
+    <text x="80" y="1009" fill="#fddd60">         "data": candles},</text>
+    <text x="80" y="1035" fill="#fddd60">        {"name": "Volume", "type": "bar",</text>
+    <text x="80" y="1061" fill="#fddd60">         "xAxisIndex": 1, "yAxisIndex": 1, "data": volumes},</text>
+    <text x="80" y="1087" fill="#fddd60">        {"name": "MACD", "type": "bar",</text>
+    <text x="80" y="1113" fill="#fddd60">         "xAxisIndex": 2, "yAxisIndex": 2, "data": macd},</text>
+    <text x="80" y="1139" fill="#a8b8ce">    ],</text>
+    <text x="80" y="1165" fill="#dce6f2">}</text>
+  </g>
+  <g font-family="Inter, Segoe UI, Arial, sans-serif">
+    <text x="60" y="1267" fill="#dce6f2" font-size="18" font-weight="700">One JSON-compatible option.</text>
+    <text x="60" y="1297" fill="#9aacc2" font-size="17">Full runnable example: examples/financial_multi_axis.py</text>
+  </g>
+</svg>
