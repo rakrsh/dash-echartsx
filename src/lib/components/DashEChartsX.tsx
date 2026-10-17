@@ -36,6 +36,7 @@ import React, {
 import type { CSSProperties } from "react";
 import { resolveJavaScriptFunctions } from "../utils/resolveJavaScriptFunctions";
 import { loadEChartsGL } from "../utils/loadEChartsGL";
+import { resolveBinaryArrays } from "../utils/resolveBinaryArrays";
 
 registerEChartsModules([
   BarChart,
@@ -522,13 +523,32 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
     }, [maps]);
 
     useEffect(() => {
-      if (chartReady && option) {
-        chartRef.current?.setOption(
-          resolveJavaScriptFunctions(option),
-          notMerge,
-          lazyUpdate,
-        );
-      }
+      if (!chartReady || !option || !chartRef.current) return;
+
+      const chart = chartRef.current;
+      const controller = new AbortController();
+      const applyOption = async () => {
+        try {
+          const resolvedFunctions = resolveJavaScriptFunctions(option);
+          const resolvedOption = await resolveBinaryArrays(
+            resolvedFunctions,
+            controller.signal,
+          );
+          if (!controller.signal.aborted && chartRef.current === chart) {
+            chart.setOption(resolvedOption, notMerge, lazyUpdate);
+          }
+        } catch (error) {
+          if (!controller.signal.aborted) {
+            console.error(
+              "[DashEChartsX] Failed to resolve chart option data.",
+              error,
+            );
+          }
+        }
+      };
+      void applyOption();
+
+      return () => controller.abort();
     }, [chartReady, lazyUpdate, maps, notMerge, option, renderer, theme]);
 
     useEffect(() => {

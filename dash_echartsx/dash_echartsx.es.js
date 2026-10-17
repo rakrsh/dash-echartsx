@@ -32057,6 +32057,56 @@ function Zq(e) {
 	}), Yq);
 }
 //#endregion
+//#region src/lib/utils/resolveBinaryArrays.ts
+var Qq = "__dash_echartsx_binary_array__", $q = {
+	float32: Float32Array.BYTES_PER_ELEMENT,
+	float64: Float64Array.BYTES_PER_ELEMENT,
+	int8: Int8Array.BYTES_PER_ELEMENT,
+	uint8: Uint8Array.BYTES_PER_ELEMENT,
+	int16: Int16Array.BYTES_PER_ELEMENT,
+	uint16: Uint16Array.BYTES_PER_ELEMENT,
+	int32: Int32Array.BYTES_PER_ELEMENT,
+	uint32: Uint32Array.BYTES_PER_ELEMENT
+};
+function eJ(e) {
+	if (!e || typeof e != "object" || Array.isArray(e)) return !1;
+	let t = e;
+	return typeof t.url == "string" && t.url.startsWith("/") && !t.url.startsWith("//") && typeof t.dtype == "string" && Object.prototype.hasOwnProperty.call($q, t.dtype) && Array.isArray(t.shape) && t.shape.length >= 1 && t.shape.length <= 2 && t.shape.every((e) => Number.isSafeInteger(e) && e >= 0);
+}
+function tJ(e, t) {
+	switch (e) {
+		case "float32": return new Float32Array(t);
+		case "float64": return new Float64Array(t);
+		case "int8": return new Int8Array(t);
+		case "uint8": return new Uint8Array(t);
+		case "int16": return new Int16Array(t);
+		case "uint16": return new Uint16Array(t);
+		case "int32": return new Int32Array(t);
+		case "uint32": return new Uint32Array(t);
+	}
+}
+async function nJ(e, t) {
+	let n = await fetch(e.url, {
+		credentials: "same-origin",
+		signal: t
+	});
+	if (!n.ok) throw Error(`[DashEChartsX] Binary chart data request failed with HTTP ${n.status}: ${e.url}`);
+	let r = await n.arrayBuffer(), i = e.shape.reduce((e, t) => e * t, 1);
+	if (!Number.isSafeInteger(i) || r.byteLength !== i * $q[e.dtype]) throw Error(`[DashEChartsX] Binary chart data length does not match its ${e.dtype} shape.`);
+	return tJ(e.dtype, r);
+}
+async function rJ(e, t) {
+	if (typeof e != "object" || !e) return e;
+	if (Array.isArray(e)) return await Promise.all(e.map((e) => rJ(e, t)));
+	let n = Object.entries(e);
+	if (Object.prototype.hasOwnProperty.call(e, Qq)) {
+		if (n.length !== 1 || !eJ(n[0][1])) throw TypeError(`[DashEChartsX] ${Qq} must contain a same-origin URL, supported dtype, and one- or two-dimensional shape.`);
+		return await nJ(n[0][1], t);
+	}
+	let r = await Promise.all(n.map(async ([e, n]) => [e, await rJ(n, t)]));
+	return Object.fromEntries(r);
+}
+//#endregion
 //#region src/lib/components/DashEChartsX.tsx
 jM([
 	kT,
@@ -32077,7 +32127,7 @@ jM([
 	Kq,
 	Sq
 ]);
-var Qq = {
+var iJ = {
 	light: {
 		backgroundColor: "transparent",
 		color: [
@@ -32100,21 +32150,21 @@ var Qq = {
 		],
 		textStyle: { color: "#e8eaed" }
 	}
-}, $q = "__dash_echartsx_theme_registration__";
-function eJ(e) {
+}, aJ = "__dash_echartsx_theme_registration__";
+function oJ(e) {
 	if (!e || typeof e != "object" || Array.isArray(e)) return !1;
-	let t = e[$q];
+	let t = e[aJ];
 	if (!t || typeof t != "object" || Array.isArray(t)) return !1;
 	let { name: n, theme: r } = t;
 	return typeof n == "string" && n.length > 0 && typeof r == "object" && !!r && !Array.isArray(r);
 }
-function tJ(e) {
-	if (typeof e == "string") return Qq[e];
-	if (!eJ(e)) return e;
-	let t = e[$q];
+function sJ(e) {
+	if (typeof e == "string") return iJ[e];
+	if (!oJ(e)) return e;
+	let t = e[aJ];
 	return cM(t.name, t.theme), t.name;
 }
-var nJ = /* @__PURE__ */ new Set([
+var cJ = /* @__PURE__ */ new Set([
 	"highlight",
 	"downplay",
 	"showTip",
@@ -32124,14 +32174,14 @@ var nJ = /* @__PURE__ */ new Set([
 	"legendToggleSelect",
 	"dataZoom"
 ]);
-function rJ(e, t) {
+function lJ(e, t) {
 	if (!t || typeof t != "object" || Array.isArray(t)) {
 		console.warn("[DashEChartsX] dispatch_action must be an object with a supported string 'type'.");
 		return;
 	}
 	let n = t;
-	if (typeof n.type != "string" || !nJ.has(n.type)) {
-		console.warn(`[DashEChartsX] Ignoring unsupported dispatch_action type: ${String(n.type)}. Supported types: ${[...nJ].join(", ")}.`);
+	if (typeof n.type != "string" || !cJ.has(n.type)) {
+		console.warn(`[DashEChartsX] Ignoring unsupported dispatch_action type: ${String(n.type)}. Supported types: ${[...cJ].join(", ")}.`);
 		return;
 	}
 	try {
@@ -32140,7 +32190,7 @@ function rJ(e, t) {
 		console.warn(`[DashEChartsX] Failed to dispatch ECharts action '${n.type}'.`, e);
 	}
 }
-function iJ(e, t) {
+function uJ(e, t) {
 	if (!e || typeof e != "object" || Array.isArray(e)) return {};
 	let n = e, r = {};
 	for (let e of t) if (e in n) try {
@@ -32149,12 +32199,12 @@ function iJ(e, t) {
 	} catch {}
 	return r;
 }
-function aJ(e) {
+function dJ(e) {
 	if (!e || typeof e != "object" || Array.isArray(e)) return !1;
 	let t = e, n = t.pixelRatio;
 	return (t.type === "png" || t.type === "svg") && (t.name === void 0 || typeof t.name == "string") && (t.backgroundColor === void 0 || typeof t.backgroundColor == "string") && (n === void 0 || typeof n == "number" && Number.isFinite(n) && n > 0);
 }
-function oJ(e, t, n) {
+function fJ(e, t, n) {
 	let r;
 	try {
 		r = e.getDataURL({
@@ -32176,7 +32226,7 @@ function oJ(e, t, n) {
 		s.remove();
 	}
 }
-var sJ = t(function(t, o) {
+var pJ = t(function(t, o) {
 	let { id: s, className: c, style: l, option: u, maps: d, enable_gl: f = !1, gl_bundle_url: p, notMerge: m = !1, lazyUpdate: h = !1, renderer: g = "canvas", theme: _, dispatch_action: v, download_chart: y, append_data: b } = t, x = t.setProps, S = i(null), C = i(null), w = i(void 0), T = i(void 0), E = i(void 0), [D, O] = a(!1);
 	return n(() => {
 		w.current = x;
@@ -32185,28 +32235,28 @@ var sJ = t(function(t, o) {
 			if (t) return;
 			let n = S.current;
 			if (!n) return;
-			let r = tM(n, tJ(_), { renderer: g });
+			let r = tM(n, sJ(_), { renderer: g });
 			C.current = r;
 			let i = [
-				["click", (e) => w.current?.({ click_data: iJ(e, [
+				["click", (e) => w.current?.({ click_data: uJ(e, [
 					"seriesIndex",
 					"dataIndex",
 					"name",
 					"value"
 				]) })],
-				["dblclick", (e) => w.current?.({ dblclick_data: iJ(e, [
+				["dblclick", (e) => w.current?.({ dblclick_data: uJ(e, [
 					"seriesIndex",
 					"dataIndex",
 					"name",
 					"value"
 				]) })],
-				["mouseover", (e) => w.current?.({ hover_data: iJ(e, [
+				["mouseover", (e) => w.current?.({ hover_data: uJ(e, [
 					"seriesIndex",
 					"dataIndex",
 					"name",
 					"value"
 				]) })],
-				["selectchanged", (e) => w.current?.({ selected_data: iJ(e, [
+				["selectchanged", (e) => w.current?.({ selected_data: uJ(e, [
 					"type",
 					"fromAction",
 					"isFromClick",
@@ -32216,9 +32266,9 @@ var sJ = t(function(t, o) {
 					"value",
 					"selected"
 				]) })],
-				["legendselectchanged", (e) => w.current?.({ legend_status: iJ(e, ["name", "selected"]) })],
-				["legendselected", (e) => w.current?.({ legend_status: iJ(e, ["name", "selected"]) })],
-				["datazoom", (e) => w.current?.({ zoom_data: iJ(e, [
+				["legendselectchanged", (e) => w.current?.({ legend_status: uJ(e, ["name", "selected"]) })],
+				["legendselected", (e) => w.current?.({ legend_status: uJ(e, ["name", "selected"]) })],
+				["datazoom", (e) => w.current?.({ zoom_data: uJ(e, [
 					"dataZoomId",
 					"dataZoomIndex",
 					"start",
@@ -32263,7 +32313,16 @@ var sJ = t(function(t, o) {
 			wM(e, t, n);
 		});
 	}, [d]), n(() => {
-		D && u && C.current?.setOption(Jq(u), m, h);
+		if (!D || !u || !C.current) return;
+		let e = C.current, t = new AbortController();
+		return (async () => {
+			try {
+				let n = await rJ(Jq(u), t.signal);
+				!t.signal.aborted && C.current === e && e.setOption(n, m, h);
+			} catch (e) {
+				t.signal.aborted || console.error("[DashEChartsX] Failed to resolve chart option data.", e);
+			}
+		})(), () => t.abort();
 	}, [
 		D,
 		h,
@@ -32273,7 +32332,7 @@ var sJ = t(function(t, o) {
 		g,
 		_
 	]), n(() => {
-		D && v !== void 0 && C.current && rJ(C.current, v);
+		D && v !== void 0 && C.current && lJ(C.current, v);
 	}, [D, v]), n(() => {
 		if (b === void 0) {
 			T.current = void 0;
@@ -32286,11 +32345,11 @@ var sJ = t(function(t, o) {
 			return;
 		}
 		if (D && y !== E.current && C.current) {
-			if (E.current = y, !aJ(y)) {
+			if (E.current = y, !dJ(y)) {
 				console.warn("[DashEChartsX] download_chart must contain type 'png' or 'svg' and valid optional export settings.");
 				return;
 			}
-			oJ(C.current, y, s);
+			fJ(C.current, y, s);
 		}
 	}, [
 		D,
@@ -32308,10 +32367,10 @@ var sJ = t(function(t, o) {
 		}
 	});
 });
-sJ.displayName = "DashEChartsX";
+pJ.displayName = "DashEChartsX";
 //#endregion
 //#region node_modules/echarts/lib/echarts.js
-var cJ = /* @__PURE__ */ s({
+var mJ = /* @__PURE__ */ s({
 	Axis: () => GS,
 	ChartView: () => Ky,
 	ComponentModel: () => J_,
@@ -32323,7 +32382,7 @@ var cJ = /* @__PURE__ */ s({
 	color: () => Gr,
 	connect: () => nM,
 	dataTool: () => OM,
-	default: () => lJ,
+	default: () => hJ,
 	dependencies: () => VA,
 	disConnect: () => iM,
 	disconnect: () => rM,
@@ -32373,9 +32432,9 @@ var cJ = /* @__PURE__ */ s({
 	zrender: () => LD
 });
 jM([Kq, _G]);
-var lJ = { init: function() {
+var hJ = { init: function() {
 	return tM.apply(null, arguments);
 } };
 jM(UG);
 //#endregion
-export { sJ as DashEChartsX, WG as _echartsCore, cJ as _echartsLib };
+export { pJ as DashEChartsX, WG as _echartsCore, mJ as _echartsLib };
