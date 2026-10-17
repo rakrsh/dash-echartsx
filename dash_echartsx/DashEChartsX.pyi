@@ -78,8 +78,10 @@ class DashEChartsX(Component):
                 selection state. Defaults to None when omitted.
             zoom_data: Latest data-zoom event with range and value bounds when
                 available. Defaults to None when omitted.
-            dispatch_action: Dispatch a supported ECharts action when this payload
-                changes. Defaults to None when omitted.
+            dispatch_action: Dispatch an ECharts action when this payload changes.
+                Supported types: highlight, downplay, showTip, hideTip, selectDataRange,
+                legendSelect, legendToggleSelect, and dataZoom. Defaults to None when
+                omitted.
             append_data: Append a batch of data to an ECharts series without resending
                 its full option. Defaults to None when omitted.
             ref: React component reference. Defaults to None when omitted.

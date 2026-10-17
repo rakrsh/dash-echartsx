@@ -63,7 +63,7 @@ Generated from the TypeScript component metadata during the build.
      - Latest data-zoom event with range and value bounds when available. Defaults to None when omitted.
    * - ``dispatch_action``
      - ``Record<string, unknown> | undefined``
-     - Dispatch a supported ECharts action when this payload changes. Defaults to None when omitted.
+     - Dispatch an ECharts action when this payload changes. Supported types: highlight, downplay, showTip, hideTip, selectDataRange, legendSelect, legendToggleSelect, and dataZoom. Defaults to None when omitted.
    * - ``append_data``
      - ``{ seriesIndex: number; data: any; } | undefined``
      - Append a batch of data to an ECharts series without resending its full option. Defaults to None when omitted.

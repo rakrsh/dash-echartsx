@@ -9,11 +9,11 @@ from dash_echartsx import DashEChartsX
 
 
 @pytest.mark.integration
-def test_dash_callback_dispatches_legend_select_action(dash_duo):
+def test_dash_callback_dispatches_legend_toggle_select_action(dash_duo):
     app = Dash(__name__)
     app.layout = html.Div(
         [
-            html.Button("Select Revenue", id="show-point"),
+            html.Button("Toggle Revenue", id="show-point"),
             html.Div(id="legend-event"),
             DashEChartsX(
                 id="chart",
@@ -34,8 +34,8 @@ def test_dash_callback_dispatches_legend_select_action(dash_duo):
         Input("show-point", "n_clicks"),
         prevent_initial_call=True,
     )
-    def select_revenue(_):
-        return {"type": "legendSelect", "name": "Revenue"}
+    def toggle_revenue(_):
+        return {"type": "legendToggleSelect", "name": "Revenue"}
 
     @app.callback(Output("legend-event", "children"), Input("chart", "legend_status"))
     def display_legend_status(status):
@@ -43,14 +43,31 @@ def test_dash_callback_dispatches_legend_select_action(dash_duo):
 
     dash_duo.start_server(app)
     dash_duo.wait_for_element("#chart canvas", timeout=30)
+    dash_duo.driver.execute_script(
+        "window.chartCanvasBeforeAction = document.querySelector('#chart canvas')"
+    )
     dash_duo.find_element("#show-point").click()
 
-    def revenue_is_selected(driver):
-        event = driver.find_element(By.ID, "legend-event").text
-        payload = json.loads(event) if event else None
-        return (
-            isinstance(payload, dict)
-            and payload.get("selected", {}).get("Revenue") is True
+    def revenue_has_selection(expected):
+        def check(driver):
+            event = driver.find_element(By.ID, "legend-event").text
+            payload = json.loads(event) if event else None
+            return (
+                isinstance(payload, dict)
+                and payload.get("selected", {}).get("Revenue") is expected
+            )
+
+        return check
+
+    def chart_canvas_is_unchanged(driver):
+        return driver.execute_script(
+            "return window.chartCanvasBeforeAction.isSameNode("
+            "document.querySelector('#chart canvas'))"
         )
 
-    WebDriverWait(dash_duo.driver, 30).until(revenue_is_selected)
+    WebDriverWait(dash_duo.driver, 30).until(revenue_has_selection(True))
+    assert chart_canvas_is_unchanged(dash_duo.driver)
+
+    dash_duo.find_element("#show-point").click()
+    WebDriverWait(dash_duo.driver, 30).until(revenue_has_selection(False))
+    assert chart_canvas_is_unchanged(dash_duo.driver)

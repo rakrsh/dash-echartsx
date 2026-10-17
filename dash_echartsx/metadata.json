@@ -129,7 +129,7 @@
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
       "dispatch_action": {
-        "description": "Dispatch a supported ECharts action when this payload changes. Defaults to None when omitted.",
+        "description": "Dispatch an ECharts action when this payload changes. Supported types: highlight, downplay, showTip, hideTip, selectDataRange, legendSelect, legendToggleSelect, and dataZoom. Defaults to None when omitted.",
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
