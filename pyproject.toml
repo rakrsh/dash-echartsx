@@ -11,9 +11,13 @@ requires-python = ">=3.10"
 license = { file = "LICENSE" }
 dependencies = ["dash>=2.14"]
 
+[project.optional-dependencies]
+binary = ["numpy>=1.23"]
+
 [dependency-groups]
 test = [
 	"dash[testing]>=4.5.0rc0",
+	"numpy>=1.23",
 	"pytest>=8",
 	"selenium>=4.14.0",
 ]

@@ -148,6 +148,101 @@ Set ``type`` to ``"svg"`` for a vector download and set the chart's
 publication. Use the ECharts toolbox for its native PNG/JPEG controls, or
 ``download_chart`` for callback-triggered PNG/SVG downloads.
 
+Binary datasets for WebGL charts
+--------------------------------
+
+Dash normally serializes component properties as JSON. For large numeric
+datasets, ``BinaryDataStore`` serves a packed NumPy array from a short-lived
+same-origin HTTP endpoint instead; only its URL, dtype, and shape travel in the
+Dash option. Install the optional NumPy dependency with
+``pip install "dash-echartsx[binary]"``. Create the store before the Dash server
+starts, then register arrays from the layout or callbacks:
+
+.. code-block:: python
+
+   import numpy as np
+   from dash import Dash
+   from dash_echartsx import BinaryDataStore, DashEChartsX
+
+   app = Dash(__name__)
+   binary_data = BinaryDataStore(app)
+   points = np.random.default_rng(42).random((120_001, 3), dtype=np.float32)
+
+   app.layout = DashEChartsX(
+       id="large-scatter",
+       enable_gl=True,
+       option={
+           "dataset": {
+               "dimensions": ["x", "y", "z"],
+               "source": binary_data.register(points),
+           },
+           "grid3D": {},
+           "xAxis3D": {"type": "value"},
+           "yAxis3D": {"type": "value"},
+           "zAxis3D": {"type": "value"},
+           "series": [
+               {
+                   "type": "scatter3D",
+                   "encode": {"x": "x", "y": "y", "z": "z"},
+                   "symbolSize": 2,
+               }
+           ],
+       },
+   )
+
+``register`` accepts one- or two-dimensional NumPy arrays with float32/float64
+or 8-, 16-, and 32-bit signed/unsigned integer types. ECharts dataset
+``dimensions`` must describe the columns of a two-dimensional array. The
+helper leaves the input unchanged and packs non-contiguous or big-endian arrays
+into a contiguous little-endian buffer. Each array is limited to 256 MiB; the
+per-app cache is limited to 512 MiB/256 entries and URLs expire after five
+minutes. These opaque URLs are not an authorization boundary: only use this
+transport for data that every user able to access the chart is allowed to
+download.
+
+For an ECharts-GL surface, register an ``(rows * columns, 3)`` array of
+``x``, ``y``, and ``z`` values as ``series.data`` and set ``dataShape`` to the
+surface's ``[rows, columns]`` grid dimensions.
+
+To compare 3D WebGL rendering with ``dcc.Graph`` on the current machine, run
+the opt-in benchmark (the default test suite skips it):
+
+.. code-block:: console
+
+   $env:DASH_ECHARTSX_RUN_BENCHMARKS = "1"
+   uv run pytest tests/test_webgl_benchmark.py -m performance -s
+
+It reports median browser time from chart selection to ECharts' ``finished``
+and Plotly's ``plotly_afterplot`` events, plus JSON serialization time and
+uncompressed data sizes for 120,000 points. Browser time includes the Dash
+callback, data delivery, and render event.
+
+One run on Windows 11, Python 3.12.10, NumPy 2.5.4, Plotly 7.1.0, and Chrome
+155.0.0.0 produced:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Measure (median of 3 samples)
+     - DashEChartsX
+     - ``dcc.Graph``
+   * - Uncompressed data and option JSON
+     - 1,440,399 bytes
+     - 2,388,949 bytes
+   * - Python Dash JSON serialization
+     - 0.03 ms
+     - 61.59 ms
+   * - Browser callback-to-render
+     - 719.3 ms
+     - 3,334.8 ms
+
+The binary array registration itself took 1.49 ms in this run. These timings
+vary by GPU, driver, browser, and operating system; the benchmark prints
+environment details and per-sample values, so compare results on the same
+machine rather than treating this one run as a universal speed guarantee.
+The Plotly size uses Dash's actual NumPy-to-JSON encoding (base64 typed-array
+data), not an expanded decimal-list estimate.
+
 Drag the candlestick chart's slider to change the visible date range:
 
 .. figure:: _static/images/financial-zoom.gif

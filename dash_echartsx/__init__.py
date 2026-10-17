@@ -1,3 +1,4 @@
+from .binary import BinaryDataStore
 from .DashEChartsX import DashEChartsX
 from .utils import register_theme
 
@@ -20,4 +21,4 @@ _js_dist = [
     },
 ]
 
-__all__ = ["DashEChartsX", "register_theme"]
+__all__ = ["BinaryDataStore", "DashEChartsX", "register_theme"]

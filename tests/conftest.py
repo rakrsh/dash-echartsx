@@ -14,6 +14,9 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "webgl: tests that require browser WebGL support"
     )
+    config.addinivalue_line(
+        "markers", "performance: opt-in performance benchmark tests"
+    )
 
     if os.environ.get("CI", "").lower() in {"1", "true", "yes"}:
         config.option.headless = True
