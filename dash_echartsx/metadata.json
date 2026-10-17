@@ -86,7 +86,7 @@
         }
       },
       "theme": {
-        "description": "Named light/dark theme or a custom ECharts theme object. Defaults to None when omitted.",
+        "description": "Named light/dark theme, custom ECharts theme object, or register_theme(...) descriptor. Defaults to None when omitted.",
         "required": false,
         "type": {
           "name": "union",

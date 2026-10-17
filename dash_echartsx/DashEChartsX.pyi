@@ -64,8 +64,8 @@ class DashEChartsX(Component):
             lazyUpdate: Defer option updates until the next animation frame. Defaults to
                 false.
             renderer: Rendering engine used by ECharts. Defaults to "canvas".
-            theme: Named light/dark theme or a custom ECharts theme object. Defaults to
-                None when omitted.
+            theme: Named light/dark theme, custom ECharts theme object, or
+                register_theme(...) descriptor. Defaults to None when omitted.
             click_data: Latest click event with seriesIndex, dataIndex, name, and value
                 when available. Defaults to None when omitted.
             dblclick_data: Latest double-click event with seriesIndex, dataIndex, name,

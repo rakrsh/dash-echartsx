@@ -8,6 +8,7 @@ import {
 } from "echarts/charts";
 import {
   DataZoomComponent,
+  AriaComponent,
   GeoComponent,
   GridComponent,
   LegendComponent,
@@ -15,7 +16,12 @@ import {
   TooltipComponent,
   VisualMapComponent,
 } from "echarts/components";
-import { init, registerMap, use as registerEChartsModules } from "echarts/core";
+import {
+  init,
+  registerMap,
+  registerTheme,
+  use as registerEChartsModules,
+} from "echarts/core";
 import type { EChartsOption } from "echarts";
 import type { EChartsType } from "echarts/core";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
@@ -37,6 +43,7 @@ registerEChartsModules([
   LineChart,
   MapChart,
   PieChart,
+  AriaComponent,
   DataZoomComponent,
   GeoComponent,
   GridComponent,
@@ -60,6 +67,48 @@ const namedThemes = {
     textStyle: { color: "#e8eaed" },
   },
 } satisfies Record<"light" | "dark", Record<string, unknown>>;
+
+const themeRegistrationKey = "__dash_echartsx_theme_registration__" as const;
+
+type ThemeRegistration = {
+  [themeRegistrationKey]: {
+    name: string;
+    theme: Record<string, unknown>;
+  };
+};
+
+function isThemeRegistration(theme: unknown): theme is ThemeRegistration {
+  if (!theme || typeof theme !== "object" || Array.isArray(theme)) return false;
+
+  const registration = (theme as Record<string, unknown>)[themeRegistrationKey];
+  if (
+    !registration ||
+    typeof registration !== "object" ||
+    Array.isArray(registration)
+  ) {
+    return false;
+  }
+
+  const { name, theme: definition } = registration as Record<string, unknown>;
+  return (
+    typeof name === "string" &&
+    name.length > 0 &&
+    definition !== null &&
+    typeof definition === "object" &&
+    !Array.isArray(definition)
+  );
+}
+
+function resolveTheme(
+  theme: DashEChartsXProps["theme"],
+): string | object | undefined {
+  if (typeof theme === "string") return namedThemes[theme];
+  if (!isThemeRegistration(theme)) return theme;
+
+  const registration = theme[themeRegistrationKey];
+  registerTheme(registration.name, registration.theme);
+  return registration.name;
+}
 
 const supportedActions = new Set([
   "highlight",
@@ -157,7 +206,7 @@ type DashEChartsXProps = {
   lazyUpdate?: boolean;
   /** Rendering engine used by ECharts. Defaults to "canvas". */
   renderer?: "canvas" | "svg";
-  /** Named light/dark theme or a custom ECharts theme object. Defaults to None when omitted. */
+  /** Named light/dark theme, custom ECharts theme object, or register_theme(...) descriptor. Defaults to None when omitted. */
   theme?: "light" | "dark" | object;
   /** Latest click event with seriesIndex, dataIndex, name, and value when available. Defaults to None when omitted. */
   click_data?: Record<string, unknown>;
@@ -233,8 +282,7 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
         const container = containerRef.current;
         if (!container) return;
 
-        const resolvedTheme =
-          typeof theme === "string" ? namedThemes[theme] : theme;
+        const resolvedTheme = resolveTheme(theme);
         const chart = init(container, resolvedTheme, { renderer });
         chartRef.current = chart;
 

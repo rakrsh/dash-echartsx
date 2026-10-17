@@ -1,4 +1,5 @@
 from .DashEChartsX import DashEChartsX
+from .utils import register_theme
 
 __version__ = "0.1.0"
 
@@ -19,4 +20,4 @@ _js_dist = [
     },
 ]
 
-__all__ = ["DashEChartsX"]
+__all__ = ["DashEChartsX", "register_theme"]

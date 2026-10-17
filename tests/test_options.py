@@ -1,6 +1,9 @@
+import json
 from pathlib import Path
 
-from dash_echartsx import DashEChartsX, _js_dist
+import pytest
+
+from dash_echartsx import DashEChartsX, _js_dist, register_theme
 from dash_echartsx.utils import js_function, option
 
 
@@ -37,6 +40,33 @@ def test_js_function_marks_source_for_evaluation():
 
 def test_option_returns_keyword_arguments():
     assert option(title={"text": "Example"}) == {"title": {"text": "Example"}}
+
+
+def test_register_theme_returns_a_json_compatible_descriptor():
+    theme = {"color": ["#3157a4"], "backgroundColor": "#f7f8fa"}
+
+    registration = register_theme("brand", theme)
+
+    assert json.loads(json.dumps(registration)) == registration
+    assert registration == {
+        "__dash_echartsx_theme_registration__": {
+            "name": "brand",
+            "theme": theme,
+        }
+    }
+    assert registration["__dash_echartsx_theme_registration__"]["theme"] is not theme
+    assert DashEChartsX(theme=registration).theme == registration
+
+
+@pytest.mark.parametrize("name", ["", "  ", "light", "dark"])
+def test_register_theme_rejects_blank_and_builtin_names(name):
+    with pytest.raises(ValueError):
+        register_theme(name, {"color": ["#3157a4"]})
+
+
+def test_register_theme_rejects_non_json_values():
+    with pytest.raises(ValueError, match="JSON-compatible"):
+        register_theme("brand", {"color": [float("nan")]})
 
 
 def test_generated_component_and_runtime_assets_are_registered():
