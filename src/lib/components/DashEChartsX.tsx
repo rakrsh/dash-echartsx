@@ -12,6 +12,7 @@ import {
   GeoComponent,
   GridComponent,
   LegendComponent,
+  ToolboxComponent,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,
@@ -48,6 +49,7 @@ registerEChartsModules([
   GeoComponent,
   GridComponent,
   LegendComponent,
+  ToolboxComponent,
   TitleComponent,
   TooltipComponent,
   VisualMapComponent,
@@ -185,6 +187,77 @@ type DashEChartsMap = {
   specialAreas?: Parameters<typeof registerMap>[2];
 };
 
+type DownloadChartRequest = {
+  type: "png" | "svg";
+  pixelRatio?: number;
+  name?: string;
+  backgroundColor?: string;
+};
+
+function isDownloadChartRequest(
+  request: unknown,
+): request is DownloadChartRequest {
+  if (!request || typeof request !== "object" || Array.isArray(request)) {
+    return false;
+  }
+
+  const payload = request as Record<string, unknown>;
+  const pixelRatio = payload.pixelRatio;
+  return (
+    (payload.type === "png" || payload.type === "svg") &&
+    (payload.name === undefined || typeof payload.name === "string") &&
+    (payload.backgroundColor === undefined ||
+      typeof payload.backgroundColor === "string") &&
+    (pixelRatio === undefined ||
+      (typeof pixelRatio === "number" &&
+        Number.isFinite(pixelRatio) &&
+        pixelRatio > 0))
+  );
+}
+
+function downloadChartImage(
+  chart: EChartsType,
+  request: DownloadChartRequest,
+  chartId?: string,
+): void {
+  let dataURL: string;
+  try {
+    dataURL = chart.getDataURL({
+      type: request.type,
+      pixelRatio: request.pixelRatio,
+      backgroundColor: request.backgroundColor,
+    });
+  } catch (error) {
+    console.error(
+      `[DashEChartsX] Failed to export chart as ${request.type}.`,
+      error,
+    );
+    return;
+  }
+
+  const extension = `.${request.type}`;
+  const baseName = request.name?.trim() || chartId || "chart";
+  const fileName = baseName.toLowerCase().endsWith(extension)
+    ? baseName
+    : `${baseName}${extension}`;
+  const anchor = document.createElement("a");
+  anchor.href = dataURL;
+  anchor.download = fileName;
+  anchor.style.display = "none";
+
+  try {
+    document.body.appendChild(anchor);
+    anchor.click();
+  } catch (error) {
+    console.error(
+      "[DashEChartsX] Failed to start chart image download.",
+      error,
+    );
+  } finally {
+    anchor.remove();
+  }
+}
+
 type DashEChartsXProps = {
   /** Unique identifier for the component. Defaults to None when omitted. */
   id?: string;
@@ -222,6 +295,8 @@ type DashEChartsXProps = {
   zoom_data?: Record<string, unknown>;
   /** Dispatch an ECharts action when this payload changes. Supported types: highlight, downplay, showTip, hideTip, selectDataRange, legendSelect, legendToggleSelect, and dataZoom. Defaults to None when omitted. */
   dispatch_action?: Record<string, unknown>;
+  /** Trigger a browser download when a new request is supplied. Use type "png" or "svg"; pixelRatio supports high-resolution raster exports. */
+  download_chart?: DownloadChartRequest;
   /** Append a batch of data to an ECharts series without resending its full option. Defaults to None when omitted. */
   append_data?: Parameters<EChartsType["appendData"]>[0];
 };
@@ -250,6 +325,7 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       renderer = "canvas",
       theme,
       dispatch_action,
+      download_chart,
       append_data,
     } = componentProps;
     const dashSetProps = (
@@ -260,6 +336,8 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
     const setPropsRef = useRef<DashSetProps | undefined>(undefined);
     const lastAppendDataRef =
       useRef<DashEChartsXProps["append_data"]>(undefined);
+    const lastDownloadChartRef =
+      useRef<DashEChartsXProps["download_chart"]>(undefined);
     const [chartReady, setChartReady] = useState(false);
 
     useEffect(() => {
@@ -476,6 +554,31 @@ const DashEChartsX = forwardRef<DashEChartsXHandle, DashEChartsXProps>(
       chartRef.current.appendData(append_data);
       lastAppendDataRef.current = append_data;
     }, [append_data, chartReady]);
+
+    useEffect(() => {
+      if (download_chart === undefined) {
+        lastDownloadChartRef.current = undefined;
+        return;
+      }
+
+      if (
+        !chartReady ||
+        download_chart === lastDownloadChartRef.current ||
+        !chartRef.current
+      ) {
+        return;
+      }
+
+      lastDownloadChartRef.current = download_chart;
+      if (!isDownloadChartRequest(download_chart)) {
+        console.warn(
+          "[DashEChartsX] download_chart must contain type 'png' or 'svg' and valid optional export settings.",
+        );
+        return;
+      }
+
+      downloadChartImage(chartRef.current, download_chart, id);
+    }, [chartReady, download_chart, id]);
 
     return (
       <div

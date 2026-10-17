@@ -58,6 +58,11 @@ Keyword arguments:
     legendSelect, legendToggleSelect, and dataZoom. Defaults to None
     when omitted.
 
+- download_chart (boolean | number | string | dict | list; optional):
+    Trigger a browser download when a new request is supplied. Use
+    type \"png\" or \"svg\"; pixelRatio supports high-resolution
+    raster exports.
+
 - enable_gl (boolean; optional):
     Lazily load ECharts-GL before applying 3D/WebGL options. Defaults
     to False.
@@ -145,14 +150,15 @@ Keyword arguments:
         legend_status: typing.Optional[typing.Any] = None,
         zoom_data: typing.Optional[typing.Any] = None,
         dispatch_action: typing.Optional[typing.Any] = None,
+        download_chart: typing.Optional[typing.Any] = None,
         append_data: typing.Optional[typing.Union["AppendData"]] = None,
         ref: typing.Optional[typing.Union[str, typing.Any]] = None,
         key: typing.Optional[typing.Union[str, NumberType]] = None,
         **kwargs
     ):
-        self._prop_names = ['id', 'append_data', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
+        self._prop_names = ['id', 'append_data', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'download_chart', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'append_data', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
+        self.available_properties = ['id', 'append_data', 'className', 'click_data', 'dblclick_data', 'dispatch_action', 'download_chart', 'enable_gl', 'gl_bundle_url', 'hover_data', 'key', 'lazyUpdate', 'legend_status', 'maps', 'notMerge', 'option', 'ref', 'renderer', 'selected_data', 'style', 'theme', 'zoom_data']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

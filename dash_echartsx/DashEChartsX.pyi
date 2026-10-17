@@ -9,6 +9,12 @@ class AppendData(TypedDict):
     seriesIndex: int
     data: Any
 
+class DownloadChart(TypedDict):
+    type: Literal["png", "svg"]
+    pixelRatio: NotRequired[float]
+    name: NotRequired[str]
+    backgroundColor: NotRequired[str]
+
 class MapDefinition(TypedDict):
     name: str
     geoJSON: Any
@@ -37,6 +43,7 @@ class DashEChartsX(Component):
         legend_status: Mapping[str, Any] | None = ...,
         zoom_data: Mapping[str, Any] | None = ...,
         dispatch_action: Mapping[str, Any] | None = ...,
+        download_chart: DownloadChart | None = ...,
         append_data: AppendData | None = ...,
         ref: Any = ...,
         key: str | int | None = ...,
@@ -82,6 +89,9 @@ class DashEChartsX(Component):
                 Supported types: highlight, downplay, showTip, hideTip, selectDataRange,
                 legendSelect, legendToggleSelect, and dataZoom. Defaults to None when
                 omitted.
+            download_chart: Trigger a browser download when a new request is supplied.
+                Use type "png" or "svg"; pixelRatio supports high-resolution raster
+                exports. Defaults to None when omitted.
             append_data: Append a batch of data to an ECharts series without resending
                 its full option. Defaults to None when omitted.
             ref: React component reference. Defaults to None when omitted.

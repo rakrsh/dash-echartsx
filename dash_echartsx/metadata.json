@@ -133,6 +133,11 @@
         "required": false,
         "type": { "name": "any", "raw": "Record<string, unknown> | undefined" }
       },
+      "download_chart": {
+        "description": "Trigger a browser download when a new request is supplied. Use type \"png\" or \"svg\"; pixelRatio supports high-resolution raster exports.",
+        "required": false,
+        "type": { "name": "any", "raw": "DownloadChartRequest | undefined" }
+      },
       "append_data": {
         "description": "Append a batch of data to an ECharts series without resending its full option. Defaults to None when omitted.",
         "required": false,
