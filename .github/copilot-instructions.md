@@ -33,8 +33,8 @@ uv run pytest
 `dash[testing]` in `tests/`.
 The shared Selenium configuration is in `tests/conftest.py`: it installs a
 matching ChromeDriver, enables headless mode when `CI` is set, and configures
-Linux WebGL/SwiftShader. The CI matrix tests Python 3.10–3.14 with supported
-ECharts versions on Ubuntu, macOS, and Windows. Use the standard `uv run
+Linux WebGL/SwiftShader. The CI matrix tests Python 3.10–3.15 with supported
+ECharts versions on Ubuntu and Windows. Use the standard `uv run
 pytest` command; set `CI=true` to reproduce headless CI behavior locally.
 
 ## Skills
