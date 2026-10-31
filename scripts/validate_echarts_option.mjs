@@ -146,9 +146,9 @@ function optionPosition(raw, offset) {
   return `${line.length}:${line.at(-1).length + 1}`;
 }
 
-function checkAgainstECharts5(raw) {
+function checkAgainstInstalledECharts(raw) {
   const prelude = [
-    'import type { EChartsOption } from "echarts5";',
+    'import type { EChartsOption } from "echarts";',
     "type SeriesItem<T> = T extends readonly (infer Item)[] ? Item : T;",
     "type CoreSeries = SeriesItem<NonNullable<EChartsOption['series']>>;",
     "type GLSeries = {",
@@ -222,7 +222,7 @@ function checkAgainstECharts5(raw) {
     ) {
       return `option.json:${optionPosition(raw, diagnostic.start - prelude.length)}: ${message}`;
     }
-    return `ECharts 5.6.0 option type schema: ${message}`;
+    return `ECharts option type schema: ${message}`;
   });
 }
 
@@ -261,18 +261,18 @@ async function main() {
     );
   }
 
-  const diagnostics = checkAgainstECharts5(raw);
+  const diagnostics = checkAgainstInstalledECharts(raw);
   if (diagnostics.length > 0) {
     throw new Error(diagnostics.join("\n"));
   }
   if (usesGL) {
     console.warn(
       "Warning: ECharts-GL extension fields are not fully described by the " +
-        "ECharts 5 core type schema.",
+        "ECharts core type schema.",
     );
   }
   console.log(
-    `Valid against ECharts 5.6.0${usesGL ? " core types (with GL extension limits)" : ""}.`,
+    `Valid against the installed ECharts version${usesGL ? " core types (with GL extension limits)" : ""}.`,
   );
 }
 
