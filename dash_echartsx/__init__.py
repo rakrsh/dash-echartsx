@@ -2,7 +2,7 @@ from .binary import BinaryDataStore
 from .DashEChartsX import DashEChartsX
 from .utils import register_theme
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 _js_dist = [
     {
