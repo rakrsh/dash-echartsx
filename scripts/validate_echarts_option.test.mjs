@@ -21,14 +21,14 @@ const basicBarOption = {
   series: [{ type: "bar", data: [12, 20] }],
 };
 
-test("accepts valid ECharts 5 options using registered component modules", () => {
+test("accepts valid ECharts options using registered component modules", () => {
   const result = validate(basicBarOption);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Valid against ECharts 5\.6\.0/);
+  assert.match(result.stdout, /Valid against the installed ECharts version/);
 });
 
-test("rejects values that do not match the ECharts 5 type schema", () => {
+test("rejects values that do not match the ECharts type schema", () => {
   const result = validate({
     ...basicBarOption,
     series: [{ type: "bar", data: "not-an-array" }],
