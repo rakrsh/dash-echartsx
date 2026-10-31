@@ -4,6 +4,16 @@ Notable changes for each release are recorded here.
 
 ## Unreleased
 
+## 0.2.1 - 2026-10-31
+
+### Added
+
+- Add Python 3.15 to the supported and tested version range.
+
+### Security
+
+- Update Node.js and Python dependencies to address reported vulnerabilities.
+
 ## 0.2.0 - 2026-10-17
 
 ### Added
