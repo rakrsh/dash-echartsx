@@ -1,0 +1,22 @@
+[
+  {
+    "version": "dev",
+    "title": "dev",
+    "aliases": []
+  },
+  {
+    "version": "v0.2.1",
+    "title": "0.2.1",
+    "aliases": []
+  },
+  {
+    "version": "v0.2.0",
+    "title": "0.2.0",
+    "aliases": []
+  },
+  {
+    "version": "v0.1.0",
+    "title": "0.1.0",
+    "aliases": []
+  }
+]
