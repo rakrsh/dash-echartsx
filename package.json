@@ -36,7 +36,7 @@
     "react-docgen": "^7.0.0",
     "typescript": "^5.5.0",
     "typescript-eslint": "^8.72.1",
-    "vite": "^8.3.5"
+    "vite": "^8.3.7"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
