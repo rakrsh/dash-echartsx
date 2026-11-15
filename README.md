@@ -36,7 +36,7 @@ announcement copy are collected in the
 
 ## Python support
 
-The package requires Python 3.10 or newer. CI tests Python 3.10 through 3.15
+The package requires Python 3.11.5 or newer. CI tests Python 3.11.5 through 3.15
 on Ubuntu and Windows, and builds wheel and source distributions for each
 matrix combination. Pull request runs upload those distributions as GitHub
 Actions artifacts for inspection before release.
