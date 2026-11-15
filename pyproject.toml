@@ -7,14 +7,13 @@ name = "dash-echartsx"
 version = "0.2.1"
 description = "Apache ECharts components for Plotly Dash"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11.5"
 license = { file = "LICENSE" }
 dependencies = ["dash>=2.14"]
 classifiers = [
 	"Operating System :: OS Independent",
 	"Programming Language :: Python :: 3",
 	"Programming Language :: Python :: 3 :: Only",
-	"Programming Language :: Python :: 3.10",
 	"Programming Language :: Python :: 3.11",
 	"Programming Language :: Python :: 3.12",
 	"Programming Language :: Python :: 3.13",
